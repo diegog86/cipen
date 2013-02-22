@@ -1,0 +1,13 @@
+web/bundles/
+app/bootstrap.php.cache
+app/cache/*
+app/logs/*
+app/config/parameters.yml
+build/
+vendor
+#composer.phar # lo comento para que tengamos siempre la misma versión
+.buildpath
+.project
+.settings
+*~
+nbproject/*

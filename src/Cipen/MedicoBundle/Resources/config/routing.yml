@@ -1,0 +1,3 @@
+cipen_medico_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: CipenMedicoBundle:Default:index }
