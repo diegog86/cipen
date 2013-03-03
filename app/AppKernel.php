@@ -20,6 +20,13 @@ class AppKernel extends Kernel
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Cipen\MedicoBundle\CipenMedicoBundle(),
+            new Cipen\InternacionBundle\CipenInternacionBundle(),
+            new Cipen\ObraSocialBundle\CipenObraSocialBundle(),
+            new Cipen\PacienteBundle\CipenPacienteBundle(),
+            new Cipen\PrestacionBundle\CipenPrestacionBundle(),
+            new Cipen\DiagnosticoBundle\CipenDiagnosticoBundle(),
+            new Comun\ComunBundle\ComunComunBundle(),
+            new Genemu\Bundle\FormBundle\GenemuFormBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

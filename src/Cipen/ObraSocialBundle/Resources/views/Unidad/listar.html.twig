@@ -1,0 +1,45 @@
+{% extends "CipenObraSocialBundle:ObraSocial:editar_layout.html.twig" %}
+            
+{% block admin_content %}
+
+   <ul class="nav nav-tabs">
+        <li><a href="{{ path('obra_social_editar', { id: obraSocialId }) }}">Datos de Obra Social</a></li>
+        <li class="active"><a href="{{ path('unidad', { obraSocialId: obraSocialId }) }}">Unidades</a></li>
+    </ul>    
+    
+    <div class="well well-small">
+        <a href="{{ path('unidad_crear', { obraSocialId: obraSocialId }) }}"><i class="icon-plus"></i> Crear nueva unidad</a>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Valor</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.descripcion }}</td>
+                    <td>{{ entity.valor }}</td>
+                    <td>
+                        <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
+                            <a class="btn" href="{{ path('unidad_editar', {id: entity.id, obraSocialId: obraSocialId }) }}" title="Editar" >
+                                <i class="icon-pencil"></i>
+                            </a>
+                            <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar esta unidad?')){ return false }" href="{{ path('unidad_eliminar', {id: entity.id, obraSocialId: obraSocialId}) }}" title="Eliminar" >
+                                <i class="icon-white icon-trash"></i>
+                            </a>                                
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">No existen registros</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}

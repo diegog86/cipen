@@ -1,6 +1,34 @@
+comun_comun:
+    resource: "@ComunComunBundle/Resources/config/routing.yml"
+    prefix:   /
+
+cipen_diagnostico:
+    resource: "@CipenDiagnosticoBundle/Resources/config/routing.yml"
+    prefix:   /diagnostico
+
+cipen_prestacion:
+    resource: "@CipenPrestacionBundle/Resources/config/routing.yml"
+    prefix:   /prestacion
+
+cipen_paciente:
+    resource: "@CipenPacienteBundle/Resources/config/routing.yml"
+    prefix:   /paciente
+
+cipen_obra_social:
+    resource: "@CipenObraSocialBundle/Resources/config/routing.yml"
+    prefix:   /obrasocial
+
+cipen_internacion:
+    resource: "@CipenInternacionBundle/Resources/config/routing.yml"
+    prefix:   /internacion
+
+cipen_diagnostico:
+    resource: "@CipenDiagnosticoBundle/Resources/config/routing.yml"
+    prefix:   /diagnostico
+
 cipen_medico:
     resource: "@CipenMedicoBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /medico
 
 # Internal routing configuration to handle ESI
 # ****** WARNING ******

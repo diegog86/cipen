@@ -1,0 +1,19 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.descripcion,'Descripción',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.descripcion, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.descripcion) }}
+    </div>
+</div>                 
+
+<div class="control-group">
+    {{ form_label(form.valor,'Valor',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.valor, { attr : { class : 'span2' } }) }}
+        {{ form_errors (form.valor) }}
+    </div>
+</div>                 
+
+{{ form_rest (form) }}

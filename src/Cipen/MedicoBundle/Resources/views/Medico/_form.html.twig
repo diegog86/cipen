@@ -1,0 +1,57 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.matricula,'Matrícula',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.matricula, { attr : { class : 'span4' } }) }}
+        {{ form_errors (form.matricula) }}
+    </div>
+</div>
+
+<div class="control-group">
+    {{ form_label(form.especialidad,'Especialidad',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.especialidad, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.especialidad) }}
+    </div>
+</div> 
+
+<hr>
+
+<div class="control-group">
+    {{ form_label(form.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.nombre, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.nombre) }}
+    </div>
+</div>        
+
+<div class="control-group">
+    {{ form_label(form.apellido,'Apellido',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.apellido, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.apellido) }}
+    </div>
+</div>  
+
+<div class="control-group">
+    {{ form_label(form.telefono,'Teléfono',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.telefono, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.telefono) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.celular,'Celular',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.celular, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.celular) }}
+    </div>
+</div> 
+
+
+
+
+
+{{ form_rest (form) }}

@@ -1,0 +1,127 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}CIPEN - Sistema de Gestión{% endblock %}
+
+{% block metas %}
+    {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output='assets/css/main.css' filter='cssrewrite, ?yui_css'
+        'bundles/comuncomun/bootstrap/less/bootstrap.less'
+        'bundles/comuncomun/bootstrap/less/responsive.less'
+        'bundles/comuncomun/css/jquery/jquery-ui-1.10.1.custom.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        
+        
+        
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+        
+    {{ parent() }}
+    {% javascripts output='assets/js/main.js' filter='?closure'
+        'bundles/comuncomun/jquery/jquery-1.9.1.js'
+        'bundles/comuncomun/jquery/jquery-ui-1.10.1.custom.js'
+        'bundles/comuncomun/jquery/extension/timepicker.js'
+        'bundles/comuncomun/js/ui.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+        
+{% endblock %}    
+    
+   
+    
+{% block body %}    
+        
+    {# header #}
+    <div class="navbar navbar-fixed-top" style="border-top:3px solid #ddd;">
+        <div class="navbar-inner">
+            <div class="container ">
+
+                {# logo #}
+                <a class="brand" style="padding:10px 20px;" href="#">
+                   CIPEN
+                </a>
+                {# fin logo #}
+
+
+                <ul class="nav pull-right">
+                    
+                    {# panel de usuario }
+                    {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <li><a href="{{ path('fos_user_security_login') }}">Iniciar Sesión</a></li>                    
+                    {% else %}
+                        <li><a href="{{ path('fos_user_profile_show') }}" title="Mi cuenta"><i class="icon-user"></i> {{ app.user.username }}</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('admin_dashboard') }}" title="Administración"><i class="icon-wrench"></i></a></li>
+                        {% endif %}                      
+                        <li><a href="{{ path('fos_user_security_logout') }}" title="Cerrar sesión" onclick="return confirm('¿Está seguro que desea cerrar su sesión?');"><i class="icon-off"></i></a></li>
+                    {% endif %}
+                    {# fin panel de usuario #}
+
+                </ul>   
+            </div>
+        </div>
+    </div>
+    {# fin header #}
+        
+    {# contenido #}
+    <div class="container row-fluid" style="padding-top:40px;">
+        {% block content %}
+            
+            <div class="row-fluid">
+                <div class="span2 affix"  >
+
+                    {% set admin_menu = {
+                        internacion:          ['','Internaciones'],
+                        paciente:             [path('paciente'),'Pacientes'],
+                        obraSocial:           [path('obra_social'),'Obras Sociales'],
+                        prestacion:         [path('acto'),'Prestaciones'],
+                        medico:             [ path('medico'),'Médicos'],
+                        diagnostico:         [path('diagnostico'),'Diagnósticos'],
+                        facturacion:         ['','Facturación'],
+                        medicamento:         ['','Medicamentos'],
+                    } %}
+                    
+                    {% set admin_menu_active = admin_menu_active is defined ? admin_menu_active : '' %}                    
+                    
+                    {# navegacion #}
+                    <div class="well" style="padding: 18px 0;">
+                        <ul class="nav nav-list">
+                            {% for menu_name, menu_item in admin_menu %}
+                                <li{% if menu_name == admin_menu_active %} class="active"{% endif %}>
+                                    <a href="{{ menu_item[0] }}">{{ menu_item[1] }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {# fin navegacion #}
+
+                </div>
+                <div class="span9 pull-right" style="margin-right: 40px;">
+
+                    {# titulo y acciones #}
+                    <div class="page-header">
+                      <ul class="nav nav-pills pull-right">
+                          {% block admin_actions %}{% endblock %}
+                      </ul>                
+                      <h1>{% block admin_title %}{% endblock admin_title %}</h1>
+                    </div>           
+                    {# fin titulo y acciones #}
+
+                    {% block admin_content %}{% endblock %}
+
+                </div>
+            </div>
+
+
+        {% endblock %}
+    </div>
+    {# fin contenido #}
+        
+{% endblock %}

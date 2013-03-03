@@ -1,3 +1,15 @@
-cipen_medico_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: CipenMedicoBundle:Default:index }
+medico:
+  pattern: /
+  defaults: {_controller: "CipenMedicoBundle:Medico:listar"}
+
+medico_crear:
+    pattern:  /crear/
+    defaults: { _controller: "CipenMedicoBundle:Medico:crear" }
+
+medico_editar:
+    pattern:  /{id}/editar/
+    defaults: { _controller: "CipenMedicoBundle:Medico:editar" }
+
+medico_eliminar:
+    pattern:  /{id}/eliminar/
+    defaults: { _controller: "CipenMedicoBundle:Medico:eliminar" }

@@ -1,0 +1,20 @@
+{% extends "CipenObraSocialBundle:ObraSocial:editar_layout.html.twig" %}
+    
+{% block admin_content %}
+
+    <ul class="nav nav-tabs">
+        <li><a href="{{ path('obra_social_editar', { id: obraSocialId }) }}">Datos de Obra Social</a></li>
+        <li class="active"><a href="{{ path('unidad', { obraSocialId: obraSocialId }) }}">Unidades</a></li>
+    </ul>        
+    
+    <form class="form-horizontal" method="POST" action="{{ path('unidad_crear', { obraSocialId: obraSocialId }) }}" >
+
+        {% include 'CipenObraSocialBundle:Unidad:_form.html.twig' %}               
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}

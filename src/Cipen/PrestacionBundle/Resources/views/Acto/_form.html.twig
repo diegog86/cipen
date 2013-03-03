@@ -1,0 +1,86 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.codigo,'Código',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.codigo, { attr : { class : 'span4' } }) }}
+        {{ form_errors (form.codigo) }}
+    </div>
+</div>
+
+<div class="control-group">
+    {{ form_label(form.tipoNomenclador,'Tipo de Nomenclador',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.tipoNomenclador, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.tipoNomenclador) }}
+    </div>
+</div>        
+
+<div class="control-group">
+    {{ form_label(form.descripcion,'Descripción',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.descripcion, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.descripcion) }}
+    </div>
+</div>             
+
+<div class="control-group">
+    {{ form_label(form.cantidadEspecialista,'Cantidad especialistas',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.cantidadEspecialista, { attr : { class : 'span7' } } ) }}
+        {{ form_errors (form.cantidadEspecialista) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.honorarioEspecialista,'Honorario especialista',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.honorarioEspecialista, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.honorarioEspecialista) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.cantidadAyudante,'Cantidad de ayudantes',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.cantidadAyudante, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.cantidadAyudante) }}
+    </div>
+</div> 
+
+
+<div class="control-group">
+    {{ form_label(form.honorarioAyudante,'Honorario ayudante',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.honorarioAyudante, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.honorarioAyudante) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.cantidadAnestesista,'Cantidad de anestesistas',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.cantidadAnestesista, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.cantidadAnestesista) }}
+    </div>
+</div> 
+
+
+<div class="control-group">
+    {{ form_label(form.honorarioAnestesista,'Honorario anestesista',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.honorarioAnestesista, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.honorarioAnestesista) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.gasto,'Gasto',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.gasto, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.gasto) }}
+    </div>
+</div> 
+
+
+{{ form_rest (form) }}

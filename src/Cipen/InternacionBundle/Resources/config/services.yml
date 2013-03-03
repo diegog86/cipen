@@ -1,0 +1,7 @@
+parameters:
+#    cipen_internacion.example.class: Cipen\InternacionBundle\Example
+
+services:
+#    cipen_internacion.example:
+#        class: %cipen_internacion.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

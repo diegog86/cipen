@@ -1,0 +1,7 @@
+parameters:
+#    cipen_paciente.example.class: Cipen\PacienteBundle\Example
+
+services:
+#    cipen_paciente.example:
+#        class: %cipen_paciente.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

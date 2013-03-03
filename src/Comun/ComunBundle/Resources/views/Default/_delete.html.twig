@@ -1,0 +1,6 @@
+<form class="pull-right" style="margin:0 5px; padding:0;"  action="{{url}}" method="POST">
+	{{ form_widget(delete_form) }}
+        <button title="Eliminar" type = "submit" class="btn btn-mini btn-danger" onclick="return confirm('{{ msj }}') ;" type="button" >
+            <i class="icon-remove icon-white"></i>
+        </button>
+</form>

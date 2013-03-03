@@ -1,0 +1,7 @@
+parameters:
+#    cipen_diagnostico.example.class: Cipen\DiagnosticoBundle\Example
+
+services:
+#    cipen_diagnostico.example:
+#        class: %cipen_diagnostico.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

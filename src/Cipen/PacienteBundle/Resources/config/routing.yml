@@ -1,0 +1,15 @@
+paciente:
+  pattern: /
+  defaults: {_controller: "CipenPacienteBundle:Paciente:listar"}
+
+paciente_crear:
+    pattern:  /crear/
+    defaults: { _controller: "CipenPacienteBundle:Paciente:crear" }
+
+paciente_editar:
+    pattern:  /{id}/editar/
+    defaults: { _controller: "CipenPacienteBundle:Paciente:editar" }
+
+paciente_eliminar:
+    pattern:  /{id}/eliminar/
+    defaults: { _controller: "CipenPacienteBundle:Paciente:eliminar" }

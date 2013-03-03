@@ -1,0 +1,35 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.nombre, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.nombre) }}
+    </div>
+</div>                 
+
+<div class="control-group">
+    {{ form_label(form.direccionBarrio,'Barrio',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.direccionBarrio, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.direccionBarrio) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.direccionCalle,'Calle',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.direccionCalle, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.direccionCalle) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.direccionNumero,'Número',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.direccionNumero, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.direccionNumero) }}
+    </div>
+</div> 
+
+{{ form_rest (form) }}

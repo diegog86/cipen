@@ -1,0 +1,15 @@
+acto:
+  pattern: /acto/
+  defaults: {_controller: "CipenPrestacionBundle:Acto:listar"}
+
+acto_crear:
+    pattern:  /acto/crear/
+    defaults: { _controller: "CipenPrestacionBundle:Acto:crear" }
+
+acto_editar:
+    pattern:  /acto/{id}/editar/
+    defaults: { _controller: "CipenPrestacionBundle:Acto:editar" }
+
+acto_eliminar:
+    pattern:  /acto/{id}/eliminar/
+    defaults: { _controller: "CipenPrestacionBundle:Acto:eliminar" }

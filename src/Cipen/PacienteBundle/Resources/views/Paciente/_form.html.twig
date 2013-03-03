@@ -1,0 +1,152 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.dni,'DNI',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.dni, { attr : { class : 'span4' } }) }}
+        {{ form_errors (form.dni) }}
+    </div>
+</div>
+
+<div class="control-group">
+    {{ form_label(form.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.nombre, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.nombre) }}
+    </div>
+</div>        
+
+<div class="control-group">
+    {{ form_label(form.apellido,'Apellido',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.apellido, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.apellido) }}
+    </div>
+</div>             
+
+<div class="control-group">
+    {{ form_label(form.fechaNacimiento,'Fecha de Nacimiento',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.fechaNacimiento, { attr : { 'data-date': 'date' } } ) }}
+        {{ form_errors (form.fechaNacimiento) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.direccionBarrio,'Barrio',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.direccionBarrio, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.direccionBarrio) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.direccionCalle,'Calle',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.direccionCalle, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.direccionCalle) }}
+    </div>
+</div> 
+
+
+<div class="control-group">
+    {{ form_label(form.direccionNumero,'Número',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.direccionNumero, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.direccionNumero) }}
+    </div>
+</div> 
+
+<br><hr>
+
+<h4>Obra social</h4>
+
+
+
+<div class="control-group">
+    {{ form_label(form.obraSocial,'Empresa',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.obraSocial, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.obraSocial) }}
+    </div>
+</div> 
+
+
+<div class="control-group">
+    {{ form_label(form.numeroObraSocial,'Número',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.numeroObraSocial, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.numeroObraSocial) }}
+    </div>
+</div> 
+
+<br><hr>
+
+<h4>Responsable</h4>
+
+
+<div class="control-group">
+    {{ form_label(form.responsable.dni,'DNI',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.responsable.dni, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.responsable.dni) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.responsable.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.responsable.nombre, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.responsable.nombre) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.responsable.apellido,'Apellido',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.responsable.apellido, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.responsable.apellido) }}
+    </div>
+</div>
+
+<div class="control-group">
+    {{ form_label(form.responsable.direccionBarrio,'Barrio',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.responsable.direccionBarrio, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.responsable.direccionBarrio) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.responsable.direccionCalle,'Calle',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.responsable.direccionCalle, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.responsable.direccionCalle) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.responsable.direccionNumero,'Número',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.responsable.direccionNumero, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.responsable.direccionNumero) }}
+    </div>
+</div>
+
+<div class="control-group">
+    {{ form_label(form.responsable.telefono,'Teléfono',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.responsable.telefono, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.responsable.telefono) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.responsable.celular,'Celular',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.responsable.celular, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.responsable.celular) }}
+    </div>
+</div>
+
+{{ form_rest (form) }}

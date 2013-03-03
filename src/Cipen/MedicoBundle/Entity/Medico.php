@@ -4,23 +4,93 @@ namespace Cipen\MedicoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as assert;
+use Comun\ComunBundle\Entity\Persona;
 
 /**
  * Cipen\MedicoBundle\Entity\Medico
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Cipen\MedicoBundle\Entity\MedicoRepository")
+ * @ORM\Entity()
+ * 
  */
-class Medico
-{
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+class Medico extends Persona {
+
+    public static $especialidades = array(
+        "ALERGIA E INMUNOLOGIA" => "ALERGIA E INMUNOLOGIA",
+        "ANATOMIA PATOLOGICA" => "ANATOMIA PATOLOGICA",
+        "ANESTESIOLOGIA	" => "ANESTESIOLOGIA",
+        "ANGIOLOGIA GENERAL Y HEMODINAMIA" =>"ANGIOLOGIA GENERAL Y HEMODINAMIA",
+        "CARDIOLOGIA" => "CARDIOLOGIA",
+        "CARDIOLOGO INFANTIL" => "CARDIOLOGO INFANTIL",
+        "CIRUGIA CARDIOVASCULAR	" => "CIRUGIA CARDIOVASCULAR	",
+        "CIRUGIA DE CABEZA Y CUELLO" => "CIRUGIA DE CABEZA Y CUELLO",
+        "CIRUGIA DE TORAX (CIRUGIA TORACICA)" => "CIRUGIA DE TORAX (CIRUGIA TORACICA)",
+        "CIRUGIA GENERAL" => "CIRUGIA GENERAL",
+        "CIRUGIA INFANTIL (CIRUGIA PEDIATRICA)" => "CIRUGIA INFANTIL (CIRUGIA PEDIATRICA)",
+        "CIRUGIA PLASTICA Y REPARADORA" => "CIRUGIA PLASTICA Y REPARADORA",
+        "CIRUGIA VASCULAR PERIFERICA" => "CIRUGIA VASCULAR PERIFERICA",
+        "CLINICA MEDICA	" => "CLINICA MEDICA",
+        "COLOPROCTOLOGIA" => "COLOPROCTOLOGIA",
+        "DERMATOLOGIA" => "DERMATOLOGIA",
+        "DIAGNOSTICO POR IMÁGENES" => "DIAGNOSTICO POR IMÁGENES",
+        "ENDOCRINOLOGIA" => "ENDOCRINOLOGIA",
+        "ENDOCRINOLOGO INFANTIL" => "ENDOCRINOLOGO INFANTIL",
+        "ESPECIALIDADES ODONTOLOGICAS" => "ESPECIALIDADES ODONTOLOGICAS",
+        "ESPECIALIDAD DE ENDODONCIA" => "ESPECIALIDAD DE ENDODONCIA",
+        "ESPECIALIDAD DE ODONTOPEDIATRIA" => "ESPECIALIDAD DE ODONTOPEDIATRIA",
+        "ESPECIALIDAD DE PERIODONCIA	" => "ESPECIALIDAD DE PERIODONCIA",
+        "ESPECIALIDAD EN ANATOMIA PATOLOGICA BUCALMAXILOFACIAL" => "ESPECIALIDAD EN ANATOMIA PATOLOGICA BUCALMAXILOFACIAL",
+        "ESPECIALIDAD EN CIRUGIA Y TRAUMATOLOGIA BUCO MAXILO FACIAL" => "ESPECIALIDAD EN CIRUGIA Y TRAUMATOLOGIA BUCO MAXILO FACIAL",
+        "ESPECIALIDAD EN CLINICA ESTOMATOLOGICA	" => "ESPECIALIDAD EN CLINICA ESTOMATOLOGICA",
+        "ESPECIALIDAD EN ODONTOLOGIA LEGAL	" => "ESPECIALIDAD EN ODONTOLOGIA LEGAL",
+        "ESPECIALIDAD EN ORTODONCIA Y ORTOPEDIA MAXILAR	" => "ESPECIALIDAD EN ORTODONCIA Y ORTOPEDIA MAXILAR",
+        "ESPECIALIDAD EN PROTESIS DENTOBUCOMAXILAR	" => "ESPECIALIDAD EN PROTESIS DENTOBUCOMAXILAR",
+        "ESPECIALIZACION EN DIAGNOSTICO POR IMAGENES BUCOMAXILOFACIAL" => "ESPECIALIZACION EN DIAGNOSTICO POR IMAGENES BUCOMAXILOFACIAL",
+        "FARMACOLOGIA CLINICA" => "FARMACOLOGIA CLINICA",
+        "FISIATRIA (MEDICINA FISICA Y REHABILITACION)" => "FISIATRIA (MEDICINA FISICA Y REHABILITACION)",
+        "GASTROENTEROLOGIA" => "GASTROENTEROLOGIA",
+        "GASTROENTEROLOGO INFANTIL." => "GASTROENTEROLOGO INFANTIL.",
+        "GENETICA MEDICA" => "GENETICA MEDICA",
+        "GERIATRIA" => "GERIATRIA",
+        "GINECOLOGIA" => "GINECOLOGIA",
+        "HEMATOLOGIA" => "HEMATOLOGIA",
+        "HEMATOLOGO INFANTIL." => "HEMATOLOGO INFANTIL.",
+        "HEMOTERAPIA E INMUNOHEMATOLOGIA" => "HEMOTERAPIA E INMUNOHEMATOLOGIA",
+        "INFECTOLOGIA" => "INFECTOLOGIA",
+        "INFECTOLOGO INFANTIL" => "INFECTOLOGO INFANTIL",
+        "MEDICINA DEL DEPORTE" => "MEDICINA DEL DEPORTE",
+        "MEDICINA DEL TRABAJO" => "MEDICINA DEL TRABAJO",
+        "MEDICINA GENERAL y/O MEDICINA DE FAMILIA" => "MEDICINA GENERAL y/O MEDICINA DE FAMILIA",
+        "MEDICINA LEGAL	" => "MEDICINA LEGAL",
+        "MEDICINA NUCLEAR" => "MEDICINA NUCLEAR",
+        "NEFROLOGIA" => "NEFROLOGIA",
+        "NEFROLOGO INFANTIL." => "NEFROLOGO INFANTIL.",
+        "NEONATOLOGIA" => "NEONATOLOGIA",
+        "NEUMONOLOGIA" => "NEUMONOLOGIA",
+        "NEUMONOLOGO INFANTIL." => "NEUMONOLOGO INFANTIL.",
+        "NEUROCIRUGIA" => "NEUROCIRUGIA",
+        "NEUROLOGIA" => "NEUROLOGIA",
+        "NEUROLOGO INFANTIL." => "NEUROLOGO INFANTIL.",
+        "NUTRICION" => "NUTRICION",
+        "OBSTETRICIA" => "OBSTETRICIA",
+        "OFTALMOLOGIA" => "OFTALMOLOGIA",
+        "ONCOLOGIA" => "ONCOLOGIA",
+        "ONCOLOGO INFANTIL." => "ONCOLOGO INFANTIL.",
+        "ORTOPEDIA Y TRAUMATOLOGIA" => "ORTOPEDIA Y TRAUMATOLOGIA",
+        "OTORRINOLARINGOLOGIA" => "OTORRINOLARINGOLOGIA",
+        "PEDIATRIA" => "PEDIATRIA",
+        "PSIQUIATRIA" => "PSIQUIATRIA",
+        "PSIQUIATRIA INFANTO JUVENIL" => "PSIQUIATRIA INFANTO JUVENIL",
+        "RADIOTERAPIA O TERAPIA RADIANTE" => "RADIOTERAPIA O TERAPIA RADIANTE",
+        "REUMATOLOGIA" => "REUMATOLOGIA",
+        "REUMATOLOGO INFANTIL." => "REUMATOLOGO INFANTIL.",
+        "TERAPIA INTENSIVA" => "TERAPIA INTENSIVA",
+        "TERAPISTA INTENSIVO INFANTIL" => "TERAPISTA INTENSIVO INFANTIL",
+        "TOCOGINECOLOGIA" => "TOCOGINECOLOGIA",
+        "TOXICOLOGIA" => "TOXICOLOGIA",
+        "UROLOGIA" => "UROLOGIA",
+        "OTRA ESPECIALIDAD" => "OTRA ESPECIALIDAD",        
+    );
 
     /**
      * @var string $matricula
@@ -31,54 +101,22 @@ class Medico
     private $matricula;
 
     /**
-     * @var string $dni
-     *
-     * @ORM\Column(name="dni", type="string", length=20, nullable=true)
-     */
-    private $dni;
-
-    /**
-     * @var string $nombre
-     *
-     * @ORM\Column(name="nombre", type="string", length=100)
-	 * @assert\NotBlank(message="Por favor, ingrese nombre") 
-     */
-    private $nombre;
-
-    /**
-     * @var string $apellido
-     *
-     * @ORM\Column(name="apellido", type="string", length=100)
-	 * @assert\NotBlank(message="Por favor, ingrese apellido") 
-     */
-    private $apellido;
-
-    /**
-     * @var integer $especialidad
-     *
-     * @ORM\ManyToOne(targetEntity="Especialidad")
+     * @ORM\Column(name="especialidad",type="string", length=100)
      */
     private $especialidad;
 
 
     /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set matricula
      *
      * @param string $matricula
+     * @return Medico
      */
     public function setMatricula($matricula)
     {
         $this->matricula = $matricula;
+    
+        return $this;
     }
 
     /**
@@ -92,86 +130,25 @@ class Medico
     }
 
     /**
-     * Set dni
-     *
-     * @param string $dni
-     */
-    public function setDni($dni)
-    {
-        $this->dni = $dni;
-    }
-
-    /**
-     * Get dni
-     *
-     * @return string 
-     */
-    public function getDni()
-    {
-        return $this->dni;
-    }
-
-    /**
-     * Set nombre
-     *
-     * @param string $nombre
-     */
-    public function setNombre($nombre)
-    {
-        $this->nombre = $nombre;
-    }
-
-    /**
-     * Get nombre
-     *
-     * @return string 
-     */
-    public function getNombre()
-    {
-        return $this->nombre;
-    }
-
-    /**
-     * Set apellido
-     *
-     * @param string $apellido
-     */
-    public function setApellido($apellido)
-    {
-        $this->apellido = $apellido;
-    }
-
-    /**
-     * Get apellido
-     *
-     * @return string 
-     */
-    public function getApellido()
-    {
-        return $this->apellido;
-    }
-
-    /**
      * Set especialidad
      *
-     * @param integer $especialidad
+     * @param string $especialidad
+     * @return Medico
      */
-    public function setEspecialidad(\Cipen\MedicoBundle\Entity\Especialidad $especialidad)
+    public function setEspecialidad($especialidad)
     {
-       $this->especialidad = $especialidad;
+        $this->especialidad = $especialidad;
+    
+        return $this;
     }
 
     /**
      * Get especialidad
      *
-     * @return integer 
+     * @return string 
      */
     public function getEspecialidad()
     {
         return $this->especialidad;
     }
-    
-    public function __toString(){
-    	return $this->matricula." - ".$this->nombre.", ".$this->apellido;
-    } 
 }

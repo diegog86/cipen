@@ -1,0 +1,15 @@
+diagnostico:
+  pattern: /
+  defaults: {_controller: "CipenDiagnosticoBundle:Diagnostico:listar"}
+
+diagnostico_crear:
+    pattern:  /crear/
+    defaults: { _controller: "CipenDiagnosticoBundle:Diagnostico:crear" }
+
+diagnostico_editar:
+    pattern:  /{id}/editar/
+    defaults: { _controller: "CipenDiagnosticoBundle:Diagnostico:editar" }
+
+diagnostico_eliminar:
+    pattern:  /{id}/eliminar/
+    defaults: { _controller: "CipenDiagnosticoBundle:Diagnostico:eliminar" }

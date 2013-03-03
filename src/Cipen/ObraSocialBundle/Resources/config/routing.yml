@@ -1,0 +1,32 @@
+obra_social:
+  pattern: /
+  defaults: {_controller: "CipenObraSocialBundle:ObraSocial:listar"}
+
+obra_social_crear:
+    pattern:  /crear/
+    defaults: { _controller: "CipenObraSocialBundle:ObraSocial:crear" }
+
+obra_social_editar:
+    pattern:  /{id}/editar/
+    defaults: { _controller: "CipenObraSocialBundle:ObraSocial:editar" }
+
+obra_social_eliminar:
+    pattern:  /{id}/eliminar/
+    defaults: { _controller: "CipenObraSocialBundle:ObraSocial:eliminar" }
+
+
+unidad:
+  pattern: /{obraSocialId}/unidad/
+  defaults: {_controller: "CipenObraSocialBundle:Unidad:listar"}
+
+unidad_crear:
+    pattern:  /{obraSocialId}/unidad/crear/
+    defaults: { _controller: "CipenObraSocialBundle:Unidad:crear" }
+
+unidad_editar:
+    pattern:  /{obraSocialId}/unidad/{id}/editar/
+    defaults: { _controller: "CipenObraSocialBundle:Unidad:editar" }
+
+unidad_eliminar:
+    pattern:  /{obraSocialId}/unidad/{id}/eliminar/
+    defaults: { _controller: "CipenObraSocialBundle:Unidad:eliminar" }

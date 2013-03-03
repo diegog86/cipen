@@ -1,0 +1,7 @@
+parameters:
+#    cipen_prestacion.example.class: Cipen\PrestacionBundle\Example
+
+services:
+#    cipen_prestacion.example:
+#        class: %cipen_prestacion.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
