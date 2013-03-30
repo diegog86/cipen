@@ -197,6 +197,7 @@ class InternacionPrestacionController extends Controller
             $internacionPrestacionActo[$j] = new InternacionPrestacionActo();
             $internacionPrestacionActo[$j]->setActo ($actoUnidad->getActo ());
 
+            
             if ($form['con_os'] and $actoUnidad->getNomenclador () != 'SIN_NOMENCLADOR') {
 
                 $internacionPrestacionActo[$j]->setHonorarioEspecialista ($actoUnidad->getHonorarioEspecialista () * $actoUnidad->getUnidadHonorario ()->getValor ());
@@ -204,6 +205,14 @@ class InternacionPrestacionController extends Controller
                 $internacionPrestacionActo[$j]->setHonorarioAnestesista ($actoUnidad->getHonorarioAnestesista () * $actoUnidad->getUnidadHonorario ()->getValor ());
                 $internacionPrestacionActo[$j]->setGasto ($actoUnidad->getGasto () * $actoUnidad->getUnidadGasto ()->getValor ());
                 $internacionPrestacion->setConObraSocial (true);
+            } elseif($form['con_os']) {
+                
+                $internacionPrestacionActo[$j]->setHonorarioEspecialista ($actoUnidad->getHonorarioEspecialista ());
+                $internacionPrestacionActo[$j]->setHonorarioAyudante ($actoUnidad->getHonorarioAyudante ());
+                $internacionPrestacionActo[$j]->setHonorarioAnestesista ($actoUnidad->getHonorarioAnestesista () );
+                $internacionPrestacionActo[$j]->setGasto ($actoUnidad->getGasto ());
+                $internacionPrestacion->setConObraSocial (true);
+                
             }
 
             $internacionPrestacion->addInternacionPrestacionActo ($internacionPrestacionActo[$j]);

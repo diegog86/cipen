@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Cipen\PacienteBundle\CipenPacienteBundle(),
             new Cipen\PrestacionBundle\CipenPrestacionBundle(),
             new Cipen\DiagnosticoBundle\CipenDiagnosticoBundle(),
+            new Cipen\MedicamentoBundle\CipenMedicamentoBundle(),            
             new Comun\ComunBundle\ComunComunBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
         );

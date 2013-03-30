@@ -1,5 +1,5 @@
 
-function cargarUnidadesNOmenclador() {
+function cargarUnidadesNomenclador() {
     
    var obraSocialId = $('[data-campo="obraSocial"] option:selected').val();
    var url = urlGetUnidadesPorObraSocial;
@@ -7,7 +7,7 @@ function cargarUnidadesNOmenclador() {
    
    $('[data-group-unidades="unidades"]').remove();
 
-   if (obraSocialId != "" && nomenclador != "SIN NOMENCLADOR") {
+   if (obraSocialId != "" && nomenclador != "SIN_NOMENCLADOR") {
        
         $.post(url,{obraSocialId:obraSocialId},function(datos){       
 
@@ -47,9 +47,9 @@ function cargarUnidadesNOmenclador() {
 }
 
 $('[data-campo="nomenclador"]').change(function(){ 
-    cargarUnidadesNOmenclador();
+    cargarUnidadesNomenclador();
 });
 
 $('[data-campo="obraSocial"]').change(function(){    
-   cargarUnidadesNOmenclador();
+   cargarUnidadesNomenclador();
 });

@@ -1,0 +1,26 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+
+{% block admin_title %}
+    Editar medicamento
+{% endblock %}
+
+{% block admin_actions %}
+    <li><a href="{{ path('medicamento') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>
+    <li><a href="{{ path('medicamento_crear') }}"><i class="icon-plus"></i> Crear</a></li>    
+{% endblock %}
+    
+{% set admin_menu_active = 'medicamento' %}
+    
+{% block admin_content %}
+        
+    <form class="form-horizontal" method="POST" action="{{ path('medicamento_editar', { 'id': entity.id }) }}">
+
+        {% include 'CipenMedicamentoBundle:Medicamento:_form.html.twig' %}        
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}

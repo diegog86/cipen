@@ -23,7 +23,7 @@
             {% for entity in entities %}
                 <tr>
                     <td>{{ entity.obraSocial.nombre }}</td>
-                    <td>{{ entity.nomenclador }}</td>
+                    <td>{{ entity.nomencladorDescripcion }}</td>
                     <td>
                         <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
                             <a class="btn" href="{{ path('acto_unidad_editar', {actoId: actoId, id: entity.id }) }}" title="Editar" >

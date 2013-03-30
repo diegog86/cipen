@@ -1,0 +1,19 @@
+medicamento:
+  pattern: /
+  defaults: {_controller: "CipenMedicamentoBundle:Medicamento:listar"}
+
+internacion:
+  pattern: /
+  defaults: {_controller: "CipenInternacionBundle:Internacion:listar"}
+
+medicamento_crear:
+  pattern:  /crear/
+  defaults: {_controller: "CipenMedicamentoBundle:Medicamento:crear" }
+
+medicamento_editar:
+  pattern:  /{id}/editar/
+  defaults: {_controller: "CipenMedicamentoBundle:Medicamento:editar" }
+
+medicamento_eliminar:
+  pattern:  /{id}/eliminar/
+  defaults: {_controller: "CipenMedicamentoBundle:Medicamento:eliminar" }

@@ -125,6 +125,11 @@ class ActoUnidad
     {
         return $this->nomenclador;
     }
+    
+    public function getNomencladorDescripcion()
+    {
+        return self::$tiposNomenclador[$this->nomenclador];
+    }
 
     /**
      * Set honorarioEspecialista
