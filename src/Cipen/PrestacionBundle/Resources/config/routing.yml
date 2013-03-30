@@ -13,3 +13,49 @@ acto_editar:
 acto_eliminar:
     pattern:  /acto/{id}/eliminar/
     defaults: { _controller: "CipenPrestacionBundle:Acto:eliminar" }
+
+#------------------------------------------------------------------#
+
+acto_unidad:
+  pattern: /acto/{actoId}/unidad/
+  defaults: {_controller: "CipenPrestacionBundle:ActoUnidad:listar"}
+
+acto_unidad_crear:
+    pattern:  /acto/{actoId}/unidad/crear/
+    defaults: { _controller: "CipenPrestacionBundle:ActoUnidad:crear" }
+
+acto_unidad_editar:
+    pattern:  /acto/{actoId}/unidad/{id}/editar/
+    defaults: { _controller: "CipenPrestacionBundle:ActoUnidad:editar" }
+
+acto_unidad_eliminar:
+    pattern:  /acto/{actoId}/unidad/{id}/eliminar/
+    defaults: { _controller: "CipenPrestacionBundle:ActoUnidad:eliminar" }
+
+#-------------------MÓDULO---------------------#
+
+modulo:
+  pattern: /modulo/
+  defaults: {_controller: "CipenPrestacionBundle:Modulo:listar"}
+
+modulo_crear:
+    pattern:  /modulo/crear/
+    defaults: { _controller: "CipenPrestacionBundle:Modulo:crear" }
+
+modulo_editar:
+    pattern:  /modulo/{id}/editar/
+    defaults: { _controller: "CipenPrestacionBundle:Modulo:editar" }
+
+modulo_eliminar:
+    pattern:  /modulo/{id}/eliminar/
+    defaults: { _controller: "CipenPrestacionBundle:Modulo:eliminar" }
+
+#------------------------------------------------------------------#
+
+modulo_agregar_acto:
+  pattern: /modulo/{moduloId}/actounidad/agregar
+  defaults: {_controller: "CipenPrestacionBundle:Modulo:agregarActoUnidad"}
+
+modulo_eliminar_acto:
+  pattern: /modulo/{moduloId}/actounidad/{actoUnidadId}/eliminar
+  defaults: {_controller: "CipenPrestacionBundle:Modulo:eliminarActoUnidad"}

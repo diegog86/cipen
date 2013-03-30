@@ -1,3 +1,64 @@
-cipen_internacion_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: CipenInternacionBundle:Default:index }
+internacion:
+  pattern: /
+  defaults: {_controller: "CipenInternacionBundle:Internacion:listar"}
+
+internacion_crear:
+    pattern:  /crear/
+    defaults: { _controller: "CipenInternacionBundle:Internacion:crear" }
+
+internacion_eliminar:
+    pattern:  /{id}/eliminar/
+    defaults: { _controller: "CipenInternacionBundle:Internacion:eliminar" }
+
+
+internacion_ingreso_editar:
+    pattern:  /{id}/ingreso/editar/
+    defaults: { _controller: "CipenInternacionBundle:InternacionIngreso:editar" }
+
+
+internacion_egreso_editar:
+    pattern:  /{id}/egreso/editar/
+    defaults: { _controller: "CipenInternacionBundle:InternacionEgreso:editar" }
+
+
+internacion_habitacion:
+    pattern: /{id}/habitacion/
+    defaults: {_controller: "CipenInternacionBundle:InternacionHabitacion:listar"}
+
+internacion_habitacion_crear:
+    pattern: /{id}/habitacion/crear
+    defaults: {_controller: "CipenInternacionBundle:InternacionHabitacion:crear"}
+
+internacion_habitacion_editar:
+    pattern: /{id}/habitacion/{habitacionId}/editar
+    defaults: {_controller: "CipenInternacionBundle:InternacionHabitacion:editar"}
+
+internacion_habitacion_eliminar:
+    pattern: /{id}/habitacion/{habitacionId}/eliminar
+    defaults: {_controller: "CipenInternacionBundle:InternacionHabitacion:eliminar"}
+
+
+
+internacion_prestacion:
+    pattern: /{internacionId}/{pacienteId}/prestacion/
+    defaults: {_controller: "CipenInternacionBundle:InternacionPrestacion:listar"}
+
+internacion_prestacion_nueva:
+    pattern:  /{internacionId}/{pacienteId}/prestacion/nueva/
+    defaults: { _controller: "CipenInternacionBundle:InternacionPrestacion:nueva" }
+    requirements:
+        _method: POST
+
+internacion_prestacion_crear:
+    pattern:  /{internacionId}/{pacienteId}/prestacion/crear/
+    defaults: { _controller: "CipenInternacionBundle:InternacionPrestacion:crear" }
+    requirements:
+        _method: POST
+
+internacion_prestacion_eliminar:
+    pattern:  /{internacionId}/{pacienteId}/prestacion/{internacionPrestacionId}/eliminar/
+    defaults: { _controller: "CipenInternacionBundle:InternacionPrestacion:eliminar" }
+
+internacion_prestacion_get_ajax:
+    pattern: /internacion/prestacion/get/ajax
+    defaults: {_controller: CipenInternacionBundle:InternacionPrestacion:getPrestacion}    

@@ -103,7 +103,8 @@ class Medico extends Persona {
     /**
      * @ORM\Column(name="especialidad",type="string", length=100)
      */
-    private $especialidad;
+    private $especialidad;  
+
 
 
     /**
@@ -151,4 +152,53 @@ class Medico extends Persona {
     {
         return $this->especialidad;
     }
+    
+    public function __toString () {
+        return $this->getMatricula ()." - ".$this->getApellido ().", ".$this->getNombre ();
+
+    }
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->internacionPrestacionEspecialista = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add internacionPrestacionEspecialista
+     *
+     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacionActo $internacionPrestacionEspecialista
+     * @return Medico
+     */
+    public function addInternacionPrestacionEspecialista(\Cipen\InternacionBundle\Entity\InternacionPrestacionActo $internacionPrestacionEspecialista)
+    {
+        $this->internacionPrestacionEspecialista[] = $internacionPrestacionEspecialista;
+    
+        return $this;
+    }
+
+    /**
+     * Remove internacionPrestacionEspecialista
+     *
+     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacionActo $internacionPrestacionEspecialista
+     */
+    public function removeInternacionPrestacionEspecialista(\Cipen\InternacionBundle\Entity\InternacionPrestacionActo $internacionPrestacionEspecialista)
+    {
+        $this->internacionPrestacionEspecialista->removeElement($internacionPrestacionEspecialista);
+    }
+
+    /**
+     * Get internacionPrestacionEspecialista
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInternacionPrestacionEspecialista()
+    {
+        return $this->internacionPrestacionEspecialista;
+    }
+    
+    
 }

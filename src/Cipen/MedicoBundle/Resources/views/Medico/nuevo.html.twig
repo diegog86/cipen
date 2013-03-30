@@ -12,7 +12,7 @@
     
 {% block admin_content %}
         
-    <form class="form-horizontal" method="POST" action="{{ path('medico_crear') }}" >
+    <form class="form-horizontal" method="POST" action="{{ path('medico_crear') }}" novalidate="novalidate" >
 
         {% include 'CipenMedicoBundle:Medico:_form.html.twig' %}        
         

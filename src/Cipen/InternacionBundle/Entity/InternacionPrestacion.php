@@ -3,13 +3,13 @@
 namespace Cipen\InternacionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Cipen\InternacionBundle\Entity\InternacionPrestacion
- * @ORM\Entity(repositoryClass="Cipen\InternacionBundle\Entity\InternacionPrestacionRepository")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="discriminador", type="string")
- * @ORM\DiscriminatorMap({"internacionModulo" = "InternacionModulo", "internacionActo" = "InternacionActo"})
+ * @ORM\Entity()
  */
 
 class InternacionPrestacion
@@ -22,38 +22,49 @@ class InternacionPrestacion
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-
-     * @ORM\Column(name="fecha", type="date")
-     */
-    private $fecha;
     
     /**
      * @var integer $internacion
      *
-     * @ORM\ManyToOne(targetEntity="Internacion", inversedBy="internacionPrestacion")
+     * @ORM\ManyToOne(targetEntity="Cipen\InternacionBundle\Entity\Internacion", inversedBy="internacionPrestacion")
      */
     private $internacion;
 
     /**
      * @var integer $acto
      *
-     * @ORM\OneToMany(targetEntity="InternacionPrestacionActoMedico" , mappedBy="internacionPrestacion" , cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionPrestacionActo" , mappedBy="internacionPrestacion", cascade={"persist", "remove"})
      */
-    private $internacionPrestacionActoMedico;
+    private $internacionPrestacionActo;
     
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Cipen\PrestacionBundle\Entity\Modulo")
+     * @ORM\ManyToOne(targetEntity="Cipen\PrestacionBundle\Entity\Modulo", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $modulo;
 
+    /**
+     * @ORM\Column(name="conObraSocial", type ="boolean")
+     */
+    private $conObraSocial;
 
-   
+    /**
+     * @ORM\Column(name="fecha", type="date")
+     * @Assert\NotBlank(message="Por favor, seleccione fecha")
+     * 
+     */
+    private $fecha;    
+       
+    
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->internacionPrestacionActoMedico = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->internacionPrestacionActo = new ArrayCollection();
+        $this->conObraSocial = false;
+
     }
     
     /**
@@ -67,19 +78,45 @@ class InternacionPrestacion
     }
 
     /**
+     * Set conObraSocial
+     *
+     * @param boolean $conObraSocial
+     * @return InternacionPrestacion
+     */
+    public function setConObraSocial($conObraSocial)
+    {
+        $this->conObraSocial = $conObraSocial;
+    
+        return $this;
+    }
+
+    /**
+     * Get conObraSocial
+     *
+     * @return boolean 
+     */
+    public function getConObraSocial()
+    {
+        return $this->conObraSocial;
+    }
+
+    /**
      * Set fecha
      *
-     * @param date $fecha
+     * @param \DateTime $fecha
+     * @return InternacionPrestacion
      */
     public function setFecha($fecha)
     {
         $this->fecha = $fecha;
+    
+        return $this;
     }
 
     /**
      * Get fecha
      *
-     * @return date 
+     * @return \DateTime 
      */
     public function getFecha()
     {
@@ -89,17 +126,20 @@ class InternacionPrestacion
     /**
      * Set internacion
      *
-     * @param Cipen\InternacionBundle\Entity\Internacion $internacion
+     * @param \Cipen\InternacionBundle\Entity\Internacion $internacion
+     * @return InternacionPrestacion
      */
-    public function setInternacion(\Cipen\InternacionBundle\Entity\Internacion $internacion)
+    public function setInternacion(\Cipen\InternacionBundle\Entity\Internacion $internacion = null)
     {
         $this->internacion = $internacion;
+    
+        return $this;
     }
 
     /**
      * Get internacion
      *
-     * @return Cipen\InternacionBundle\Entity\Internacion 
+     * @return \Cipen\InternacionBundle\Entity\Internacion 
      */
     public function getInternacion()
     {
@@ -107,60 +147,74 @@ class InternacionPrestacion
     }
 
     /**
-     * Add internacionPrestacionActoMedico
+     * Add internacionPrestacionActo
      *
-     * @param Cipen\InternacionBundle\Entity\InternacionPrestacionActoMedico $internacionPrestacionActoMedico
+     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacionActo $internacionPrestacionActo
+     * @return InternacionPrestacion
      */
-    public function addInternacionPrestacionActoMedico(\Cipen\InternacionBundle\Entity\InternacionPrestacionActoMedico $internacionPrestacionActoMedico)
+    public function addInternacionPrestacionActo(\Cipen\InternacionBundle\Entity\InternacionPrestacionActo $internacionPrestacionActo)
     {
-        $this->internacionPrestacionActoMedico[] = $internacionPrestacionActoMedico;
+        $this->internacionPrestacionActo[] = $internacionPrestacionActo;
+        $internacionPrestacionActo->setInternacionPrestacion($this);
+        return $this;
     }
 
     /**
-     * Get internacionPrestacionActoMedico
+     * Remove internacionPrestacionActo
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacionActo $internacionPrestacionActo
      */
-    public function getInternacionPrestacionActoMedico()
+    public function removeInternacionPrestacionActo(\Cipen\InternacionBundle\Entity\InternacionPrestacionActo $internacionPrestacionActo)
     {
-        return $this->internacionPrestacionActoMedico;
+        $this->internacionPrestacionActo->removeElement($internacionPrestacionActo);
     }
-    
-    
-    
-    
 
-    
-    
+    /**
+     * Get internacionPrestacionActo
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInternacionPrestacionActo()
+    {
+        return $this->internacionPrestacionActo;
+    }
+
     /**
      * Set modulo
      *
-     * @param Cipen\PrestacionBundle\Entity\Modulo $modulo
+     * @param \Cipen\PrestacionBundle\Entity\Modulo $modulo
+     * @return InternacionPrestacion
      */
-    public function setModulo(\Cipen\PrestacionBundle\Entity\Modulo $modulo)
+    public function setModulo(\Cipen\PrestacionBundle\Entity\Modulo $modulo = null)
     {
-    	$this->modulo = $modulo;
-    }
+        $this->modulo = $modulo;
     
+        return $this;
+    }
+
     /**
      * Get modulo
      *
-     * @return Cipen\PrestacionBundle\Entity\Modulo
+     * @return \Cipen\PrestacionBundle\Entity\Modulo 
      */
     public function getModulo()
     {
-    	return $this->modulo;
+        return $this->modulo;
     }
     
-    
-
-    /**
-     * Remove internacionPrestacionActoMedico
-     *
-     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacionActoMedico $internacionPrestacionActoMedico
-     */
-    public function removeInternacionPrestacionActoMedico(\Cipen\InternacionBundle\Entity\InternacionPrestacionActoMedico $internacionPrestacionActoMedico)
-    {
-        $this->internacionPrestacionActoMedico->removeElement($internacionPrestacionActoMedico);
+    public function setInternacionPrestacionActo(ArrayCollection $internacionPrestacionActo){
+       
+        echo 'GASTO: '.$internacionPrestacionActo->getGasto();
+        exit();
+        
+        foreach ($internacionPrestacionActos as $internacionPrestacionActo){
+           // $this->addInternacionPrestacionActo($internacionPrestacionAct);
+            $internacionPrestacionActo->setInternacionPrestacion($this);
+            
+        }
+        
+        
+        $this->internacionPrestacionActo = $internacionPrestacionActo;
+        
     }
 }

@@ -9,10 +9,30 @@ use Symfony\Component\Validator\Constraints as assert;
  * Cipen\InternacionBundle\Entity\Internacion
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Cipen\InternacionBundle\Entity\InternacionRepository")
+ * @ORM\Entity()
  */
 class Internacion
 {
+    public static $motivos = array(
+        'Enfermedad inculpable' => 'Enfermedad inculpable',
+        'Accidente vial' => 'Accidente vial',
+        'Accidente laboral' => 'Accidente laboral',
+        'Enfermedad profesional' => 'Enfermedad profesional'
+    );
+
+    public static $tiposInternaciones = array(
+        'clinica' => 'Clinica',
+        'cirugia' => 'Cirugía',
+    );
+    
+    public static $tiposAltas = array(
+        'Sanatorial'=>'Sanatorial',
+        'Voluntaria'=>'Voluntaria',
+        'Traslado'=>'Traslado',
+        'Obito'=>'Obito'
+     );
+
+
     /**
      * @var integer $id
      *
@@ -26,6 +46,7 @@ class Internacion
      * @var integer $paciente
      *
      * @ORM\ManyToOne(targetEntity="Cipen\PacienteBundle\Entity\Paciente")
+     * @ORM\JoinColumn(nullable=false)
      * @assert\NotNull(message="Por favor, seleccione un paciente")
      */
     private $paciente;
@@ -34,6 +55,7 @@ class Internacion
      * @var integer $prestador
      *
      * @ORM\ManyToOne(targetEntity="Cipen\MedicoBundle\Entity\Medico")
+     * @ORM\JoinColumn(nullable=false)
      * @assert\NotNull(message="Por favor, seleccione un prestador")
      */
     private $prestador;
@@ -42,24 +64,25 @@ class Internacion
      * @var integer $prescriptor
      *
      * @ORM\ManyToOne(targetEntity="Cipen\MedicoBundle\Entity\Medico")
-	 * @assert\NotNull(message="Por favor, seleccione un prescriptor")
+     * @ORM\JoinColumn(nullable=false)
+     * @assert\NotNull(message="Por favor, seleccione un prescriptor")
      */
     private $prescriptor;
     
     /**
-     * @var integer $diagnostico
      *
      * @ORM\ManyToMany(targetEntity="Cipen\DiagnosticoBundle\Entity\Diagnostico")
-     * @assert\NotNull(message="Por favor, agregue un diagnostico")
+     * @ORM\JoinColumn(nullable=false)
      * @assert\NotBlank(message="Por favor, agregue un diagnostico")
      */
-    private $diagnosticoInternacion;
+    private $diagnosticoIngreso;
 
 
     /**
      * @var integer $modulos
      *
      * @ORM\OneToMany(targetEntity="InternacionPrestacion", mappedBy="internacion", cascade={"persist","remove"})
+     * @ORM\JoinColumn(nullable=true)
      * @ORM\OrderBy({"fecha"="DESC"})
      */
     private $internacionPrestacion;
@@ -80,50 +103,54 @@ class Internacion
     
     /**
      *
-     * @ORM\Column(name="motivoIngreso", type="integer")
+     * @ORM\Column(name="motivoIngreso", type="string")
      */
     private $motivoIngreso;
     
     
     /**
      *
-     * @ORM\Column(name="tipoAlta", type="integer", nullable=true)
+     * @ORM\Column(name="tipoAlta", type="string", nullable=true)
      */
     private $tipoAlta;
 
-    /**
-     *
-     * @ORM\Column(name="tipoPago", type="integer", nullable=true)
-     */
-    private $tipoPago;
 
     /**
      * @var integer $diagnostico
      *
      * @ORM\ManyToMany(targetEntity="Cipen\DiagnosticoBundle\Entity\Diagnostico")
      * @ORM\JoinTable(name="internacion_diagnosticoEgreso")
+     * @ORM\JoinColumn(nullable=true)
      * 
      */
     private $diagnosticoEgreso;
+    
+    /**
+     *
+     * @ORM\Column(name="tipoInternacion", type="string")
+     */
+    private $tipoInternacion;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\Habitacion", mappedBy="internacion")
+     */
+    private $habitacion;
     
     
     public function getNumero(){
     	return "INT".str_pad($this->getId(),5,0,STR_PAD_LEFT);
     }
     
+ 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-    	$this->diagnosticoInternacion = new \Doctrine\Common\Collections\ArrayCollection();
-    	$this->diagnosticoEgreso = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * @ORM\prePersist
-     */
-    public function prePersist()
-    {
-    	$this->setFechaHoraIngreso(new \DateTime);
-    	$this->setFechaHoraEgreso(new \DateTime);
+        $this->diagnosticoIngreso = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->internacionPrestacion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->diagnosticoEgreso = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->habitacion = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -139,17 +166,20 @@ class Internacion
     /**
      * Set fechaHoraIngreso
      *
-     * @param datetime $fechaHoraIngreso
+     * @param \DateTime $fechaHoraIngreso
+     * @return Internacion
      */
     public function setFechaHoraIngreso($fechaHoraIngreso)
     {
         $this->fechaHoraIngreso = $fechaHoraIngreso;
+    
+        return $this;
     }
 
     /**
      * Get fechaHoraIngreso
      *
-     * @return datetime 
+     * @return \DateTime 
      */
     public function getFechaHoraIngreso()
     {
@@ -159,17 +189,20 @@ class Internacion
     /**
      * Set fechaHoraEgreso
      *
-     * @param datetime $fechaHoraEgreso
+     * @param \DateTime $fechaHoraEgreso
+     * @return Internacion
      */
     public function setFechaHoraEgreso($fechaHoraEgreso)
     {
         $this->fechaHoraEgreso = $fechaHoraEgreso;
+    
+        return $this;
     }
 
     /**
      * Get fechaHoraEgreso
      *
-     * @return datetime 
+     * @return \DateTime 
      */
     public function getFechaHoraEgreso()
     {
@@ -179,17 +212,20 @@ class Internacion
     /**
      * Set motivoIngreso
      *
-     * @param integer $motivoIngreso
+     * @param string $motivoIngreso
+     * @return Internacion
      */
     public function setMotivoIngreso($motivoIngreso)
     {
         $this->motivoIngreso = $motivoIngreso;
+    
+        return $this;
     }
 
     /**
      * Get motivoIngreso
      *
-     * @return integer 
+     * @return string 
      */
     public function getMotivoIngreso()
     {
@@ -200,10 +236,13 @@ class Internacion
      * Set tipoAlta
      *
      * @param integer $tipoAlta
+     * @return Internacion
      */
     public function setTipoAlta($tipoAlta)
     {
         $this->tipoAlta = $tipoAlta;
+    
+        return $this;
     }
 
     /**
@@ -215,41 +254,48 @@ class Internacion
     {
         return $this->tipoAlta;
     }
+    
 
     /**
-     * Set tipoPago
+     * Set tipoInternacion
      *
-     * @param integer $tipoPago
+     * @param string $tipoInternacion
+     * @return Internacion
      */
-    public function setTipoPago($tipoPago)
+    public function setTipoInternacion($tipoInternacion)
     {
-        $this->tipoPago = $tipoPago;
+        $this->tipoInternacion = $tipoInternacion;
+    
+        return $this;
     }
 
     /**
-     * Get tipoPago
+     * Get tipoInternacion
      *
-     * @return integer 
+     * @return string 
      */
-    public function getTipoPago()
+    public function getTipoInternacion()
     {
-        return $this->tipoPago;
+        return $this->tipoInternacion;
     }
 
     /**
      * Set paciente
      *
-     * @param Cipen\PacienteBundle\Entity\Paciente $paciente
+     * @param \Cipen\PacienteBundle\Entity\Paciente $paciente
+     * @return Internacion
      */
     public function setPaciente(\Cipen\PacienteBundle\Entity\Paciente $paciente)
     {
         $this->paciente = $paciente;
+    
+        return $this;
     }
 
     /**
      * Get paciente
      *
-     * @return Cipen\PacienteBundle\Entity\Paciente 
+     * @return \Cipen\PacienteBundle\Entity\Paciente 
      */
     public function getPaciente()
     {
@@ -259,17 +305,20 @@ class Internacion
     /**
      * Set prestador
      *
-     * @param Cipen\MedicoBundle\Entity\Medico $prestador
+     * @param \Cipen\MedicoBundle\Entity\Medico $prestador
+     * @return Internacion
      */
     public function setPrestador(\Cipen\MedicoBundle\Entity\Medico $prestador)
     {
         $this->prestador = $prestador;
+    
+        return $this;
     }
 
     /**
      * Get prestador
      *
-     * @return Cipen\MedicoBundle\Entity\Medico 
+     * @return \Cipen\MedicoBundle\Entity\Medico 
      */
     public function getPrestador()
     {
@@ -279,95 +328,70 @@ class Internacion
     /**
      * Set prescriptor
      *
-     * @param Cipen\MedicoBundle\Entity\Medico $prescriptor
+     * @param \Cipen\MedicoBundle\Entity\Medico $prescriptor
+     * @return Internacion
      */
     public function setPrescriptor(\Cipen\MedicoBundle\Entity\Medico $prescriptor)
     {
         $this->prescriptor = $prescriptor;
+    
+        return $this;
     }
 
     /**
      * Get prescriptor
      *
-     * @return Cipen\MedicoBundle\Entity\Medico 
+     * @return \Cipen\MedicoBundle\Entity\Medico 
      */
     public function getPrescriptor()
     {
         return $this->prescriptor;
     }
 
-
     /**
-     * Add diagnosticoInternacion
+     * Add diagnosticoIngreso
      *
-     * @param Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoInternacion
-     */
-    public function addDiagnostico(\Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoInternacion)
-    {
-        $this->diagnosticoInternacion[] = $diagnosticoInternacion;
-    }
-
-    /**
-     * Get diagnosticoInternacion
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getDiagnosticoInternacion()
-    {
-        return $this->diagnosticoInternacion;
-    }
-
-    /**
-     * Get diagnosticoEgreso
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getDiagnosticoEgreso()
-    {
-        return $this->diagnosticoEgreso;
-    }
-
-    /**
-     * Add internacionPrestacion
-     *
-     * @param Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion
-     */
-    public function addInternacionPrestacion(\Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion)
-    {
-        $this->internacionPrestacion[] = $internacionPrestacion;
-    }
-
-    /**
-     * Get internacionPrestacion
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getInternacionPrestacion()
-    {
-        return $this->internacionPrestacion;
-    }
-
-    /**
-     * Add diagnosticoInternacion
-     *
-     * @param \Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoInternacion
+     * @param \Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoIngreso
      * @return Internacion
      */
-    public function addDiagnosticoInternacion(\Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoInternacion)
+    public function addDiagnosticoIngreso(\Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoIngreso)
     {
-        $this->diagnosticoInternacion[] = $diagnosticoInternacion;
+        $this->diagnosticoIngreso[] = $diagnosticoIngreso;
     
         return $this;
     }
 
     /**
-     * Remove diagnosticoInternacion
+     * Remove diagnosticoIngreso
      *
-     * @param \Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoInternacion
+     * @param \Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoIngreso
      */
-    public function removeDiagnosticoInternacion(\Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoInternacion)
+    public function removeDiagnosticoIngreso(\Cipen\DiagnosticoBundle\Entity\Diagnostico $diagnosticoIngreso)
     {
-        $this->diagnosticoInternacion->removeElement($diagnosticoInternacion);
+        $this->diagnosticoIngreso->removeElement($diagnosticoIngreso);
+    }
+
+    /**
+     * Get diagnosticoIngreso
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDiagnosticoIngreso()
+    {
+        return $this->diagnosticoIngreso;
+    }
+
+    /**
+     * Add internacionPrestacion
+     *
+     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion
+     * @return Internacion
+     */
+    public function addInternacionPrestacion(\Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion)
+    {
+        $this->internacionPrestacion[] = $internacionPrestacion;
+    
+        return $this;
     }
 
     /**
@@ -378,6 +402,16 @@ class Internacion
     public function removeInternacionPrestacion(\Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion)
     {
         $this->internacionPrestacion->removeElement($internacionPrestacion);
+    }
+
+    /**
+     * Get internacionPrestacion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInternacionPrestacion()
+    {
+        return $this->internacionPrestacion;
     }
 
     /**
@@ -402,4 +436,48 @@ class Internacion
     {
         $this->diagnosticoEgreso->removeElement($diagnosticoEgreso);
     }
+
+    /**
+     * Get diagnosticoEgreso
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDiagnosticoEgreso()
+    {
+        return $this->diagnosticoEgreso;
+    }
+
+    /**
+     * Add habitacion
+     *
+     * @param \Cipen\InternacionBundle\Entity\Habitacion $habitacion
+     * @return Internacion
+     */
+    public function addHabitacion(\Cipen\InternacionBundle\Entity\Habitacion $habitacion)
+    {
+        $this->habitacion[] = $habitacion;
+    
+        return $this;
+    }
+
+    /**
+     * Remove habitacion
+     *
+     * @param \Cipen\InternacionBundle\Entity\Habitacion $habitacion
+     */
+    public function removeHabitacion(\Cipen\InternacionBundle\Entity\Habitacion $habitacion)
+    {
+        $this->habitacion->removeElement($habitacion);
+    }
+
+    /**
+     * Get habitacion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHabitacion()
+    {
+        return $this->habitacion;
+    }
+
 }

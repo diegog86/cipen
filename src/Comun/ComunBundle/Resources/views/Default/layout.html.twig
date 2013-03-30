@@ -12,10 +12,11 @@
         'bundles/comuncomun/bootstrap/less/bootstrap.less'
         'bundles/comuncomun/bootstrap/less/responsive.less'
         'bundles/comuncomun/css/jquery/jquery-ui-1.10.1.custom.css'
+        'bundles/comuncomun/select2/select2.css'
+        'bundles/cipeninternacion/css/internacion.less'
     %}
+    
         <link rel="stylesheet" href="{{ asset_url }}" />
-        
-        
         
     {% endstylesheets %}
 {% endblock %}
@@ -23,13 +24,19 @@
 {% block javascripts %}
         
     {{ parent() }}
+        
     {% javascripts output='assets/js/main.js' filter='?closure'
         'bundles/comuncomun/jquery/jquery-1.9.1.js'
         'bundles/comuncomun/jquery/jquery-ui-1.10.1.custom.js'
         'bundles/comuncomun/jquery/extension/timepicker.js'
         'bundles/comuncomun/js/ui.js'
+        'bundles/cipenprestacion/js/unidad_acto.js'
+        'bundles/cipeninternacion/js/internacion_prestacion.js'
+        'bundles/comuncomun/select2/select2.js'
     %}
-        <script src="{{ asset_url }}"></script>
+    
+    <script src="{{ asset_url }}"></script>
+        
     {% endjavascripts %}
         
 {% endblock %}    
@@ -78,14 +85,12 @@
                 <div class="span2 affix"  >
 
                     {% set admin_menu = {
-                        internacion:          ['','Internaciones'],
-                        paciente:             [path('paciente'),'Pacientes'],
-                        obraSocial:           [path('obra_social'),'Obras Sociales'],
-                        prestacion:         [path('acto'),'Prestaciones'],
-                        medico:             [ path('medico'),'Médicos'],
-                        diagnostico:         [path('diagnostico'),'Diagnósticos'],
-                        facturacion:         ['','Facturación'],
-                        medicamento:         ['','Medicamentos'],
+                        internacion:          [path('internacion'),'Internaciones',[]],
+                        paciente:             [path('paciente'),'Pacientes',[]],
+                        obraSocial:           [path('obra_social'),'Obras Sociales',[]],
+                        prestacion:         ['javascript:void(0)','Prestaciones',[ [path('acto'),'Acto médico'], [path('modulo'),'Módulo'] ] ],
+                        medico:             [ path('medico'),'Médicos',[]],
+                        diagnostico:         [path('diagnostico'),'Diagnósticos',[]],
                     } %}
                     
                     {% set admin_menu_active = admin_menu_active is defined ? admin_menu_active : '' %}                    
@@ -95,7 +100,16 @@
                         <ul class="nav nav-list">
                             {% for menu_name, menu_item in admin_menu %}
                                 <li{% if menu_name == admin_menu_active %} class="active"{% endif %}>
-                                    <a href="{{ menu_item[0] }}">{{ menu_item[1] }}</a>
+                                    <a href="{{ menu_item[0] }}" {% if menu_item[2] | length > 0 %} data-menu="{{ menu_name }}" {% endif  %} >{{ menu_item[1] }}</a>                                 
+                                    {% if menu_item[2] | length > 0 %}
+                                        <ul class="nav nav-list">
+                                            {% for sub_menu  in menu_item[2]  %}
+                                                <li>
+                                                    <a href="{{ sub_menu[0] }}"  >{{ sub_menu[1] }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>

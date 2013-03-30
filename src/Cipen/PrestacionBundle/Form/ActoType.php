@@ -14,16 +14,7 @@ class ActoType extends AbstractType
     {
         $builder
             ->add('codigo')
-            ->add('tipoNomenclador','choice',array('choices'=>  Acto::$tiposNomenclador))
             ->add('descripcion')
-            ->add('cantidadEspecialista')
-            ->add('honorarioEspecialista')
-            ->add('cantidadAyudante')
-            ->add('honorarioAyudante')
-            ->add('cantidadAnestesista')
-            ->add('honorarioAnestesista')
-            ->add('gasto')
-                 
             ;
     }
 

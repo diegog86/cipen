@@ -1,0 +1,55 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+  
+{% block admin_title %}
+    Gestión de internaciones
+{% endblock %}
+    
+{% block admin_actions %}
+    <li><a href="{{ path('internacion_crear') }}"><i class="icon-plus"></i> Crear</a></li>
+{% endblock %}
+    
+{% set admin_menu_active = 'internacion' %}
+    
+{% block admin_content %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th width ="100" >Número</th>
+                <th>Paciente</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.getNumero }}</td>
+                    <td>{{ entity.paciente.apellido }}, {{ entity.paciente.nombre }}</td>
+                    <td>
+                        <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
+                            <a class="btn" href="{{ path('internacion_ingreso_editar', {id: entity.id}) }}" title="Ingreso" >
+                                Ingreso
+                            </a>
+                            <a class="btn" href="{{ path('internacion_habitacion', {id: entity.id}) }}" title="Habitación" >
+                                Habitación
+                            </a>
+                            <a class="btn" href="{{ path('internacion_prestacion', {internacionId: entity.id, pacienteId: entity.paciente.id}) }}" title="Módulos/Actos Médicos" >
+                                Prestaciones
+                            </a>
+                            <a class="btn" href="{{ path('internacion_egreso_editar', {id: entity.id}) }}" title="Egreso" >
+                                Egreso
+                            </a>
+                                
+                            <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar esta internación?')){ return false }" href="{{ path('internacion_eliminar', {id: entity.id}) }}" title="Eliminar" >
+                                <i class="icon-white icon-trash"></i>
+                            </a>                                
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">No existen registros</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}

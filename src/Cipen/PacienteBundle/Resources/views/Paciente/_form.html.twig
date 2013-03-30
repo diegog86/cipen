@@ -27,7 +27,7 @@
 <div class="control-group">
     {{ form_label(form.fechaNacimiento,'Fecha de Nacimiento',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
-        {{ form_widget (form.fechaNacimiento, { attr : { 'data-date': 'date' } } ) }}
+        {{ form_widget (form.fechaNacimiento) }}
         {{ form_errors (form.fechaNacimiento) }}
     </div>
 </div> 

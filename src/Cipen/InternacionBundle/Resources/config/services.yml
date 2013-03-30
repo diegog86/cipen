@@ -5,3 +5,8 @@ services:
 #    cipen_internacion.example:
 #        class: %cipen_internacion.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    validator.unique.internacion_prestacion_validator:
+        class: Cipen\InternacionBundle\Validator\Constraints\InternacionPrestacionValidator
+        arguments: ['@validator']
+        tags:
+              - { name: validator.constraint_validator, alias: internacion_prestacion_validator }

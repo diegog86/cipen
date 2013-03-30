@@ -1,0 +1,25 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+
+{% block admin_title %}
+    Nuevo módulo
+{% endblock %}
+
+{% block admin_actions %}
+    <li><a href="{{ path('modulo') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>
+{% endblock %}
+
+{% set admin_menu_active = 'prestacion' %}    
+    
+{% block admin_content %}
+        
+    <form class="form-horizontal" method="POST" action="{{ path('modulo_crear') }}" >
+
+        {% include 'CipenPrestacionBundle:Modulo:_form.html.twig' %}
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}

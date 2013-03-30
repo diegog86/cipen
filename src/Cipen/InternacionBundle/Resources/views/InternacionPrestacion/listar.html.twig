@@ -1,0 +1,106 @@
+{% extends "CipenInternacionBundle:Internacion:editar_layout.html.twig" %}
+            
+{% block admin_content %}
+
+   <ul class="nav nav-tabs">
+        <li><a href="{{ path('internacion_ingreso_editar', { id: internacionId }) }}">Ingreso</a></li>
+        <li><a href="{{ path('internacion_habitacion', { id: internacionId }) }}">Habitación</a></li>
+        <li class="active" ><a href="{{ path('internacion_prestacion', { internacionId : internacionId, pacienteId: pacienteId }) }}">Prestaciones</a></li>
+        <li><a href="{{ path('internacion_egreso_editar', { id: internacionId }) }}">Egreso</a></li>   
+    </ul>    
+
+    <form method="POST" action="{{ path('internacion_prestacion_nueva', { internacionId : internacionId, pacienteId: pacienteId }) }}" >
+        
+        <div class="well well-small">
+
+            <div class="row-fluid" style="margin-bottom: 10px;">
+
+              <label class="radio inline">
+                    <input type="radio" data-prestacion="tipo_prestacion" name="prestacion_nueva[tipo_prestacion]" id="optionsRadios1" value="modulo" checked>
+                    Módulo
+              </label>
+
+                <label class="radio inline" style="margin-right: 30px">
+                    <input type="radio" data-prestacion="tipo_prestacion" name="prestacion_nueva[tipo_prestacion]" id="optionsRadios2" value="acto" >
+                    Acto médico
+              </label>
+
+              <label class="radio inline">
+                    <input type="radio" data-prestacion="con_os" name="prestacion_nueva[con_os]" id="optionsRadios1" value="1" checked>
+                    Con obra social
+              </label>
+
+              <label class="radio inline">
+                    <input type="radio" data-prestacion="con_os" name="prestacion_nueva[con_os]" id="optionsRadios2" value="0" >
+                    Sin obra social
+              </label>
+
+              <input type="hidden" data-prestacion="p" name="prestacion_nueva[paciente]" value="{{ pacienteId }}" />
+                
+            </div>
+            <div class="row-fluid">
+
+                <select class="span10" data-genemu="select2" name="prestacion_nueva[prestacion]" data-prestacion="prestacion" >
+                </select>
+
+                <button style="margin-left: 10px;" class="btn btn-primary btn-small" type="submit" title="Agregar prestaciónn" data-prestacion-btn="agregar" >
+                        <i class="icon-plus icon-white"></i>
+                        Agregar prestación
+                </button>
+            </div>        
+        </div>
+    
+    </form>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th width="120">Realizado el</th>
+                <th width="120">Tipo</th>
+                <th>Prestación</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.fecha | date('d/m/Y') }}</td>
+                    <td>{{ entity.modulo is not empty ? '<span class="label label-inverse">MÓDULO</span>' : '<span class="label label-info">ACTO MÉDICO</span>' }}</td>
+                    <td>{{ entity.modulo is not empty ? entity.modulo.codigo~" - "~entity.modulo.descripcion : entity.internacionPrestacionActo[0].acto.codigo~" - "~entity.internacionPrestacionActo[0].acto.descripcion }}</td>
+                    <td>
+                        <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
+                            <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar esta prestación?')){ return false }" href="{{ path('internacion_prestacion_eliminar', { internacionId:internacionId, pacienteId:pacienteId , internacionPrestacionId: entity.id }) }}" title="Eliminar" >
+                                <i class="icon-white icon-trash"></i>
+                            </a>                                
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">No existen registros</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var urlInternacionPrestacionGetAjax = "{{ path('internacion_prestacion_get_ajax') }}"
+    </script>
+
+
+    <script type="text/javascript">  
+        $(function() {
+            cargarPrestacion();
+        });
+    </script>
+    
+{% endblock %}
+
+
+    

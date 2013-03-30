@@ -1,0 +1,12 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+
+{% block admin_title %}
+    Editar módulo
+{% endblock %}
+
+{% block admin_actions %}
+    <li><a href="{{ path('modulo') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>
+    <li><a href="{{ path('modulo_crear') }}"><i class="icon-plus"></i> Crear</a></li>    
+{% endblock %}
+    
+{% set admin_menu_active = 'prestacion' %}

@@ -1,0 +1,48 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+  
+{% block admin_title %}
+    Gestión de módulos
+{% endblock %}
+    
+{% block admin_actions %}
+    <li><a href="{{ path('modulo_crear') }}"><i class="icon-plus"></i> Crear</a></li>
+{% endblock %}
+
+{% set admin_menu_active = 'prestacion' %}    
+    
+{% block admin_content %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="span4" >Obra Social</th>                
+                <th class="span6">Módulo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.obraSocial.nombre }}</td>
+                    <td>{{ entity.descripcion }}</td>
+                    <td>
+                        <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
+                            <a class="btn" href="{{ path('modulo_agregar_acto', {moduloId: entity.id}) }}" title="Agregar acto médico al módulo" >
+                                <i class="icon-list"></i> &nbsp;AM
+                            </a>
+                            <a class="btn" href="{{ path('modulo_editar', {id: entity.id}) }}" title="Editar" >
+                                <i class="icon-pencil"></i>
+                            </a>
+                           <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar este módulo?')){ return false }" href="{{ path('modulo_eliminar', {id: entity.id}) }}" title="Eliminar" >
+                                <i class="icon-white icon-trash"></i>
+                            </a>                                
+                        </div>
+                    </td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">No existen registros</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}

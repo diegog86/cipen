@@ -8,7 +8,7 @@
     <li><a href="{{ path('acto_crear') }}"><i class="icon-plus"></i> Crear</a></li>
 {% endblock %}
 
-{% set admin_menu_active = 'acto' %}    
+{% set admin_menu_active = 'prestacion' %}    
     
 {% block admin_content %}
     <table class="table table-hover">
@@ -23,6 +23,9 @@
                     <td>{{ entity.descripcion }}</td>
                     <td>
                         <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
+                            <a class="btn" href="{{ path('acto_unidad', {actoId: entity.id}) }}" title="Unidad Obra Social" >
+                                <i class="icon-list"></i> &nbsp;OS
+                            </a>
                             <a class="btn" href="{{ path('acto_editar', {id: entity.id}) }}" title="Editar" >
                                 <i class="icon-pencil"></i>
                             </a>

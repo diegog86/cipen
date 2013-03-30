@@ -1,0 +1,52 @@
+{% extends "CipenInternacionBundle:Internacion:editar_layout.html.twig" %}
+
+{# CONSIDERAR MOSTRAR TODO LOS ERRORES IGUAL QUE ACA #}
+{% form_theme form _self %}
+
+{% block form_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+        {% for error in errors %}
+            <div class="item-error">{{
+                error.messagePluralization is null
+                    ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                    : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+            }}</div>
+        {% endfor %}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}
+
+
+
+{% block admin_content %}
+
+   <ul class="nav nav-tabs">
+        <li><a href="{{ path('internacion_ingreso_editar', { id: internacionPrestacion.internacion.id }) }}">Ingreso</a></li>
+        <li><a href="{{ path('internacion_habitacion', { id: internacionPrestacion.internacion.id }) }}">Habitación</a></li>
+        <li ><a href="{{ path('internacion_prestacion', { internacionId : internacionPrestacion.internacion.id, pacienteId: paciente.id }) }}">Prestaciones</a></li>        
+        <li class="active" ><a href="javascript:void(0);">Agregar prestación</a></li>
+        <li><a href="{{ path('internacion_egreso_editar', { id: internacionPrestacion.internacion.id }) }}">Egreso</a></li>   
+    </ul>  
+
+                            
+<form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('internacion_prestacion_crear', { internacionId : internacionPrestacion.internacion.id, pacienteId : paciente.id }) }}" >
+        {% include 'CipenInternacionBundle:InternacionPrestacion:_form.html.twig' %}        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+    <script type="text/javascript"> 
+         $(function() {
+             nuevaPrestacion ()
+         });
+    </script>
+    
+{% endblock %}

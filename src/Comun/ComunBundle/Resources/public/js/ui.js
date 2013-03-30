@@ -1,6 +1,5 @@
 
-
-$('[data-date="date"]').datepicker({
+$('[data-jquery="date"]').datepicker({
     numberOfMonths: 1,dateFormat: 'dd/mm/yy',
     monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
     dayNamesShort: ["Dom", "Lun", "Mar", "Mir", "Jue", "Vin", "Sab"],
@@ -11,7 +10,7 @@ $('[data-date="date"]').datepicker({
 });
 
 
-$('[data-date="datetime"]').datetimepicker({
+$('[data-jquery="datetime"]').datetimepicker({
     numberOfMonths: 1,dateFormat: 'dd/mm/yy',
     monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
     dayNamesShort: ["Dom", "Lun", "Mar", "Mir", "Jue", "Vin", "Sab"],
@@ -26,3 +25,5 @@ $('[data-date="datetime"]').datetimepicker({
     changeYear: true
 });
 
+  
+   $(document).ready(function() { $('select').not('[style="display:none"]').select2(); });

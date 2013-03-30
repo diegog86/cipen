@@ -1,0 +1,49 @@
+{% extends "CipenInternacionBundle:Internacion:editar_layout.html.twig" %}  
+  
+{% block admin_content %}
+
+   <ul class="nav nav-tabs">
+        <li ><a href="{{ path('internacion_ingreso_editar', { id: internacion.id }) }}">Ingreso</a></li>
+        <li  class="active" ><a href="{{ path('internacion_habitacion', { id: internacion.id }) }}">Habitación</a></li>
+        <li><a href="{{ path('internacion_prestacion', { internacionId: internacion.id, pacienteId: internacion.paciente.id }) }}">Prestaciónes</a></li>
+        <li><a href="{{ path('internacion_egreso_editar', { id: internacion.id }) }}">Egreso</a></li>        
+    </ul> 
+
+    <div class="well well-small">
+        <a href="{{ path('internacion_habitacion_crear', { id : internacion.id }) }}"><i class="icon-plus"></i> Agregar habitación</a>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th width ="200" >Fecha/hora ingreso</th>                
+                <th width ="150" >Tipo</th>
+                <th>Descripcion</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in internacion.habitacion %}
+                <tr>
+                    <td>{{ entity.fechaHoraIngreso | date('d/m/Y h:i') }} hs</td>
+                    <td>{{ entity.tipo }}</td>
+                    <td>{{ entity.descripcion }}</td>
+                    <td>
+                        <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
+                            <a class="btn" href="{{ path('internacion_habitacion_editar', {id:internacion.id, habitacionId: entity.id}) }}" title="Editar" >
+                                <i class="icon-pencil"></i>
+                            </a>        
+                            <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar esta habitación?')){ return false }" href="{{ path('internacion_habitacion_eliminar', {id:internacion.id ,habitacionId: entity.id}) }}" title="Eliminar" >
+                                <i class="icon-white icon-trash"></i>
+                            </a> 
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No existen registros</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}

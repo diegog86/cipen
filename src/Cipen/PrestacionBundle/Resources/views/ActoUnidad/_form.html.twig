@@ -1,0 +1,98 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.nomenclador,'Tipo de Nomenclador',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.nomenclador, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.nomenclador) }}
+    </div>
+</div>               
+
+<div class="control-group" data-campo-group="obraSocial" >
+    {{ form_label(form.obraSocial,'Obra Social',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.obraSocial, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.obraSocial) }}
+    </div>
+</div>  
+
+{% if entity.unidadHonorario and entity.unidadGasto  %}
+    
+    <div class="control-group" data-group-unidades="unidades">
+        <label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Honorario</label>
+        <div class="controls">
+            <select class="span7" name="unidadHonorario" >
+                {% for unidad in entity.obraSocial.unidades %}
+                    {% set selectedUH = '' %}
+                    {% if unidad.id == entity.unidadHonorario.id %}
+                        {% set selectedUH = 'selected="selected"' %}
+                    {% endif %}
+                     <option {{ selectedUH }} value="{{ unidad.id }}">{{ unidad.descripcion }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="control-group" data-group-unidades="unidades">
+        <label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Gasto</label>
+        <div class="controls">
+            <select class="span7" name="unidadGasto" >
+                {% for unidad in entity.obraSocial.unidades %}
+                    {% set selectedUG = '' %}
+                    {% if unidad.id == entity.unidadGasto.id %}
+                        {% set selectedUG = 'selected="selected"' %}
+                    {% endif %}
+                     <option {{ selectedUG }} value="{{ unidad.id }}">{{ unidad.descripcion }}</option>
+                {% endfor %}                
+            </select>
+        </div>
+    </div>
+
+{% endif %}
+
+
+
+
+<hr>
+
+<div class="control-group">
+    {{ form_label(form.honorarioEspecialista,'Honorario especialista',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.honorarioEspecialista, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.honorarioEspecialista) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.honorarioAyudante,'Honorario ayudante',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.honorarioAyudante, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.honorarioAyudante) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.honorarioAnestesista,'Honorario anestesista',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.honorarioAnestesista, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.honorarioAnestesista) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.gasto,'Gasto',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.gasto, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.gasto) }}
+    </div>
+</div> 
+
+
+{{ form_rest (form) }}
+
+
+<script type="text/javascript">
+    
+    var urlGetUnidadesPorObraSocial = "{{ path('unidad_get_por_obra_socia') }}"
+    
+</script>

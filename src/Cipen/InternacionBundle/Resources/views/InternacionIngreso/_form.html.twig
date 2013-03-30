@@ -1,0 +1,59 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.paciente,'Paciente',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.paciente, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.paciente) }}
+    </div>
+</div>                 
+
+<div class="control-group">
+    {{ form_label(form.prestador,'Prestador',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.prestador, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.prestador) }}
+    </div>
+</div>   
+
+<div class="control-group">
+        {{ form_label(form.prescriptor,'Prescriptor',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.prescriptor, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.prescriptor) }}
+    </div>
+</div>   
+
+<div class="control-group">
+        {{ form_label(form.diagnosticoIngreso,'Diagnóstico',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.diagnosticoIngreso, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.diagnosticoIngreso) }}
+    </div>
+</div>  
+
+<div class="control-group">
+        {{ form_label(form.fechaHoraIngreso,'Fecha y hora',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls" style="width:575px;">
+        {{ form_widget (form.fechaHoraIngreso, { attr : { class : 'span3' } }) }}
+        {{ form_errors (form.fechaHoraIngreso) }}
+    </div>
+</div>   
+
+<div class="control-group">
+        {{ form_label(form.tipoInternacion,'Tipo de internación',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.tipoInternacion, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.tipoInternacion) }}
+    </div>
+</div> 
+
+<div class="control-group">
+        {{ form_label(form.motivoIngreso,'Motivo ingreso',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.motivoIngreso, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.motivoIngreso) }}
+    </div>
+</div> 
+
+{{ form_rest(form) }}

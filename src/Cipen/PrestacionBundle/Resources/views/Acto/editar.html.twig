@@ -1,17 +1,11 @@
-{% extends "ComunComunBundle:Default:layout.html.twig" %}
-
-{% block admin_title %}
-    Editar acto médico
-{% endblock %}
-
-{% block admin_actions %}
-    <li><a href="{{ path('acto') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>
-    <li><a href="{{ path('acto_crear') }}"><i class="icon-plus"></i> Crear</a></li>    
-{% endblock %}
-
-{% set admin_menu_active = 'acto' %}
-    
+{% extends "CipenPrestacionBundle:Acto:editar_layout.html.twig" %}
+            
 {% block admin_content %}
+
+   <ul class="nav nav-tabs">
+        <li class="active"><a href="{{ path('acto_editar', { id: entity.id }) }}">Datos de acto médico</a></li>
+        <li><a href="{{ path('acto_unidad', { actoId: entity.id }) }}">Obras Sociales</a></li>
+    </ul>  
         
     <form class="form-horizontal" method="POST" action="{{ path('acto_editar', {'id':entity.id}) }}">
 

@@ -65,3 +65,4 @@ swiftmailer:
 
 genemu_form:
     date: ~
+    select2: ~

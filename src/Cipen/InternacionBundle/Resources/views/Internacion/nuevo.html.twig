@@ -1,0 +1,25 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+
+{% block admin_title %}
+    Nueva internación
+{% endblock %}
+    
+{% block admin_actions %}
+    <li><a href="{{ path('internacion') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>
+{% endblock %}
+
+{% set admin_menu_active = 'internacion' %}
+    
+{% block admin_content %}
+        
+    <form class="form-horizontal" method="POST" action="{{ path('internacion_crear') }}" novalidate="novalidate" >
+
+        {% include 'CipenInternacionBundle:InternacionIngreso:_form.html.twig' %}               
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}

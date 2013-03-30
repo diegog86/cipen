@@ -1,0 +1,35 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.tipo,'Tipo',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.tipo, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.tipo) }}
+    </div>
+</div>                 
+
+<div class="control-group">
+    {{ form_label(form.descripcion,'Descripcion',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.descripcion, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.descripcion) }}
+    </div>
+</div>   
+
+<div class="control-group">
+        {{ form_label(form.fechaHoraIngreso,'Fecha/hora de ingreso',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls" style="width:575px;">
+        {{ form_widget (form.fechaHoraIngreso, { attr : { class : 'span3' } }) }}
+        {{ form_errors (form.fechaHoraIngreso) }}
+    </div>
+</div>   
+
+<div class="control-group">
+        {{ form_label(form.fechaHoraEgreso,'Fecha/hora de egreso',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls" style="width:575px;">
+        {{ form_widget (form.fechaHoraEgreso, { attr : { class : 'span3' } }) }}
+        {{ form_errors (form.fechaHoraEgreso) }}
+    </div>
+</div>   
+
+{{ form_rest(form) }}

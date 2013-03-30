@@ -1,0 +1,145 @@
+<h4>
+    {{ prestacionTitulo }}  
+    {{ form_widget (form.modulo) }}
+</h4>
+
+
+
+{% if form_errors(form.fecha) | length > 0 or form_errors(form) | length > 0 %}
+    <div class="alert alert-error form-errors">
+        <h4 >ERROR!</h4>
+        {{ form_errors(form) }}
+    </div>
+{% endif %}
+
+<hr>
+
+<div class="row-fluid info-prestacion" >
+    <div class="control inline">
+        <label>Realizado el</label>
+        {{ form_widget (form.fecha, { attr : { class : 'input-small' } }) }} 
+        
+    </div>
+
+    <div class="control inline">
+        <label>Tipo de prestación: <strong> {{ internacionPrestacion.modulo ? 'MÓDULO' : 'ACTO MÉDICO' }} </strong></label>
+    </div>
+
+    <div class="control inline">
+        <label>
+            Con Obra Social {{ paciente.obraSocial.nombre }}: <strong> {{ internacionPrestacion.conObraSocial ? 'SI' : 'NO' }} </strong> 
+            {{ form_widget (form.conObraSocial) }}
+        </label>
+    </div>       
+</div>
+
+<hr>          
+
+<div class="row-fluid internacionPrestacion" >
+                 
+    {% for key,internacionPrestacionActo in internacionPrestacion.internacionPrestacionActo %}
+    
+        <ul>
+            <li {{ internacionPrestacion.modulo ? '' : 'style="display:none"' }} >
+                
+                <label class="checkbox">
+                    {{ form_widget (form.internacionPrestacionActo[key].realizarActo) }}
+                    <strong> {{ internacionPrestacionActo.acto.descripcion }} </strong>
+                    {{ form_widget (form.internacionPrestacionActo[key].acto) }}
+                </label>
+                
+             </li>
+             <li>
+                 <ul class="tipoMedico">
+                     <li>
+                         Especialistas: 
+                     </li>
+                     <li>
+                        <ul>
+                            <li>
+                                {{ form_label(form.internacionPrestacionActo[key].honorarioEspecialista,'Honorario',{ label_attr : { class : 'control-label'} }) }} 
+                                <div class="controls">
+                                    {{ form_widget (form.internacionPrestacionActo[key].honorarioEspecialista, { attr : { class : 'span7' } }) }}
+
+                                </div>                                                
+                             </li>
+                             <li>
+                                 {{ form_label(form.internacionPrestacionActo[key].medicoEspecialista,'Médico',{ label_attr : { class : 'control-label'} }) }} 
+                                 <div class="controls">
+                                    {{ form_widget (form.internacionPrestacionActo[key].medicoEspecialista, { attr : { class : 'span7' } }) }}
+                                    
+                                 </div>
+                             </li>
+                         </ul>
+                     </li>
+                 </ul>
+
+                 <ul>
+                     <li>
+                        Ayudante: 
+                     </li>
+                     <li>
+                         <ul>
+                             <li>
+                                 {{ form_label(form.internacionPrestacionActo[key].honorarioAyudante,'Honorario',{ label_attr : { class : 'control-label'} }) }} 
+                                 <div class="controls">
+                                     {{ form_widget (form.internacionPrestacionActo[key].honorarioAyudante, { attr : { class : 'span7' } }) }}
+                                  </div>                                                
+                             </li>
+                             <li>
+                                 {{ form_label(form.internacionPrestacionActo[key].medicoAyudante,'Médico',{ label_attr : { class : 'control-label'} }) }} 
+                                 <div class="controls">
+                                     {{ form_widget (form.internacionPrestacionActo[key].medicoAyudante, { attr : { class : 'span7' } }) }}
+
+                                 </div>
+                             </li>
+                         </ul>
+                     </li>
+                 </ul>
+
+                 <ul>
+                     <li>
+                         Anestesista: 
+                     </li>
+                     <li>
+                         <ul>
+                             <li>
+                                 {{ form_label(form.internacionPrestacionActo[key].honorarioAnestesista,'Honorario',{ label_attr : { class : 'control-label'} }) }} 
+                                 <div class="controls">
+                                     {{ form_widget (form.internacionPrestacionActo[key].honorarioAnestesista, { attr : { class : 'span7' } }) }}
+                                 </div>                                                
+                             </li>
+                             <li>
+                                 {{ form_label(form.internacionPrestacionActo[key].medicoAnestesista,'Médico',{ label_attr : { class : 'control-label'} }) }} 
+                                 <div class="controls">
+                                     {{ form_widget (form.internacionPrestacionActo[key].medicoAnestesista, { attr : { class : 'span7' } }) }}
+
+                                 </div>
+                             </li>
+                         </ul>
+                     </li>
+                 </ul>
+
+                 <ul>
+                     <li>
+                         Gasto: 
+                     </li>
+                     <li>
+                         <ul>
+                             <li>
+                                 {{ form_label(form.internacionPrestacionActo[key].gasto,'Valor',{ label_attr : { class : 'control-label'} }) }} 
+                                  <div class="controls">
+                                     {{ form_widget (form.internacionPrestacionActo[key].gasto, { attr : { class : 'span7' } }) }}
+                                  </div>
+                             </li>
+                         </ul>
+                     </li>
+                 </ul>
+
+             </li>
+         </ul>
+    {% endfor %}
+
+</div>
+      
+{{ form_widget(form._token) }}

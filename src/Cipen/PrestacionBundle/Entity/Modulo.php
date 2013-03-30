@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as assert;
  * Cipen\PrestacionBundle\Entity\Modulo
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Cipen\PrestacionBundle\Entity\ModuloRepository")
+ * @ORM\Entity()
  */
 class Modulo
 {
@@ -57,16 +57,18 @@ class Modulo
 
     /**
      * @var Acto $acto
-     * @ORM\OneToMany(targetEntity="Acto", mappedBy="Modulo")
+     * @ORM\ManyToMany(targetEntity="Cipen\PrestacionBundle\Entity\ActoUnidad")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $acto;
+    private $ActoUnidad;
 
+ 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->acto = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ActoUnidad = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -87,7 +89,7 @@ class Modulo
      */
     public function setCodigo($codigo)
     {
-        $this->codigo = $codigo;
+        $this->codigo = strtoupper($codigo);
     
         return $this;
     }
@@ -110,7 +112,7 @@ class Modulo
      */
     public function setDescripcion($descripcion)
     {
-        $this->descripcion = $descripcion;
+        $this->descripcion = strtoupper($descripcion);
     
         return $this;
     }
@@ -172,35 +174,40 @@ class Modulo
     }
 
     /**
-     * Add acto
+     * Add ActoUnidad
      *
-     * @param \Cipen\PrestacionBundle\Entity\Acto $acto
+     * @param \Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad
      * @return Modulo
      */
-    public function addActo(\Cipen\PrestacionBundle\Entity\Acto $acto)
+    public function addActoUnidad(\Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad)
     {
-        $this->acto[] = $acto;
+        $this->ActoUnidad[] = $actoUnidad;
     
         return $this;
     }
 
     /**
-     * Remove acto
+     * Remove ActoUnidad
      *
-     * @param \Cipen\PrestacionBundle\Entity\Acto $acto
+     * @param \Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad
      */
-    public function removeActo(\Cipen\PrestacionBundle\Entity\Acto $acto)
+    public function removeActoUnidad(\Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad)
     {
-        $this->acto->removeElement($acto);
+        $this->ActoUnidad->removeElement($actoUnidad);
     }
 
     /**
-     * Get acto
+     * Get ActoUnidad
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getActo()
+    public function getActoUnidad()
     {
-        return $this->acto;
+        return $this->ActoUnidad;
+    }
+    
+    public function __toString () {
+        return $this->codigo;
+
     }
 }

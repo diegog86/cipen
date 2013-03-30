@@ -135,5 +135,9 @@ class Paciente extends Persona
         return $this->responsable;
     }
     
+    public function __toString () {
+        return $this->getDni()." - ".$this->getApellido ().", ".$this->getNombre ();
+    }
+    
 
 }

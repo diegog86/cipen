@@ -1,0 +1,23 @@
+{% extends "CipenInternacionBundle:Internacion:editar_layout.html.twig" %}
+ 
+{% block admin_content %}
+
+    <ul class="nav nav-tabs">
+        <li ><a href="{{ path('internacion_ingreso_editar', { id: entity.internacion.id }) }}">Ingreso</a></li>
+        <li ><a href="{{ path('internacion_habitacion', { id: entity.internacion.id }) }}">Habitación</a></li>
+        <li class="active" ><a href="javascript:void(0);">Editar habitación</a></li>                
+        <li><a href="{{ path('internacion_prestacion', { internacionId: entity.internacion.id, pacienteId: entity.internacion.paciente.id }) }}">Prestaciónes</a></li>
+        <li><a href="{{ path('internacion_egreso_editar', { id: entity.internacion.id }) }}">Egreso</a></li>        
+    </ul> 
+        
+    <form class="form-horizontal" method="POST" action="{{ path('internacion_habitacion_editar', { 'id': id, 'habitacionId': entity.id }) }}" novalidate="novalidate">
+
+        {% include 'CipenInternacionBundle:InternacionHabitacion:_form.html.twig' %}        
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}

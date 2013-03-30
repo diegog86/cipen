@@ -65,4 +65,6 @@ class Diagnostico
     	return $this->getNombre();
     }
     
+    
+    
 }

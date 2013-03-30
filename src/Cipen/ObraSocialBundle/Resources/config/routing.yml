@@ -30,3 +30,7 @@ unidad_editar:
 unidad_eliminar:
     pattern:  /{obraSocialId}/unidad/{id}/eliminar/
     defaults: { _controller: "CipenObraSocialBundle:Unidad:eliminar" }
+
+unidad_get_por_obra_socia:
+  pattern: /unidad/getporobrasocial
+  defaults: {_controller: CipenObraSocialBundle:Unidad:getUnidadPorObraSocial}

@@ -1,0 +1,21 @@
+{% extends "CipenPrestacionBundle:Acto:editar_layout.html.twig" %}
+    
+{% block admin_content %}
+
+    <ul class="nav nav-tabs">
+        <li><a href="{{ path('acto_editar', { id: actoId }) }}">Datos acto médico</a></li>
+        <li><a href="{{ path('acto_unidad', { actoId: actoId }) }}">Obras Sociales</a></li>
+        <li class="active"><a href="{{ path('acto_unidad_crear', { actoId: actoId }) }}">Agregar Obra Social</a></li>
+    </ul>        
+    
+    <form class="form-horizontal" method="POST" action="{{ path('acto_unidad_crear', { actoId: actoId }) }}" >
+
+        {% include 'CipenPrestacionBundle:ActoUnidad:_form.html.twig' %}               
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}

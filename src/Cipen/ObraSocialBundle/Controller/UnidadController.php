@@ -4,6 +4,7 @@ namespace Cipen\ObraSocialBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cipen\ObraSocialBundle\Entity\Unidad;
 use Cipen\ObraSocialBundle\Form\UnidadType;
@@ -121,6 +122,28 @@ class UnidadController extends Controller
         $em->flush();
 
         return $this->redirect($this->generateUrl('unidad',array('obraSocialId'=>$obraSocialId)));
+        
+    }
+    
+    public function getUnidadPorObraSocialAction(){
+        
+        $request = $this->getRequest();
+        $obraSocialId = $request->request->get('obraSocialId');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entities = $em->getRepository('CipenObraSocialBundle:Unidad')->findBy(array('obraSocial'=>$obraSocialId),array('descripcion'=>'ASC'));
+
+        $unidades = array();
+        $j = 0;
+        foreach ($entities as $entity) {
+            
+            $unidades[$j]['id'] = $entity->getId();
+            $unidades[$j]['descripcion'] = $entity->getDescripcion();
+            
+            $j++;
+        }
+                
+        return new JsonResponse($unidades);
         
     }
 

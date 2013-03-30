@@ -14,9 +14,10 @@ class PacienteType extends AbstractType
             ->add('dni')
             ->add('nombre')
             ->add('apellido')
-             ->add('fechaNacimiento', 'date', array(
+            ->add('fechaNacimiento', 'date', array(
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy',
+                'attr' => array('data-jquery'=>'date' )
             ))
             ->add('direccionBarrio')            
             ->add('direccionCalle')                

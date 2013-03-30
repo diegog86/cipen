@@ -1,0 +1,20 @@
+{% extends "CipenPrestacionBundle:Modulo:editar_layout.html.twig" %}
+            
+{% block admin_content %}
+
+   <ul class="nav nav-tabs">
+        <li class="active"><a href="{{ path('modulo_editar', { id: entity.id }) }}">Datos del módulo</a></li>
+        <li><a href="{{ path('modulo_agregar_acto', { moduloId: entity.id }) }}">Actos médicos</a></li>
+    </ul>  
+        
+    <form class="form-horizontal" method="POST" action="{{ path('modulo_editar', {'id':entity.id}) }}">
+
+        {% include 'CipenPrestacionBundle:Modulo:_form.html.twig' %}        
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}

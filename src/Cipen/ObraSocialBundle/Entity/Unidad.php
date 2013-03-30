@@ -26,7 +26,7 @@ class Unidad
     /**
      * @var integer $obra
      *
-     * @ORM\ManyToOne(targetEntity="Cipen\ObraSocialBundle\Entity\ObraSocial")
+     * @ORM\ManyToOne(targetEntity="Cipen\ObraSocialBundle\Entity\ObraSocial", inversedBy = "unidades")
      */
     private $obraSocial;
     
