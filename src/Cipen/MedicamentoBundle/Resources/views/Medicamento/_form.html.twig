@@ -16,4 +16,20 @@
     </div>
 </div> 
 
+<div class="control-group">
+    {{ form_label(form.catastro,'Catastro',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.catastro, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.catastro) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.kairo,'Kairos',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.kairo, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.kairo) }}
+    </div>
+</div> 
+
 {{ form_rest (form) }}

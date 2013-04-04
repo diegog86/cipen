@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as assert;
 /**
  * Cipen\PrestacionBundle\Entity\Modulo
  *
- * @ORM\Table()
+ * @ORM\Table("Prestacion__Modulo")
  * @ORM\Entity()
  */
 class Modulo
@@ -58,6 +58,7 @@ class Modulo
     /**
      * @var Acto $acto
      * @ORM\ManyToMany(targetEntity="Cipen\PrestacionBundle\Entity\ActoUnidad")
+     * @ORM\JoinTable(name="Prestacion__Modulo_Acto_Unidad")
      * @ORM\JoinColumn(nullable=true)
      */
     private $ActoUnidad;

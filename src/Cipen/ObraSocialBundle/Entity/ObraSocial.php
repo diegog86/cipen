@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as assert;
 use Comun\ComunBundle\Entity\Organizacion;
 
 /**
+ * @ORM\Table("Obra_Social__Obra_Social")
  * @ORM\Entity
  */
 class ObraSocial extends Organizacion

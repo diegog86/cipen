@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Cipen\InternacionBundle\Entity\InternacionPrestacion
+ * @ORM\Table("Internacion__Internacion_Prestacion")
  * @ORM\Entity()
  */
 

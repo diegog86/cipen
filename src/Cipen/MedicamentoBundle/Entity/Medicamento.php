@@ -4,14 +4,17 @@ namespace Cipen\MedicamentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Medicamento
  *
- * @ORM\Table()
+ * @ORM\Table("Medicamento__Medicamento")
  * @ORM\Entity
  */
 class Medicamento
 {
+    public static $kairos = array("No","Si");
+
     /**
      * @var integer
      *
@@ -31,10 +34,28 @@ class Medicamento
     /**
      * @var string
      *
-     * @ORM\Column(name="marca", type="string", length=255)
+     * @ORM\Column(name="marca", type="string", length=255, nullable= true)
      */
     private $marca;
+    
+    /**
+     *
+     * @ORM\Column(name="catastro", type="boolean")
+     */
+    private $catastro;
+        
+    /**
+     *
+     * @ORM\Column(name="kairo", type="float")
+     */
+    private $kairo;
+    
+    
 
+    public function __construct ()
+    {
+        $this->kairo = 0;
+    }
 
     /**
      * Get id
@@ -90,5 +111,56 @@ class Medicamento
     public function getMarca()
     {
         return $this->marca;
+    }
+
+    /**
+     * Set catastro
+     *
+     * @param boolean $catastro
+     * @return Medicamento
+     */
+    public function setCatastro($catastro)
+    {
+        $this->catastro = $catastro;
+    
+        return $this;
+    }
+
+    /**
+     * Get catastro
+     *
+     * @return boolean 
+     */
+    public function getCatastro()
+    {
+        return $this->catastro;
+    }
+
+    /**
+     * Set kairo
+     *
+     * @param float $kairo
+     * @return Medicamento
+     */
+    public function setKairo($kairo)
+    {
+        $this->kairo = $kairo;
+    
+        return $this;
+    }
+
+    /**
+     * Get kairo
+     *
+     * @return float 
+     */
+    public function getKairo()
+    {
+        return $this->kairo;
+    }
+    
+    public function __toString ()
+    {
+        return $this->getNombre ();
     }
 }

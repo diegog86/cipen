@@ -25,7 +25,7 @@
         <tbody>
             {% for entity in internacion.habitacion %}
                 <tr>
-                    <td>{{ entity.fechaHoraIngreso | date('d/m/Y h:i') }} hs</td>
+                    <td>{{ entity.fechaHoraIngreso | date('d/m/Y H:i') }} hs</td>
                     <td>{{ entity.tipo }}</td>
                     <td>{{ entity.descripcion }}</td>
                     <td>

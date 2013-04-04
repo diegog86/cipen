@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as assert;
 /**
  * Cipen\PrestacionBundle\Entity\Nomenclador
  *
- * @ORM\Table()
+ * @ORM\Table("Prestacion__Acto_Unidad")
  * @ORM\Entity()
  */
 class ActoUnidad

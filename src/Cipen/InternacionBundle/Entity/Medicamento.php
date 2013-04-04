@@ -5,13 +5,31 @@ namespace Cipen\InternacionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * InternacionMedicamento
+ * Medicamento
  *
- * @ORM\Table()
+ * @ORM\Table("Internacion__Medicamento")
  * @ORM\Entity
  */
-class InternacionMedicamento
+class Medicamento
 {
+    public static $vias = array(
+        "Cutanea"=>"Cutanea",
+        "Intravenosa"=>"Intravenosa",
+        "Intramuscular"=>"Intramuscular",
+        "Oral"=>"Oral",
+        "Paramteral"=>"Paramteral",
+        "Percutanea"=>"Percutanea",
+        "Subcutanea"=>"Subcutanea"
+    );
+    
+    public static $unidades = array(
+        "kg"=>"kg",
+        "grm"=>"grm",        
+        "mlg"=>"mlg",
+        "lt"=>"lt",
+        "cm3"=>"cm3",
+    );    
+    
     /**
      * @var integer
      *
@@ -22,9 +40,16 @@ class InternacionMedicamento
     private $id;
 
     /**
+     *
+     * @ORM\ManyToOne(targetEntity="Cipen\InternacionBundle\Entity\Internacion")
+     * @ORM\JoinColumn(name="internacion_internacion_id")
+     */
+    private $internacion;        
+    /**
      * @var integer
      *
-     * @ORM\ManyToMany(targetEntity="Cipen\MedicamentoBundle\Entity\Medicamento")
+     * @ORM\ManyToOne(targetEntity="Cipen\MedicamentoBundle\Entity\Medicamento")
+     * @ORM\JoinColumn(name="internacion_medicamento_id")
      */
     private $medicamento;
 
@@ -41,6 +66,13 @@ class InternacionMedicamento
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad;
+
+    /**
+     *
+     * @ORM\Column(name="via", type="string")
+     */
+    private $via;
+    
 
     /**
      * @var \DateTime
@@ -64,6 +96,7 @@ class InternacionMedicamento
     private $fin;
 
 
+
     /**
      * Get id
      *
@@ -78,7 +111,7 @@ class InternacionMedicamento
      * Set unidad
      *
      * @param string $unidad
-     * @return InternacionMedicamento
+     * @return Medicamento
      */
     public function setUnidad($unidad)
     {
@@ -101,7 +134,7 @@ class InternacionMedicamento
      * Set cantidad
      *
      * @param float $cantidad
-     * @return InternacionMedicamento
+     * @return Medicamento
      */
     public function setCantidad($cantidad)
     {
@@ -121,10 +154,33 @@ class InternacionMedicamento
     }
 
     /**
+     * Set via
+     *
+     * @param string $via
+     * @return Medicamento
+     */
+    public function setVia($via)
+    {
+        $this->via = $via;
+    
+        return $this;
+    }
+
+    /**
+     * Get via
+     *
+     * @return string 
+     */
+    public function getVia()
+    {
+        return $this->via;
+    }
+
+    /**
      * Set inicio
      *
      * @param \DateTime $inicio
-     * @return InternacionMedicamento
+     * @return Medicamento
      */
     public function setInicio($inicio)
     {
@@ -147,7 +203,7 @@ class InternacionMedicamento
      * Set frecuencia
      *
      * @param \DateTime $frecuencia
-     * @return InternacionMedicamento
+     * @return Medicamento
      */
     public function setFrecuencia($frecuencia)
     {
@@ -170,7 +226,7 @@ class InternacionMedicamento
      * Set fin
      *
      * @param \DateTime $fin
-     * @return InternacionMedicamento
+     * @return Medicamento
      */
     public function setFin($fin)
     {
@@ -188,41 +244,47 @@ class InternacionMedicamento
     {
         return $this->fin;
     }
+
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->medicamento = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add medicamento
+     * Set internacion
      *
-     * @param \Cipen\MedicamentoBundle\Entity\Medicamento $medicamento
-     * @return InternacionMedicamento
+     * @param \Cipen\InternacionBundle\Entity\Internacion $internacion
+     * @return Medicamento
      */
-    public function addMedicamento(\Cipen\MedicamentoBundle\Entity\Medicamento $medicamento)
+    public function setInternacion(\Cipen\InternacionBundle\Entity\Internacion $internacion = null)
     {
-        $this->medicamento[] = $medicamento;
+        $this->internacion = $internacion;
     
         return $this;
     }
 
     /**
-     * Remove medicamento
+     * Get internacion
+     *
+     * @return \Cipen\InternacionBundle\Entity\Internacion 
+     */
+    public function getInternacion()
+    {
+        return $this->internacion;
+    }
+
+    /**
+     * Set medicamento
      *
      * @param \Cipen\MedicamentoBundle\Entity\Medicamento $medicamento
+     * @return Medicamento
      */
-    public function removeMedicamento(\Cipen\MedicamentoBundle\Entity\Medicamento $medicamento)
+    public function setMedicamento(\Cipen\MedicamentoBundle\Entity\Medicamento $medicamento = null)
     {
-        $this->medicamento->removeElement($medicamento);
+        $this->medicamento = $medicamento;
+    
+        return $this;
     }
 
     /**
      * Get medicamento
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Cipen\MedicamentoBundle\Entity\Medicamento 
      */
     public function getMedicamento()
     {

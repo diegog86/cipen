@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as assert;
 /**
  * Cipen\InternacionBundle\Entity\Internacion
  *
- * @ORM\Table()
+ * @ORM\Table("Internacion__Internacion")
  * @ORM\Entity()
  */
 class Internacion
@@ -72,6 +72,7 @@ class Internacion
     /**
      *
      * @ORM\ManyToMany(targetEntity="Cipen\DiagnosticoBundle\Entity\Diagnostico")
+     * @ORM\JoinTable(name="Internacion__Diagnostico_Ingreso")
      * @ORM\JoinColumn(nullable=false)
      * @assert\NotBlank(message="Por favor, agregue un diagnostico")
      */
@@ -119,7 +120,7 @@ class Internacion
      * @var integer $diagnostico
      *
      * @ORM\ManyToMany(targetEntity="Cipen\DiagnosticoBundle\Entity\Diagnostico")
-     * @ORM\JoinTable(name="internacion_diagnosticoEgreso")
+     * @ORM\JoinTable(name="Internacion__Diagnostico_Egreso")
      * @ORM\JoinColumn(nullable=true)
      * 
      */
@@ -135,6 +136,11 @@ class Internacion
      * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\Habitacion", mappedBy="internacion")
      */
     private $habitacion;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\Medicamento", mappedBy="internacion")
+     */
+    private $medicamento;
     
     
     public function getNumero(){
@@ -480,4 +486,37 @@ class Internacion
         return $this->habitacion;
     }
 
+
+    /**
+     * Add medicamento
+     *
+     * @param \Cipen\InternacionBundle\Entity\Medicamento $medicamento
+     * @return Internacion
+     */
+    public function addMedicamento(\Cipen\InternacionBundle\Entity\Medicamento $medicamento)
+    {
+        $this->medicamento[] = $medicamento;
+    
+        return $this;
+    }
+
+    /**
+     * Remove medicamento
+     *
+     * @param \Cipen\InternacionBundle\Entity\Medicamento $medicamento
+     */
+    public function removeMedicamento(\Cipen\InternacionBundle\Entity\Medicamento $medicamento)
+    {
+        $this->medicamento->removeElement($medicamento);
+    }
+
+    /**
+     * Get medicamento
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMedicamento()
+    {
+        return $this->medicamento;
+    }
 }

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Cipen\InternacionBundle\Form\EgresoType;
 
-class InternacionEgresoController extends Controller
+class EgresoController extends Controller
 {
 
     public function editarAction($id, Request $request)

@@ -11,7 +11,7 @@ use Cipen\InternacionBundle\Validator\Constraints AS AssertInternacion;
 /**
  * Cipen\InternacionBundle\Entity\Internacion
  *
- * @ORM\Table()
+ * @ORM\Table("Internacion__Internacion_Prestacion_Acto")
  * @ORM\Entity()
  * @AssertInternacion\InternacionPrestacion()
  */
@@ -47,7 +47,7 @@ class InternacionPrestacionActo
      * @var Medico $medico
      * 
      * @ORM\ManyToMany(targetEntity="Cipen\MedicoBundle\Entity\Medico", inversedBy="internacionPrestacionEspecialista")
-     * @ORM\JoinTable(name="internacion_prestacion_acto_especialista")
+     * @ORM\JoinTable(name="Internacion__Prestacion_Acto_Especialista")
      * @ORM\JoinColumn(nullable=true)
      */    
     private $medicoEspecialista;
@@ -65,7 +65,7 @@ class InternacionPrestacionActo
      * @var Medico $medico
      * 
      * @ORM\ManyToMany(targetEntity="Cipen\MedicoBundle\Entity\Medico")
-     * @ORM\JoinTable(name="internacion_prestacion_acto_ayudante")
+     * @ORM\JoinTable(name="Internacion__Prestacion_Acto_Ayudante")
      * @ORM\JoinColumn(nullable=true)
      */
     private $medicoAyudante;
@@ -92,7 +92,7 @@ class InternacionPrestacionActo
      * @var Medico $medico
      * 
      * @ORM\ManyToMany(targetEntity="Cipen\MedicoBundle\Entity\Medico")
-     * @ORM\JoinTable(name="internacion_prestacion_acto_anestesista")
+     * @ORM\JoinTable(name="Internacion__Prestacion_Acto__Anestesista")
      * @ORM\JoinColumn(nullable=true)
      */
     private $medicoAnestesista;

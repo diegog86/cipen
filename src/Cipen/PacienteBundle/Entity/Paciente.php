@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as assert;
 use Comun\ComunBundle\Entity\Persona;
 
 /**
+ * @ORM\Table("Paciente__Paciente")
  * @ORM\Entity()
  */
 class Paciente extends Persona

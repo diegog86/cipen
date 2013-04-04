@@ -17,7 +17,7 @@ use Cipen\InternacionBundle\Entity\InternacionPrestacionActoMedico;
  * Paciente controller.
  *
  */
-class InternacionPrestacionController extends Controller
+class PrestacionController extends Controller
 {
 
     public function listarAction($internacionId, $pacienteId)

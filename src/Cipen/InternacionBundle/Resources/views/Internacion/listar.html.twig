@@ -32,6 +32,9 @@
                             <a class="btn" href="{{ path('internacion_habitacion', {id: entity.id}) }}" title="Habitación" >
                                 Habitación
                             </a>
+                            <a class="btn" href="{{ path('internacion_medicamento', {id: entity.id}) }}" title="Habitación" >
+                                Medicación
+                            </a>                                
                             <a class="btn" href="{{ path('internacion_prestacion', {internacionId: entity.id, pacienteId: entity.paciente.id}) }}" title="Módulos/Actos Médicos" >
                                 Prestaciones
                             </a>
@@ -47,7 +50,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="2">No existen registros</td>
+                    <td colspan="3">No existen registros</td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Cipen\InternacionBundle\Entity\Internacion;
 use Cipen\InternacionBundle\Form\IngresoType;
 
-class InternacionIngresoController extends Controller
+class IngresoController extends Controller
 {
 
     public function editarAction($id, Request $request)

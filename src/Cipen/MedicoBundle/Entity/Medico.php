@@ -9,7 +9,7 @@ use Comun\ComunBundle\Entity\Persona;
 /**
  * Cipen\MedicoBundle\Entity\Medico
  *
- * @ORM\Table()
+ * @ORM\Table("Medico__Medico")
  * @ORM\Entity()
  * 
  */

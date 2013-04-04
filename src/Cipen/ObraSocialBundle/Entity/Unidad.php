@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as assert;
 /**
  * Cipeen\ObraSocialBundle\Entity\Unidad
  *
- * @ORM\Table()
+ * @ORM\Table("Obra_Social__Unidad")
  * @ORM\Entity()
  */
 class Unidad
