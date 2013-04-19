@@ -1,0 +1,47 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+  
+{% block admin_title %}
+    Gestión de facturación
+{% endblock %}
+    
+{% block admin_actions %}
+    <li><a href="{{ path('factura_crear') }}"><i class="icon-plus"></i>Crear</a></li>
+{% endblock %}
+    
+{% set admin_menu_active = 'factura' %}
+    
+{% block admin_content %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Obra social</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.desde | date('d/m/Y') }}</td>
+                    <td>{{ entity.hasta | date('d/m/Y') }}</td>
+                    <td>{{ entity.obraSocial is not empty ? entity.obraSocial.nombre : ""}}</td>
+                    <td>
+                        <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
+                            <a class="btn" href="{{ path('factura_ver', {id: entity.id}) }}" title="Ver" >
+                                <i class="icon-eye-open"></i>
+                            </a>
+                            <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar esta factura?')){ return false }" href="{{ path('factura_eliminar', {id: entity.id}) }}" title="Eliminar" >
+                                <i class="icon-white icon-trash"></i>
+                            </a>                                
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No existen registros</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}

@@ -44,13 +44,12 @@ class InternacionPrestacionActo
     private $acto;
     
      /**
-     * @var Medico $medico
      * 
-     * @ORM\ManyToMany(targetEntity="Cipen\MedicoBundle\Entity\Medico", inversedBy="internacionPrestacionEspecialista")
+     * @ORM\ManyToMany(targetEntity="Cipen\PersonalBundle\Entity\Personal", inversedBy="internacionPrestacionEspecialista")
      * @ORM\JoinTable(name="Internacion__Prestacion_Acto_Especialista")
      * @ORM\JoinColumn(nullable=true)
      */    
-    private $medicoEspecialista;
+    private $especialista;
     
     /**
      * @ORM\Column(name="honorarioEspecialista", type="float")
@@ -62,13 +61,12 @@ class InternacionPrestacionActo
     
 
      /**
-     * @var Medico $medico
      * 
-     * @ORM\ManyToMany(targetEntity="Cipen\MedicoBundle\Entity\Medico")
+     * @ORM\ManyToMany(targetEntity="Cipen\PersonalBundle\Entity\Personal")
      * @ORM\JoinTable(name="Internacion__Prestacion_Acto_Ayudante")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $medicoAyudante;
+    private $ayudante;
 
     /**
      * @ORM\Column(name="honorarioAyudante", type="float")
@@ -91,11 +89,11 @@ class InternacionPrestacionActo
      /**
      * @var Medico $medico
      * 
-     * @ORM\ManyToMany(targetEntity="Cipen\MedicoBundle\Entity\Medico")
+     * @ORM\ManyToMany(targetEntity="Cipen\PersonalBundle\Entity\Personal")
      * @ORM\JoinTable(name="Internacion__Prestacion_Acto__Anestesista")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $medicoAnestesista;
+    private $anestesista;
 
     
     /**
@@ -110,18 +108,50 @@ class InternacionPrestacionActo
     private $realizarActo;    
     
     
+    public function setRealizarActo($realizarActo)
+    {
+        $this->realizarActo = $realizarActo;
     
+        return $this;
+    }
+
+    public function getRealizarActo()
+    {
+        return $this->realizarActo ;
+    }    
+    
+    public function setEspecialista($especialista)
+    {
+        $this->especialista = $especialista;
+    
+        return $this;
+    }
+
+    public function setAyudante($ayudante)
+    {
+        $this->ayudante = $ayudante;
+    
+        return $this;
+    }
+
+    public function setAnestesista($anestesista)
+    {
+        $this->anestesista = $anestesista;
+    
+        return $this;
+    }
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->medicoEspecialista = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->medicoAyudante = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->medicoAnestesista = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->especialista = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ayudante = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->anestesista = new \Doctrine\Common\Collections\ArrayCollection();
         $this->realizarActo = true;
     }
-    
+ 
+
     /**
      * Get id
      *
@@ -271,155 +301,101 @@ class InternacionPrestacionActo
     }
 
     /**
-     * Add medicoEspecialista
+     * Add especialista
      *
-     * @param \Cipen\MedicoBundle\Entity\Medico $medicoEspecialista
+     * @param \Cipen\PersonalBundle\Entity\Personal $especialista
      * @return InternacionPrestacionActo
      */
-    public function addMedicoEspecialista(\Cipen\MedicoBundle\Entity\Medico $medicoEspecialista)
+    public function addEspecialista(\Cipen\PersonalBundle\Entity\Personal $especialista)
     {
-        $this->medicoEspecialista[] = $medicoEspecialista;
+        $this->especialista[] = $especialista;
     
         return $this;
     }
 
     /**
-     * Remove medicoEspecialista
+     * Remove especialista
      *
-     * @param \Cipen\MedicoBundle\Entity\Medico $medicoEspecialista
+     * @param \Cipen\PersonalBundle\Entity\Personal $especialista
      */
-    public function removeMedicoEspecialista(\Cipen\MedicoBundle\Entity\Medico $medicoEspecialista)
+    public function removeEspecialista(\Cipen\PersonalBundle\Entity\Personal $especialista)
     {
-        $this->medicoEspecialista->removeElement($medicoEspecialista);
+        $this->especialista->removeElement($especialista);
     }
 
     /**
-     * Get medicoEspecialista
+     * Get especialista
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMedicoEspecialista()
+    public function getEspecialista()
     {
-        return $this->medicoEspecialista;
+        return $this->especialista;
     }
 
     /**
-     * Add medicoAyudante
+     * Add ayudante
      *
-     * @param \Cipen\MedicoBundle\Entity\Medico $medicoAyudante
+     * @param \Cipen\PersonalBundle\Entity\Personal $ayudante
      * @return InternacionPrestacionActo
      */
-    public function addMedicoAyudante(\Cipen\MedicoBundle\Entity\Medico $medicoAyudante)
+    public function addAyudante(\Cipen\PersonalBundle\Entity\Personal $ayudante)
     {
-        $this->medicoAyudante[] = $medicoAyudante;
+        $this->ayudante[] = $ayudante;
     
         return $this;
     }
 
     /**
-     * Remove medicoAyudante
+     * Remove ayudante
      *
-     * @param \Cipen\MedicoBundle\Entity\Medico $medicoAyudante
+     * @param \Cipen\PersonalBundle\Entity\Personal $ayudante
      */
-    public function removeMedicoAyudante(\Cipen\MedicoBundle\Entity\Medico $medicoAyudante)
+    public function removeAyudante(\Cipen\PersonalBundle\Entity\Personal $ayudante)
     {
-        $this->medicoAyudante->removeElement($medicoAyudante);
+        $this->ayudante->removeElement($ayudante);
     }
 
     /**
-     * Get medicoAyudante
+     * Get ayudante
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMedicoAyudante()
+    public function getAyudante()
     {
-        return $this->medicoAyudante;
+        return $this->ayudante;
     }
 
     /**
-     * Add medicoAnestesista
+     * Add anestesista
      *
-     * @param \Cipen\MedicoBundle\Entity\Medico $medicoAnestesista
+     * @param \Cipen\PersonalBundle\Entity\Personal $anestesista
      * @return InternacionPrestacionActo
      */
-    public function addMedicoAnestesista(\Cipen\MedicoBundle\Entity\Medico $medicoAnestesista)
+    public function addAnestesista(\Cipen\PersonalBundle\Entity\Personal $anestesista)
     {
-        $this->medicoAnestesista[] = $medicoAnestesista;
+        $this->anestesista[] = $anestesista;
     
         return $this;
     }
 
     /**
-     * Remove medicoAnestesista
+     * Remove anestesista
      *
-     * @param \Cipen\MedicoBundle\Entity\Medico $medicoAnestesista
+     * @param \Cipen\PersonalBundle\Entity\Personal $anestesista
      */
-    public function removeMedicoAnestesista(\Cipen\MedicoBundle\Entity\Medico $medicoAnestesista)
+    public function removeAnestesista(\Cipen\PersonalBundle\Entity\Personal $anestesista)
     {
-        $this->medicoAnestesista->removeElement($medicoAnestesista);
+        $this->anestesista->removeElement($anestesista);
     }
 
     /**
-     * Get medicoAnestesista
+     * Get anestesista
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMedicoAnestesista()
+    public function getAnestesista()
     {
-        return $this->medicoAnestesista;
-    }
-
-    
-    public function setRealizarActo($realizarActo)
-    {
-        $this->realizarActo = $realizarActo;
-    
-        return $this;
-    }
-
-   
-    public function getRealizarActo()
-    {   
-        return $this->realizarActo;
-    }
-    
-    
-    /**
-     * Set medicoEspecialista
-     *
-     * @param string $medicoEspecialista
-     * @return InternacionPrestacionActo
-     */
-    public function setMedicoEspecialista($medicoEspecialista)
-    {
-        $this->medicoEspecialista = $medicoEspecialista;
-    
-        return $this;
-    }
-
-    /**
-     * Set medicoAyudante
-     *
-     * @param string $medicoAyudante
-     * @return InternacionPrestacionActo
-     */
-    public function setMedicoAyudante($medicoAyudante)
-    {
-        $this->medicoAyudante = $medicoAyudante;
-    
-        return $this;
-    }
-
-    /**
-     * Set medicoAnestesista
-     *
-     * @param string $medicoAnestesista
-     * @return InternacionPrestacionActo
-     */
-    public function setMedicoAnestesista($medicoAnestesista)
-    {
-        $this->medicoAnestesista = $medicoAnestesista;
-    
-        return $this;
+        return $this->anestesista;
     }
 }

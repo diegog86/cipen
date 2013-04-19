@@ -5,7 +5,6 @@ namespace Cipen\InternacionBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use Cipen\InternacionBundle\Entity\Internacion;
 use Cipen\InternacionBundle\Form\IngresoType;
 
 class IngresoController extends Controller
@@ -18,8 +17,9 @@ class IngresoController extends Controller
         
         if (!$entity) {
             $this->createNotFoundException("No se encontro registro");
-        }
-        
+        }       
+
+
         $form   = $this->createForm(new IngresoType(), $entity);
         
         if ($request->isMethod ("POST")) {
@@ -34,6 +34,7 @@ class IngresoController extends Controller
             
         }
 
+        
         $datos["entity"] = $entity;
         $datos["form"] = $form->createView ();
         

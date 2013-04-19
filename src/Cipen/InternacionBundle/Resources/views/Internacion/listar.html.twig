@@ -35,7 +35,7 @@
                             <a class="btn" href="{{ path('internacion_medicamento', {id: entity.id}) }}" title="Habitación" >
                                 Medicación
                             </a>                                
-                            <a class="btn" href="{{ path('internacion_prestacion', {internacionId: entity.id, pacienteId: entity.paciente.id}) }}" title="Módulos/Actos Médicos" >
+                            <a class="btn" href="{{ path('internacion_prestacion', {internacionId: entity.id}) }}" title="Módulos/Actos Médicos" >
                                 Prestaciones
                             </a>
                             <a class="btn" href="{{ path('internacion_egreso_editar', {id: entity.id}) }}" title="Egreso" >

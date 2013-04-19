@@ -1,0 +1,36 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+
+{% block admin_title %}
+    Ver facturación
+{% endblock %}
+
+{% block admin_actions %}
+    <li><a href="{{ path('factura') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>
+    <li><a href="{{ path('factura_crear') }}"><i class="icon-plus"></i> Facturar</a></li>    
+{% endblock %}
+    
+{% set admin_menu_active = 'factura' %}
+    
+{% block admin_content %}
+        
+    
+    <div class="row-fluid">
+
+        <div class="span3">
+            Desde: <strong>{{ entity.desde | date('d/m/Y')}}</strong>        
+        </div>
+        
+        <div class="span3">
+            Hasta: <strong>{{ entity.hasta | date('d/m/Y')}}</strong>        
+        </div>
+        
+        <div class="span3">
+            Obra Social: <strong>{{ entity.obraSocial is not empty ? entity.obraSocial : "-" }}</strong>        
+        </div>
+    
+    </div>
+    
+    <hr>
+    
+{% endblock %}
+     

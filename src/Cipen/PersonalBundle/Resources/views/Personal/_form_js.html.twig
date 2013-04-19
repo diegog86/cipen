@@ -1,0 +1,41 @@
+<script type="text/javascript">
+
+    var config = { 
+                choose: ' ', 
+                indexed: true,
+                show_multiple: false,
+                preselect: {
+                    "personal[tipoId]": {{ tipoPreselect | json_encode | raw }} 
+                },                 
+                loading_image: '',
+                select_class: 'input span6',    
+                leaf_class: 'final', 
+                empty_value: '',
+                set_value_on: 'each',
+                on_each_change: '{{ path('personal_get_tipo_ajax') }}' ,
+              };
+
+    
+    $.getJSON('{{ path('personal_get_tipo_ajax') }}', function(tree) { // initialize the tree by loading the file first
+
+        $('[data-id="tipo"]').optionTree(tree,config).change(
+            function() {                    
+        
+
+                var cantSelect = $(this).parent().children('select').length;    
+                $(this).parent().children('div').each(function(index,val){
+                    if((index+1)>cantSelect) {
+                        $(this).remove();
+                    }
+                });
+
+                
+            }
+        );
+
+       // $('select').select2();                 
+
+    });
+    
+</script>
+    

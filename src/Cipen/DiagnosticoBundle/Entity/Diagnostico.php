@@ -23,12 +23,27 @@ class Diagnostico
     private $id;
 
     /**
+     * @var string $codigo
+     *
+     * @ORM\Column(name="codigo", type="string", length = 150, nullable = true)
+     */
+    private $codigo;
+    
+    
+    /**
      * @var string $nombre
      *
      * @ORM\Column(name="nombre", type="string", length=255)
      * @assert\NotBlank(message="Por favor, ingrese nombre")
      */
     private $nombre;
+    
+    /**
+     * @var text $descripcion
+     *
+     * @ORM\Column(name="descripcion", type="text", nullable = true)
+     */
+    private $descripcion;    
 
 
     /**
@@ -67,4 +82,50 @@ class Diagnostico
     
     
     
+
+    /**
+     * Set codigo
+     *
+     * @param string $codigo
+     * @return Diagnostico
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+    
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return string 
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     * @return Diagnostico
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+    
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string 
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
 }

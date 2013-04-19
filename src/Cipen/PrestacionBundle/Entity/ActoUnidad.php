@@ -90,8 +90,6 @@ class ActoUnidad
      */
     private $gasto;
     
-    
- 
 
     /**
      * Get id
@@ -315,4 +313,33 @@ class ActoUnidad
     {
         return $this->unidadGasto;
     }
+    
+    /**
+     * @Assert\True(message="El acto médico ya tiene ésta obra social asociada.")
+     */
+    public function isObraSocialValida()
+    {
+        $actoUnidades = $this->getActo()->getActoUnidades();
+        foreach($actoUnidades as $actoUnidad){
+            if ($actoUnidad->getObraSocial()->getId() == $this->getObraSocial ()->getId() and $actoUnidad->getId() != $this->getId() )   {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    
+    /**
+     * @Assert\True(message="Complete Unidad de honorario y/o unidad de gasto .")
+     */
+    public function isUnidadValida()
+    {
+        if ($this->nomenclador != "SIN_NOMENCLADOR" and ($this->unidadGasto == null or $this->unidadHonorario == null)) {
+            $this->setNomenclador("SIN_NOMENCLADOR");
+            return false;
+        }        
+        return true;
+    }    
+    
 }

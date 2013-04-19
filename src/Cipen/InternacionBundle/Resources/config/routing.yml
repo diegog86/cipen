@@ -40,23 +40,23 @@ internacion_habitacion_eliminar:
 
 
 internacion_prestacion:
-    pattern: /{internacionId}/{pacienteId}/prestacion/
+    pattern: /{internacionId}/prestacion/
     defaults: {_controller: "CipenInternacionBundle:Prestacion:listar"}
 
 internacion_prestacion_nueva:
-    pattern:  /{internacionId}/{pacienteId}/prestacion/nueva/
+    pattern:  /{internacionId}/prestacion/nueva/
     defaults: { _controller: "CipenInternacionBundle:Prestacion:nueva" }
     requirements:
         _method: POST
 
 internacion_prestacion_crear:
-    pattern:  /{internacionId}/{pacienteId}/prestacion/crear/
+    pattern:  /{internacionId}/prestacion/crear/
     defaults: { _controller: "CipenInternacionBundle:Prestacion:crear" }
     requirements:
         _method: POST
 
 internacion_prestacion_eliminar:
-    pattern:  /{internacionId}/{pacienteId}/prestacion/{internacionPrestacionId}/eliminar/
+    pattern:  /{internacionId}/prestacion/{internacionPrestacionId}/eliminar/
     defaults: { _controller: "CipenInternacionBundle:Prestacion:eliminar" }
 
 internacion_prestacion_get_ajax:

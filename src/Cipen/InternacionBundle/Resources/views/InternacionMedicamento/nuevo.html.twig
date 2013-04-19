@@ -8,7 +8,7 @@
         <li><a href="{{ path('internacion_habitacion', { id: internacion.id }) }}">Habitación</a></li>
         <li ><a href="{{ path('internacion_medicamento', { id: internacion.id }) }}">Medicación</a></li>
         <li class="active" ><a href="javascript:void(0);">Agregar medicación</a></li>        
-        <li><a href="{{ path('internacion_prestacion', { internacionId: internacion.id, pacienteId: internacion.paciente.id }) }}">Prestaciónes</a></li>
+        <li><a href="{{ path('internacion_prestacion', { internacionId: internacion.id }) }}">Prestaciónes</a></li>
         <li><a href="{{ path('internacion_egreso_editar', { id: internacion.id }) }}">Egreso</a></li>        
     </ul>
 

@@ -5,7 +5,8 @@
    <ul class="nav nav-tabs">
         <li class="active" ><a href="{{ path('internacion_ingreso_editar', { id: entity.id }) }}">Ingreso</a></li>
         <li><a href="{{ path('internacion_habitacion', { id: entity.id }) }}">Habitación</a></li>
-        <li><a href="{{ path('internacion_prestacion', { internacionId: entity.id, pacienteId: entity.paciente.id }) }}">Prestaciónes</a></li>
+        <li ><a href="{{ path('internacion_medicamento', { id: entity.id }) }}">Medicación</a></li>                         
+        <li><a href="{{ path('internacion_prestacion', { internacionId: entity.id }) }}">Prestaciónes</a></li>
         <li><a href="{{ path('internacion_egreso_editar', { id: entity.id }) }}">Egreso</a></li>        
     </ul> 
         

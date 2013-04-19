@@ -1,0 +1,33 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+
+{% block admin_title %}
+    Editar personal
+{% endblock %}
+
+{% block admin_actions %}
+    <li><a href="{{ path('personal') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>
+    <li><a href="{{ path('personal_crear') }}"><i class="icon-plus"></i> Crear</a></li>    
+{% endblock %}
+
+{% set admin_menu_active = 'personal' %}
+    
+{% block admin_content %}
+        
+    <form class="form-horizontal" method="POST" action="{{ path('personal_editar', {'id':entity.id}) }}">
+
+        {% include 'CipenPersonalBundle:Personal:_form.html.twig' %}        
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}
+    
+{% block javascripts %}
+
+    {{ parent() }}
+    {% include 'CipenPersonalBundle:Personal:_form_js.html.twig' %}
+
+{% endblock %}

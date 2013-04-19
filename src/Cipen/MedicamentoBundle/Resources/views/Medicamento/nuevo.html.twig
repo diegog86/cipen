@@ -23,3 +23,8 @@
     </form>
     
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'CipenMedicamentoBundle:Medicamento:_form_js.html.twig' %}
+{% endblock %}    

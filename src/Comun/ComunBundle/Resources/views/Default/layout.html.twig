@@ -27,11 +27,13 @@
         
     {% javascripts output='assets/js/main.js' filter='?closure'
         'bundles/comuncomun/jquery/jquery-1.9.1.js'
+        'bundles/comuncomun/jquery/jquery.optionTree.js'
         'bundles/comuncomun/jquery/jquery-ui-1.10.1.custom.js'
         'bundles/comuncomun/jquery/extension/timepicker.js'
         'bundles/comuncomun/js/ui.js'
         'bundles/cipenprestacion/js/unidad_acto.js'
         'bundles/cipeninternacion/js/internacion_prestacion.js'
+        'bundles/cipenmedicamento/js/medicamento.js'
         'bundles/comuncomun/select2/select2.js'
     %}
     
@@ -82,15 +84,17 @@
         {% block content %}
             
             <div class="row-fluid">
-                <div class="span2 affix"  >
+                <div class="span2 affix navbar-fixed-top" style="margin-top:44px;"  >
 
                     {% set admin_menu = {
-                        internacion:          [path('internacion'),'Internaciones',[]],
-                        paciente:             [path('paciente'),'Pacientes',[]],
-                        obraSocial:           [path('obra_social'),'Obras Sociales',[]],
+                        internacion:        [path('internacion'),'Internaciones',[]],
+                        paciente:           [path('paciente'),'Pacientes',[]],
+                        obraSocial:         [path('obra_social'),'Obras Sociales',[]],
                         prestacion:         ['javascript:void(0)','Prestaciones',[ [path('acto'),'Acto médico'], [path('modulo'),'Módulo'] ] ],
-                        medico:             [ path('medico'),'Médicos',[]],
-                        diagnostico:         [path('diagnostico'),'Diagnósticos',[]],
+                        personal:           [ path('personal'),'Personal',[]],
+                        medicamento:        [path('medicamento'),'Medicamentos',[]],
+                        diagnostico:        [path('diagnostico'),'Diagnósticos',[]],
+                        factura:            [path('factura'),'Facturación',[]],
                     } %}
                     
                     {% set admin_menu_active = admin_menu_active is defined ? admin_menu_active : '' %}                    

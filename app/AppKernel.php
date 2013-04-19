@@ -19,7 +19,7 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new Cipen\MedicoBundle\CipenMedicoBundle(),
+            new Cipen\PersonalBundle\CipenPersonalBundle(),
             new Cipen\InternacionBundle\CipenInternacionBundle(),
             new Cipen\ObraSocialBundle\CipenObraSocialBundle(),
             new Cipen\PacienteBundle\CipenPacienteBundle(),
@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Cipen\MedicamentoBundle\CipenMedicamentoBundle(),            
             new Comun\ComunBundle\ComunComunBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
+            new Cipen\FacturaBundle\CipenFacturaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

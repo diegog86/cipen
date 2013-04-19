@@ -1,0 +1,19 @@
+personal:
+  pattern:  /
+  defaults: { _controller: "CipenPersonalBundle:Personal:listar"}
+
+personal_crear:
+  pattern:  /crear/
+  defaults: { _controller: "CipenPersonalBundle:Personal:crear" }
+
+personal_editar:
+  pattern:  /{id}/editar/
+  defaults: { _controller: "CipenPersonalBundle:Personal:editar" }
+
+personal_eliminar:
+  pattern:  /{id}/eliminar/
+  defaults: { _controller: "CipenPersonalBundle:Personal:eliminar" }
+
+personal_get_tipo_ajax:
+  pattern: /get-personal-ajax
+  defaults: {_controller: "CipenPersonalBundle:Personal:getTipos"}

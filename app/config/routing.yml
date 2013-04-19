@@ -1,4 +1,8 @@
-medicamento:
+cipen_factura:
+    resource: "@CipenFacturaBundle/Resources/config/routing.yml"
+    prefix:   /factura
+
+cipen_medicamento:
     resource: "@CipenMedicamentoBundle/Resources/config/routing.yml"
     prefix:   /medicamento
 
@@ -30,9 +34,9 @@ cipen_diagnostico:
     resource: "@CipenDiagnosticoBundle/Resources/config/routing.yml"
     prefix:   /diagnostico
 
-cipen_medico:
-    resource: "@CipenMedicoBundle/Resources/config/routing.yml"
-    prefix:   /medico
+cipen_personal:
+    resource: "@CipenPersonalBundle/Resources/config/routing.yml"
+    prefix:   /personal
 
 # Internal routing configuration to handle ESI
 # ****** WARNING ******

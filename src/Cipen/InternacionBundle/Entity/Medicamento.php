@@ -3,6 +3,7 @@
 namespace Cipen\InternacionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Medicamento
@@ -50,6 +51,7 @@ class Medicamento
      *
      * @ORM\ManyToOne(targetEntity="Cipen\MedicamentoBundle\Entity\Medicamento")
      * @ORM\JoinColumn(name="internacion_medicamento_id")
+     * @Assert\NotNull(message="Seleccione un objeto")
      */
     private $medicamento;
 
@@ -64,6 +66,7 @@ class Medicamento
      * @var float
      *
      * @ORM\Column(name="cantidad", type="float")
+     * @Assert\NotBlank(message="Ingrese cantidad")
      */
     private $cantidad;
 
@@ -78,6 +81,7 @@ class Medicamento
      * @var \DateTime
      *
      * @ORM\Column(name="inicio", type="datetime")
+     * @Assert\NotBlank(message="Ingrese inicio")
      */
     private $inicio;
 
@@ -92,6 +96,7 @@ class Medicamento
      * @var \DateTime
      *
      * @ORM\Column(name="fin", type="datetime")
+     * @Assert\NotBlank(message="Ingrese fin")
      */
     private $fin;
 

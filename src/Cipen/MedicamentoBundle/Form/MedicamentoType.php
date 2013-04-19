@@ -15,8 +15,8 @@ class MedicamentoType extends AbstractType
         $builder
             ->add('nombre')                                
             ->add('marca')
-            ->add('catastro','choice', array('choices'=>  Medicamento::$kairos))            
-            ->add('kairo')            
+            ->add('catastro','choice', array('choices'=>  Medicamento::$kairos, 'attr'=>array('data-id'=>'catastro')))            
+            ->add('kairo',null, array('attr'=>array('data-id'=>'kairo')))            
             ;
     }
 

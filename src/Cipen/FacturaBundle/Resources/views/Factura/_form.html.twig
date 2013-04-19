@@ -1,0 +1,27 @@
+{{ form_errors (form) }}
+
+<div class="control-group">
+    {{ form_label(form.obraSocial,'Obra Social',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.obraSocial, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.obraSocial) }}
+    </div>
+</div>          
+
+<div class="control-group">
+    {{ form_label(form.desde,'Desde',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.desde, { attr : { class : 'span2' } }) }}
+        {{ form_errors (form.desde) }}
+    </div>
+</div> 
+
+<div class="control-group">
+    {{ form_label(form.hasta,'Hasta',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.hasta, { attr : { class : 'span2' } }) }}
+        {{ form_errors (form.hasta) }}
+    </div>
+</div> 
+
+{{ form_rest (form) }}

@@ -10,6 +10,7 @@ class ObraSocialType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('cuit')
             ->add('nombre')
             ->add('direccionBarrio')            
             ->add('direccionCalle')                

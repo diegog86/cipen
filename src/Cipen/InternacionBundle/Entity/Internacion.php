@@ -9,7 +9,8 @@ use Symfony\Component\Validator\Constraints as assert;
  * Cipen\InternacionBundle\Entity\Internacion
  *
  * @ORM\Table("Internacion__Internacion")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Cipen\InternacionBundle\Entity\InternacionRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Internacion
 {
@@ -50,11 +51,33 @@ class Internacion
      * @assert\NotNull(message="Por favor, seleccione un paciente")
      */
     private $paciente;
+    
+    /**
+     * @var integer $obraSocial
+     *
+     * @ORM\ManyToOne(targetEntity="Cipen\ObraSocialBundle\Entity\ObraSocial")
+     * @ORM\JoinColumn(name="obraSocialPaciente_id")
+     */
+     private $obraSocialPaciente;    
+    
+    /**
+     * @var string $numeroObraSocial
+     *
+     * @ORM\Column(name="numeroObraSocialPaciente", type="string", length=100, nullable=true)
+     */
+    private $numeroObraSocialPaciente;
+    
+    /**
+     * @var string $numeroInternacionObraSocial
+     *
+     * @ORM\Column(name="numeroInternacionObraSocial", type="string", length=100, nullable=true)
+     */
+    private $numeroInternacionObraSocial;  
 
     /**
      * @var integer $prestador
      *
-     * @ORM\ManyToOne(targetEntity="Cipen\MedicoBundle\Entity\Medico")
+     * @ORM\ManyToOne(targetEntity="Cipen\PersonalBundle\Entity\Personal")
      * @ORM\JoinColumn(nullable=false)
      * @assert\NotNull(message="Por favor, seleccione un prestador")
      */
@@ -63,7 +86,7 @@ class Internacion
     /**
      * @var integer $prescriptor
      *
-     * @ORM\ManyToOne(targetEntity="Cipen\MedicoBundle\Entity\Medico")
+     * @ORM\ManyToOne(targetEntity="Cipen\PersonalBundle\Entity\Personal")
      * @ORM\JoinColumn(nullable=false)
      * @assert\NotNull(message="Por favor, seleccione un prescriptor")
      */
@@ -147,7 +170,16 @@ class Internacion
     	return "INT".str_pad($this->getId(),5,0,STR_PAD_LEFT);
     }
     
- 
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(){
+        $this->obraSocialPaciente = $this->paciente->getObraSocial();
+        $this->numeroObraSocialPaciente = $this->paciente->getNumeroObraSocial();
+    }
+
+
+    
     /**
      * Constructor
      */
@@ -157,6 +189,7 @@ class Internacion
         $this->internacionPrestacion = new \Doctrine\Common\Collections\ArrayCollection();
         $this->diagnosticoEgreso = new \Doctrine\Common\Collections\ArrayCollection();
         $this->habitacion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->medicamento = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -241,7 +274,7 @@ class Internacion
     /**
      * Set tipoAlta
      *
-     * @param integer $tipoAlta
+     * @param string $tipoAlta
      * @return Internacion
      */
     public function setTipoAlta($tipoAlta)
@@ -254,13 +287,12 @@ class Internacion
     /**
      * Get tipoAlta
      *
-     * @return integer 
+     * @return string 
      */
     public function getTipoAlta()
     {
         return $this->tipoAlta;
     }
-    
 
     /**
      * Set tipoInternacion
@@ -311,10 +343,10 @@ class Internacion
     /**
      * Set prestador
      *
-     * @param \Cipen\MedicoBundle\Entity\Medico $prestador
+     * @param \Cipen\PersonalBundle\Entity\Personal $prestador
      * @return Internacion
      */
-    public function setPrestador(\Cipen\MedicoBundle\Entity\Medico $prestador)
+    public function setPrestador(\Cipen\PersonalBundle\Entity\Personal $prestador)
     {
         $this->prestador = $prestador;
     
@@ -324,7 +356,7 @@ class Internacion
     /**
      * Get prestador
      *
-     * @return \Cipen\MedicoBundle\Entity\Medico 
+     * @return \Cipen\PersonalBundle\Entity\Personal 
      */
     public function getPrestador()
     {
@@ -334,10 +366,10 @@ class Internacion
     /**
      * Set prescriptor
      *
-     * @param \Cipen\MedicoBundle\Entity\Medico $prescriptor
+     * @param \Cipen\PersonalBundle\Entity\Personal $prescriptor
      * @return Internacion
      */
-    public function setPrescriptor(\Cipen\MedicoBundle\Entity\Medico $prescriptor)
+    public function setPrescriptor(\Cipen\PersonalBundle\Entity\Personal $prescriptor)
     {
         $this->prescriptor = $prescriptor;
     
@@ -347,7 +379,7 @@ class Internacion
     /**
      * Get prescriptor
      *
-     * @return \Cipen\MedicoBundle\Entity\Medico 
+     * @return \Cipen\PersonalBundle\Entity\Personal 
      */
     public function getPrescriptor()
     {
@@ -486,7 +518,6 @@ class Internacion
         return $this->habitacion;
     }
 
-
     /**
      * Add medicamento
      *
@@ -518,5 +549,74 @@ class Internacion
     public function getMedicamento()
     {
         return $this->medicamento;
+    }
+
+    /**
+     * Set numeroObraSocialPaciente
+     *
+     * @param string $numeroObraSocialPaciente
+     * @return Internacion
+     */
+    public function setNumeroObraSocialPaciente($numeroObraSocialPaciente)
+    {
+        $this->numeroObraSocialPaciente = $numeroObraSocialPaciente;
+    
+        return $this;
+    }
+
+    /**
+     * Get numeroObraSocialPaciente
+     *
+     * @return string 
+     */
+    public function getNumeroObraSocialPaciente()
+    {
+        return $this->numeroObraSocialPaciente;
+    }
+
+    /**
+     * Set numeroInternacionObraSocial
+     *
+     * @param string $numeroInternacionObraSocial
+     * @return Internacion
+     */
+    public function setNumeroInternacionObraSocial($numeroInternacionObraSocial)
+    {
+        $this->numeroInternacionObraSocial = $numeroInternacionObraSocial;
+    
+        return $this;
+    }
+
+    /**
+     * Get numeroInternacionObraSocial
+     *
+     * @return string 
+     */
+    public function getNumeroInternacionObraSocial()
+    {
+        return $this->numeroInternacionObraSocial;
+    }
+
+    /**
+     * Set obraSocialPaciente
+     *
+     * @param \Cipen\ObraSocialBundle\Entity\ObraSocial $obraSocialPaciente
+     * @return Internacion
+     */
+    public function setObraSocialPaciente(\Cipen\ObraSocialBundle\Entity\ObraSocial $obraSocialPaciente = null)
+    {
+        $this->obraSocialPaciente = $obraSocialPaciente;
+    
+        return $this;
+    }
+
+    /**
+     * Get obraSocialPaciente
+     *
+     * @return \Cipen\ObraSocialBundle\Entity\ObraSocial 
+     */
+    public function getObraSocialPaciente()
+    {
+        return $this->obraSocialPaciente;
     }
 }

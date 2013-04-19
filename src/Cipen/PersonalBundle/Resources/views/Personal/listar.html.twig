@@ -1,0 +1,43 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+  
+{% block admin_title %}
+    Gestión de personal
+{% endblock %}
+    
+{% block admin_actions %}
+    <li><a href="{{ path('personal_crear') }}"><i class="icon-plus"></i> Crear</a></li>
+{% endblock %}
+
+{% set admin_menu_active = 'personal' %}    
+    
+{% block admin_content %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Personal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.nombre }}, {{ entity.apellido }}</td>
+                    <td>
+                        <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
+                            <a class="btn" href="{{ path('personal_editar', {id: entity.id}) }}" title="Editar" >
+                                <i class="icon-pencil"></i>
+                            </a>
+                           <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar esta persona?')){ return false }" href="{{ path('personal_eliminar', {id: entity.id}) }}" title="Eliminar" >
+                                <i class="icon-white icon-trash"></i>
+                            </a>                                
+                        </div>
+                    </td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td>No existen registros</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}

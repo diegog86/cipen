@@ -36,7 +36,7 @@ class ActoUnidadController extends Controller
      *
      */
     public function crearAction($actoId = 0 ,Request $request)
-    {
+    {exit();
         $em = $this->getDoctrine()->getEntityManager();
         $entity = new ActoUnidad();
         

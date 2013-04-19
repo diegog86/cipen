@@ -20,7 +20,7 @@ use Cipen\InternacionBundle\Entity\InternacionPrestacionActoMedico;
 class PrestacionController extends Controller
 {
 
-    public function listarAction($internacionId, $pacienteId)
+    public function listarAction($internacionId)
     {
     	$em = $this->getDoctrine()->getEntityManager();
         $datos["entities"] = $em->getRepository('CipenInternacionBundle:InternacionPrestacion')->findBy(
@@ -28,7 +28,6 @@ class PrestacionController extends Controller
             array('fecha'=>'DESC','id'=>'DESC')
         );
         
-        $datos['pacienteId'] = $pacienteId;
         $datos['internacionId'] = $internacionId;
         
     	return $this->render('CipenInternacionBundle:InternacionPrestacion:listar.html.twig',$datos);    
@@ -39,14 +38,14 @@ class PrestacionController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getEntityManager();
         
-        $p = $request->request->get('p');
-        $cos = $request->request->get('cos');
-        $tp = $request->request->get('tp');
+        $i = $request->request->get('i'); //internacion
+        $cos = $request->request->get('cos'); // con obra social
+        $tp = $request->request->get('tp'); //tipo obra social
 
         if ($cos) {   
 
-            $paciente = $em->getRepository('CipenPacienteBundle:Paciente')->find($p);
-            $obraSocial = $paciente->getObraSocial();
+            $internacion = $em->getRepository('CipenInternacionBundle:Internacion')->find($i);
+            $obraSocial = $internacion->getObraSocialPaciente();
             
             if ($tp == 'modulo') {
                 $entities = $em->getRepository('CipenPrestacionBundle:Modulo')->findByObraSocial($obraSocial->getId());
@@ -85,23 +84,22 @@ class PrestacionController extends Controller
     }
 
     
-    public function nuevaAction($internacionId,$pacienteId, Request $request)
+    public function nuevaAction($internacionId, Request $request)
     {
 
         $em = $this->getDoctrine()->getEntityManager();        
-        $paciente = $em->getRepository('CipenPacienteBundle:Paciente')->find($pacienteId);   
         $internacion = $em->getRepository('CipenInternacionBundle:Internacion')->find($internacionId); ;
 
-        if(!$internacion or !$paciente) {
+        if(!$internacion) {
            throw $this->createNotFoundException("No se encontro registro");
         }
         
         $internacionPrestacion = new InternacionPrestacion();
         $internacionPrestacion->setInternacion($internacion);
         $internacionPrestacion->setFecha(new \DateTime('NOW'));
-
         $formPrestacionNueva = $request->request->get('prestacion_nueva'); 
 
+        
         if ($formPrestacionNueva['tipo_prestacion'] == "modulo") {
 
             $modulo = $em->getRepository ('CipenPrestacionBundle:Modulo')->find ($formPrestacionNueva['prestacion']);
@@ -113,7 +111,7 @@ class PrestacionController extends Controller
             
             $actoUnidad = $em->getRepository('CipenPrestacionBundle:ActoUnidad')->findBy(
                     array(
-                        'obraSocial'=>$paciente->getObraSocial()->getId(),
+                        'obraSocial'=>$internacion->getObraSocialPaciente()->getId(),
                         'acto'=>$formPrestacionNueva['prestacion']
                     )
             );
@@ -126,8 +124,8 @@ class PrestacionController extends Controller
         $form = $this->createForm(new InternacionPrestacionType (),$internacionPrestacion) ;          
         
         $datos['form'] = $form->createView ();
+        $datos['internacion'] = $internacion;
         $datos['internacionPrestacion'] = $internacionPrestacion;
-        $datos['paciente'] = $paciente;
         $datos['prestacionTitulo'] = $prestacionTitulo;
         
         
@@ -135,15 +133,14 @@ class PrestacionController extends Controller
     }
     
     
-    public function crearAction($internacionId,$pacienteId, Request $request)
+    public function crearAction($internacionId, Request $request)
     {
        
         $em = $this->getDoctrine()->getEntityManager();        
-              
-        $paciente = $em->getRepository('CipenPacienteBundle:Paciente')->find($pacienteId);   
+
         $internacion = $em->getRepository('CipenInternacionBundle:Internacion')->find($internacionId); ;
 
-        if(!$internacion or !$paciente) {
+        if(!$internacion) {
             throw  $this->createNotFoundException("No se encontro registro");
         }
         
@@ -175,13 +172,12 @@ class PrestacionController extends Controller
 
                 $em->persist ($internacionPrestacion);
                 $em->flush ();
-                return $this->redirect ($this->generateUrl ('internacion_prestacion', array('internacionId' => $internacionPrestacion->getInternacion ()->getId (), 'pacienteId' => $paciente->getId ())));
+                return $this->redirect ($this->generateUrl ('internacion_prestacion', array('internacionId' => $internacionPrestacion->getInternacion ()->getId ())));
             }
         }
         
         $datos['form'] = $form->createView ();
         $datos['internacionPrestacion'] = $internacionPrestacion;
-        $datos['paciente'] = $paciente;
         $datos['prestacionTitulo'] = $prestacionTitulo;        
 
         return $this->render('CipenInternacionBundle:InternacionPrestacion:nuevo.html.twig', $datos);        
@@ -191,12 +187,12 @@ class PrestacionController extends Controller
     private function setPrestacionActo($internacionPrestacion, $actosUnidad, $form){
         
         $j = 0;
+        $internacionPrestacion->setConObraSocial ($form['con_os']);
         $internacionPrestacionActo = array();
         foreach ($actosUnidad as $actoUnidad) {
 
             $internacionPrestacionActo[$j] = new InternacionPrestacionActo();
             $internacionPrestacionActo[$j]->setActo ($actoUnidad->getActo ());
-
             
             if ($form['con_os'] and $actoUnidad->getNomenclador () != 'SIN_NOMENCLADOR') {
 
@@ -204,14 +200,15 @@ class PrestacionController extends Controller
                 $internacionPrestacionActo[$j]->setHonorarioAyudante ($actoUnidad->getHonorarioAyudante () * $actoUnidad->getUnidadHonorario ()->getValor ());
                 $internacionPrestacionActo[$j]->setHonorarioAnestesista ($actoUnidad->getHonorarioAnestesista () * $actoUnidad->getUnidadHonorario ()->getValor ());
                 $internacionPrestacionActo[$j]->setGasto ($actoUnidad->getGasto () * $actoUnidad->getUnidadGasto ()->getValor ());
-                $internacionPrestacion->setConObraSocial (true);
+
+                
             } elseif($form['con_os']) {
                 
                 $internacionPrestacionActo[$j]->setHonorarioEspecialista ($actoUnidad->getHonorarioEspecialista ());
                 $internacionPrestacionActo[$j]->setHonorarioAyudante ($actoUnidad->getHonorarioAyudante ());
                 $internacionPrestacionActo[$j]->setHonorarioAnestesista ($actoUnidad->getHonorarioAnestesista () );
                 $internacionPrestacionActo[$j]->setGasto ($actoUnidad->getGasto ());
-                $internacionPrestacion->setConObraSocial (true);
+
                 
             }
 
@@ -224,7 +221,7 @@ class PrestacionController extends Controller
     
 
     
-    public function eliminarAction($internacionId, $pacienteId, $internacionPrestacionId)
+    public function eliminarAction($internacionId,  $internacionPrestacionId)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('CipenInternacionBundle:InternacionPrestacion')->find($internacionPrestacionId);
@@ -236,7 +233,7 @@ class PrestacionController extends Controller
         $em->remove($entity);
         $em->flush();
 
-        return $this->redirect($this->generateUrl ('internacion_prestacion', array('internacionId'=>$internacionId,'pacienteId'=>$pacienteId)));
+        return $this->redirect($this->generateUrl ('internacion_prestacion', array('internacionId'=>$internacionId)));
     }
 
     

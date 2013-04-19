@@ -19,28 +19,28 @@ function cargarUnidadesNomenclador() {
 
             });
 
-               html += '<div class="control-group" data-group-unidades="unidades">' +
-                             '<label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Honorario</label>' +
-                             '<div class="controls">' +                        
-                                 '<select class="span7" name="unidadHonorario" >' +
-                                     option
-               html +=  '         </select>' +           
-                             '</div>' +
-                       '</div>';
+
+                    html += '<div class="control-group" data-group-unidades="unidades">' +
+                                  '<label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Honorario</label>' +
+                                  '<div class="controls">' +                        
+                                      '<select class="span7" name="unidadHonorario" >' +
+                                          option
+                    html +=  '         </select>' +           
+                                  '</div>' +
+                            '</div>';
 
 
-               html += '<div class="control-group" data-group-unidades="unidades">' +
-                             '<label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Gasto</label>' +
-                             '<div class="controls">' +                        
-                                 '<select class="span7" name="unidadGasto" >' +
-                                     option
-               html +=  '         </select>' +           
-                             '</div>' +
-                       '</div>';
+                    html += '<div class="control-group" data-group-unidades="unidades">' +
+                                  '<label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Gasto</label>' +
+                                  '<div class="controls">' +                        
+                                      '<select class="span7" name="unidadGasto" >' +
+                                          option
+                    html +=  '         </select>' +           
+                                  '</div>' +
+                            '</div>';
 
-               
-              $(html).insertAfter('[data-campo-group="obraSocial"]');
-
+                   $(html).insertAfter('[data-campo-group="obraSocial"]');
+                   $('select').select2();
         });
     }
     

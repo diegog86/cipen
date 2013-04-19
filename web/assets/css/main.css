@@ -7999,29 +7999,53 @@ disabled look for already selected choices in the results dropdown
 	}
 }
 
-.prestacion li {
+.form-errors h4 {
+  border-bottom: 1px solid #EDC4C4;
+  margin-bottom: 5px;
+}
+.form-errors div {
+  margin: 5px 0px 0 15px;
+}
+.info-prestacion label {
+  padding-top: 4px;
+  font-size: 16px;
+}
+.info-prestacion > .control {
+  float: left;
+  margin-right: 40px;
+}
+.internacionPrestacion li {
   list-style: none;
-  padding-bottom: 10px;
   padding: 5px;
 }
-.prestacion > li:last-child {
-  padding-bottom: 20px;
-}
-.prestacion > li:first-child {
-  font-size: 18px;
-  text-decoration: underline;
-}
-.prestacion > li > ul {
-  background-color: #F7F7F7;
-  border: 1px solid #ccc;
-  padding: 5px 5px 30px 5px;
+.internacionPrestacion >ul {
+  float: left;
+  border: solid 1px #ccc;
+  margin-left: 0px;
   margin-bottom: 20px;
+  width: 100%;
 }
-.prestacion li > ul > li {
+.internacionPrestacion >ul > li {
+  float: left;
+  width: 99%;
+}
+.internacionPrestacion >ul > li:first-child {
+  border-bottom: solid 1px #ccc;
+  box-shadow: 1px 10px 13px #A0A0A0;
+}
+.internacionPrestacion >ul > li:first-child label {
+  font-size: 16px;
+}
+.internacionPrestacion >ul > li:last-child {
+  padding-top: 35px;
+}
+.internacionPrestacion >ul li ul li {
   clear: both;
 }
-.prestacion li > ul > li >ul > li {
-  clear: both;
+.internacionPrestacionActo >li:first-child {
+  float: left;
+  border-bottom: solid 1px #ccc;
+  width: 99%;
 }
 label,
 input,

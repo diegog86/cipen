@@ -1,0 +1,27 @@
+{% extends "ComunComunBundle:Default:layout.html.twig" %}
+
+{% block admin_title %}
+    Nueva facturación
+{% endblock %}
+    
+{% block admin_actions %}
+    <li><a href="{{ path('factura') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>
+{% endblock %}
+
+{% set admin_menu_active = 'factura' %}
+    
+{% block admin_content %}
+        
+    <form class="form-horizontal" method="POST" action="{{ path('factura_crear') }}" >
+
+        {% include 'CipenFacturaBundle:Factura:_form.html.twig' %}               
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}
+
+  

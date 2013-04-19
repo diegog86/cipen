@@ -4,7 +4,8 @@
 
     <ul class="nav nav-tabs">
         <li><a href="{{ path('obra_social_editar', { id: obraSocialId }) }}">Datos de Obra Social</a></li>
-        <li class="active"><a href="{{ path('unidad', { obraSocialId: obraSocialId }) }}">Unidades</a></li>
+        <li><a href="{{ path('unidad', { obraSocialId: obraSocialId }) }}">Unidades</a></li>
+        <li class="active"><a href="javascript:void(0)">Agregar unidad</a></li>
     </ul>        
     
     <form class="form-horizontal" method="POST" action="{{ path('unidad_crear', { obraSocialId: obraSocialId }) }}" >

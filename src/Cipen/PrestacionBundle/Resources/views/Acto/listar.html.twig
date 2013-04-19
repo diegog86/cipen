@@ -14,12 +14,14 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Acto médico</th>
+                <th>Código</th>
+                <th>Descripción</th>
             </tr>
         </thead>
         <tbody>
             {% for entity in entities %}
                 <tr>
+                    <td>{{ entity.codigo }}</td>
                     <td>{{ entity.descripcion }}</td>
                     <td>
                         <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
@@ -38,7 +40,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td>No existen registros</td>
+                    <td colspan="3">No existen registros</td>
                 </tr>
             {% endfor %}
         </tbody>

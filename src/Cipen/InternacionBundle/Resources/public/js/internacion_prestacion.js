@@ -9,12 +9,12 @@
             var cos=$('[data-prestacion="con_os"]:checked').val();
             var tp=$('[data-prestacion="tipo_prestacion"]:checked').val();
             var url = urlInternacionPrestacionGetAjax ;
-            var p = $('[data-prestacion="p"]').val() ;
+            var i = $('[data-prestacion="i"]').val() ;
            
             $('[data-prestacion]').attr('disabled','disabled');
             $('[data-prestacion="prestacion"]').html('');
 
-            $.post(url,{cos:cos, tp:tp, p:p},function(datos){       
+            $.post(url,{cos:cos, tp:tp, i:i},function(datos){       
 
                  var option = '<option selected="selected" value=""></option>';
                  $.each(datos, function(id,prestacion){

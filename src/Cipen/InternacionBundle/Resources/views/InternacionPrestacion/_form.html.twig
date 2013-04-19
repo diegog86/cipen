@@ -27,7 +27,7 @@
 
     <div class="control inline">
         <label>
-            Con Obra Social {{ paciente.obraSocial.nombre }}: <strong> {{ internacionPrestacion.conObraSocial ? 'SI' : 'NO' }} </strong> 
+            Con Obra Social {{ internacion.obraSocialPaciente.nombre }}: <strong> {{ internacionPrestacion.conObraSocial ? 'SI' : 'NO' }} </strong> 
             {{ form_widget (form.conObraSocial) }}
         </label>
     </div>       
@@ -64,9 +64,9 @@
                                 </div>                                                
                              </li>
                              <li>
-                                 {{ form_label(form.internacionPrestacionActo[key].medicoEspecialista,'Médico',{ label_attr : { class : 'control-label'} }) }} 
+                                 {{ form_label(form.internacionPrestacionActo[key].especialista,'Médico',{ label_attr : { class : 'control-label'} }) }} 
                                  <div class="controls">
-                                    {{ form_widget (form.internacionPrestacionActo[key].medicoEspecialista, { attr : { class : 'span7' } }) }}
+                                    {{ form_widget (form.internacionPrestacionActo[key].especialista, { attr : { class : 'span7' } }) }}
                                     
                                  </div>
                              </li>
@@ -87,9 +87,9 @@
                                   </div>                                                
                              </li>
                              <li>
-                                 {{ form_label(form.internacionPrestacionActo[key].medicoAyudante,'Médico',{ label_attr : { class : 'control-label'} }) }} 
+                                 {{ form_label(form.internacionPrestacionActo[key].ayudante,'Médico',{ label_attr : { class : 'control-label'} }) }} 
                                  <div class="controls">
-                                     {{ form_widget (form.internacionPrestacionActo[key].medicoAyudante, { attr : { class : 'span7' } }) }}
+                                     {{ form_widget (form.internacionPrestacionActo[key].ayudante, { attr : { class : 'span7' } }) }}
 
                                  </div>
                              </li>
@@ -110,9 +110,9 @@
                                  </div>                                                
                              </li>
                              <li>
-                                 {{ form_label(form.internacionPrestacionActo[key].medicoAnestesista,'Médico',{ label_attr : { class : 'control-label'} }) }} 
+                                 {{ form_label(form.internacionPrestacionActo[key].anestesista,'Médico',{ label_attr : { class : 'control-label'} }) }} 
                                  <div class="controls">
-                                     {{ form_widget (form.internacionPrestacionActo[key].medicoAnestesista, { attr : { class : 'span7' } }) }}
+                                     {{ form_widget (form.internacionPrestacionActo[key].anestesista, { attr : { class : 'span7' } }) }}
 
                                  </div>
                              </li>

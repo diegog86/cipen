@@ -1,0 +1,7 @@
+parameters:
+#    cipen_factura.example.class: Cipen\FacturaBundle\Example
+
+services:
+#    cipen_factura.example:
+#        class: %cipen_factura.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

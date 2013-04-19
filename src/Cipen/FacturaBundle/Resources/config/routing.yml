@@ -1,0 +1,15 @@
+factura:
+  pattern:  /
+  defaults: { _controller: CipenFacturaBundle:Factura:listar }
+
+factura_crear:
+  pattern:  /crear/
+  defaults: { _controller: CipenFacturaBundle:Factura:crear }
+
+factura_ver:
+  pattern:  /{id}/ver/
+  defaults: { _controller: CipenFacturaBundle:Factura:ver }
+
+factura_eliminar:
+  pattern:  /{id}/eliminar/
+  defaults: { _controller: CipenFacturaBundle:Factura:eliminar }

@@ -10,9 +10,9 @@
     
     <form action = "{{ path('modulo_agregar_acto', { moduloId: entity.id }) }}" method = "POST" class="form-inline" >
         <div class="well well-small">
-            {{ form_widget (form.actoUnidad, { attr : { class : 'span11' } }) }}
-                <button type="submit" class="btn btn-primary" style="margin-left: 10px" title="Agregar acto médico">
-                 <i class="icon-plus icon-white"></i>
+            {{ form_widget (form.actoUnidad, { attr : { class : 'span9' } }) }}
+            <button type="submit" class="btn btn-primary btn-small" style="margin-left: 10px" title="Agregar acto médico">
+                <i class="icon-plus icon-white"></i> Agregar acto médico
             </button>
         </div>
     </form>

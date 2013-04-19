@@ -30,17 +30,13 @@ $.fn.optionTree = function(tree, options) {
         loading_image: '', // show an ajax loading graphics (animated gif) while loading ajax (eg. /ajax-loader.gif)
         select_class: '',
         leaf_class: 'final',
-        cleanInput: false, //liampia el id del último select anidado seleccionado cuando este genera otro select hijo
-        attr_data: 'tree',
-        bloquearSelectAnidados: false,
         empty_value: '', // what value to set the input to if no valid option was selected
         on_each_change: false, // URL to lazy load (JSON, 'id' parameter will be added) or function. See default_lazy_load
         set_value_on: 'leaf', // leaf - sets input value only when choosing leaf node. 'each' - sets value on each level change.
                               // makes sense only then indexed=true
         indexed: false,
-        preselect_only_once: true // if true, once preselected items will be chosen, the preselect list is cleared. This is to allow
+        preselect_only_once: false // if true, once preselected items will be chosen, the preselect list is cleared. This is to allow
                                     // changing the higher level options without automatically changing lower levels when a whole subtree is in preselect list
-       
     }, options || {});
 
     var cleanName = function (name) {
@@ -65,16 +61,9 @@ $.fn.optionTree = function(tree, options) {
             .attr('class', 'optionTree-loader')
             .insertAfter(input);
         }
-        
-        if(options.bloquearSelectAnidados){
-            
-            $('[data-'+options.attr_data+']').attr('disabled','disabled')
-            
-        }
 
         $.getJSON(options.lazy_load, {id: value}, function(tree) {
             $('.optionTree-loader').remove();
-            $('[data-'+options.attr_data+']').removeAttr('disabled')
             var prop;
             for (prop in tree) {
                 if (tree.hasOwnProperty(prop)) { // tree not empty
@@ -84,6 +73,7 @@ $.fn.optionTree = function(tree, options) {
             }
             // tree empty, call value switch
             $(input).optionTree(value, options);
+
         });
     };
 
@@ -93,9 +83,6 @@ $.fn.optionTree = function(tree, options) {
     }
 
     var isPreselectedFor = function(clean, v) {
-        
-        
-        
       if (!options.preselect || !options.preselect[clean]) {
         return false;
       }
@@ -109,27 +96,18 @@ $.fn.optionTree = function(tree, options) {
 
     return this.each(function() {
         var name = $(this).attr('name') + "_";
-        var val_attr_data = name.split("_").length-1; //valor del atributo data
+        var data = $(this).attr('name')+"_";
 
         // remove all dynamic options of lower levels
         removeNested(name);
 
         if (typeof tree === "object") { // many options exists for current nesting level
 
-            //liampia el id del último select anidado seleccionado cuando este genera otro select hijo
-            if(options.cleanInput && options.set_value_on === "leaf"){
-                setValue(name, '');
-            }
-            
-            
             // create select element with all the options
             // and bind onchange event to recursively call this function
 
-            
-            
-            var $select = $("<select>").attr('name',name)
+            var $select = $("<select>").attr({'name':name,'data-tree-select':data})
             .change(function() {
-                //cuando el valor seleccionado del select es distinto al option.choose
                 if (this.options[this.selectedIndex].value !== '') {
                     if ($.isFunction(options.on_each_change)) {
                       removeNested(name + '_');
@@ -143,15 +121,12 @@ $.fn.optionTree = function(tree, options) {
                     }
                 } else {
                   removeNested(name + '_');
-                  setValue(name, options.empty_value);
-
+                    setValue(name, options.empty_value);
                 }
             });
 
-            //agrego propiedad html data- al select
-            $select.attr("data-"+options.attr_data , val_attr_data);
-            
             var text_to_choose = '';
+
             if (jQuery.isFunction(options.choose)) {
                 var level = $(this).siblings().andSelf().filter('select').length;
                 text_to_choose = options.choose.apply(this, [level]);
@@ -220,6 +195,8 @@ $.fn.optionTree = function(tree, options) {
             if (!foundPreselect && options.preselect_only_once) { // clear preselect on first not-found level
                 options.preselect[cleanName(name)] = null;
             }
+            
+            $('select').select2(); 
 
         } else if (options.set_value_on === 'leaf') { // single option is selected by the user (function called via onchange event())
             if (options.indexed) {

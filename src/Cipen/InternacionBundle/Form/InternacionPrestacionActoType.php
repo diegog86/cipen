@@ -12,17 +12,17 @@ class InternacionPrestacionActoType extends AbstractType
     {
         $builder
             ->add ('acto',null, array('attr'=>array('style'=>'display:none')))
-            ->add('medicoEspecialista',null,array(
+            ->add('especialista',null,array(
                 'attr'=>array('data-genemu'=>'select2'),
                 ))
             ->add ('honorarioEspecialista',null, array('error_bubbling' => true))
                 
-            ->add('medicoAyudante',null,array(
+            ->add('ayudante',null,array(
                 'attr'=>array('data-genemu'=>'select2'),
                 ))
             ->add ('honorarioAyudante',null, array('error_bubbling' => true))                
                 
-            ->add('medicoAnestesista',null,array(
+            ->add('anestesista',null,array(
                 'attr'=>array('data-genemu'=>'select2'),
                 ))
             ->add ('honorarioAnestesista',null, array('error_bubbling' => true))

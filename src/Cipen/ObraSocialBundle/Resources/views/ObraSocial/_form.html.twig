@@ -1,12 +1,20 @@
 {{ form_errors (form) }}
 
 <div class="control-group">
+    {{ form_label(form.cuit,'CUIT',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (form.cuit, { attr : { class : 'span3' } }) }}
+        {{ form_errors (form.cuit) }}
+    </div>
+</div>
+
+<div class="control-group">
     {{ form_label(form.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }} 
     <div class="controls">
         {{ form_widget (form.nombre, { attr : { class : 'span7' } }) }}
         {{ form_errors (form.nombre) }}
     </div>
-</div>                 
+</div>   
 
 <div class="control-group">
     {{ form_label(form.direccionBarrio,'Barrio',{ label_attr : { class : 'control-label'} }) }}
