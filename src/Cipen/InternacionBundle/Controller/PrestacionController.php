@@ -109,15 +109,29 @@ class PrestacionController extends Controller
             
         } else {
             
-            $actoUnidad = $em->getRepository('CipenPrestacionBundle:ActoUnidad')->findBy(
-                    array(
+            
+            $qb = $em->getRepository('CipenPrestacionBundle:ActoUnidad')->
+                createQueryBuilder('au')
+                ->where('au.acto = :acto');
+            
+
+            if ($formPrestacionNueva['con_os']) {
+                $actoUnidad = $qb->andWhere('au.obraSocial = :obraSocial')
+                    ->setParameters (array(
                         'obraSocial'=>$internacion->getObraSocialPaciente()->getId(),
                         'acto'=>$formPrestacionNueva['prestacion']
-                    )
-            );
-                        
-            $internacionPrestacion = $this->setPrestacionActo($internacionPrestacion, $actoUnidad, $formPrestacionNueva);
+                    ))->getQuery()->getResult ();
+            }  else {
+                $actoUnidad = $qb
+                    ->setParameters (array(
+                        'acto'=>$formPrestacionNueva['prestacion']
+                    ))->getQuery()->getResult ();
+            }
+            
             $prestacionTitulo = $actoUnidad[0]->getActo()->getDescripcion();
+            $internacionPrestacion = $this->setPrestacionActo($internacionPrestacion, $actoUnidad, $formPrestacionNueva);
+            
+           
         }
 
         
@@ -177,6 +191,7 @@ class PrestacionController extends Controller
         }
         
         $datos['form'] = $form->createView ();
+        $datos['internacion'] = $internacion;        
         $datos['internacionPrestacion'] = $internacionPrestacion;
         $datos['prestacionTitulo'] = $prestacionTitulo;        
 

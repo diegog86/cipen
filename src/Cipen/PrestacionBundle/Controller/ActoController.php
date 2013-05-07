@@ -22,7 +22,7 @@ class ActoController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
         $datos["entities"] = $em->getRepository('CipenPrestacionBundle:Acto')->findAll();
-        
+
     	return $this->render('CipenPrestacionBundle:Acto:listar.html.twig',$datos);
     
     }

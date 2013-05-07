@@ -35,8 +35,8 @@ class ActoUnidadController extends Controller
      * Displays a form to create a new Paciente entity.
      *
      */
-    public function crearAction($actoId = 0 ,Request $request)
-    {exit();
+    public function crearAction($actoId = 0, Request $request)
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = new ActoUnidad();
         
@@ -54,8 +54,7 @@ class ActoUnidadController extends Controller
             
             if ($form->isValid ()) {
                                 
-                $entity = $this->setUnidades($entity, $this->getRequest());
-                
+                $entity = $this->setUnidades($entity);
                 $em->persist($entity);
                 $em->flush();
                 
@@ -84,7 +83,6 @@ class ActoUnidadController extends Controller
         $datos["actoId"] = $actoId;
         $datos["entity"] = $entity;
         $datos["form"] = $form->createView ();
-
         return $this->render('CipenPrestacionBundle:ActoUnidad:nuevo.html.twig', $datos);
     }
 
@@ -109,8 +107,7 @@ class ActoUnidadController extends Controller
             
             if ($form->isValid ()) {
                 
-                $entity = $this->setUnidades($entity, $this->getRequest());
-                
+                $entity = $this->setUnidades($entity);
                 $em->persist($entity);
                 $em->flush();
             }
@@ -126,26 +123,12 @@ class ActoUnidadController extends Controller
     }
 
   
-    private function setUnidades ($entity, $request) 
+    private function setUnidades ($entity) 
     {
-        
-        $unidadHonorarioId = $request->request->get('unidadHonorario');
-        $unidadGastoId = $request->request->get('unidadGasto');
-
-        if (isset($unidadHonorarioId) and isset($unidadGastoId)) {
-
-            $em = $this->getDoctrine()->getEntityManager();
-            
-            $unidadHonorario = $em->getRepository ('CipenObraSocialBundle:Unidad')->find($unidadHonorarioId);
-            $unidadGasto = $em->getRepository ('CipenObraSocialBundle:Unidad')->find($unidadGastoId);
-                    
-            $entity->setUnidadHonorario($unidadHonorario);
-            $entity->setUnidadGasto($unidadGasto);
-                    
-        } else {
+        if ($entity->getNomencladorDescripcion() == "SIN_NOMENCLADOR") {
             $entity->setUnidadHonorario(null);
-            $entity->setUnidadGasto(null);
-        }   
+            $entity->setUnidadGasto(null);                    
+        }
         
         return $entity;
     }

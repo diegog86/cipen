@@ -125,4 +125,9 @@ class Unidad
     {
         return $this->obraSocial;
     }
+    
+    public function __toString ()
+    {
+        return $this->getDescripcion ();
+    }
 }

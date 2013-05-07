@@ -25,7 +25,6 @@ class Personal extends Persona
     
     /**
      * @ORM\ManyToOne(targetEntity="Tipo")
-     * @assert\NotNull(message="Por favor, ingrese tipo")
      * 
      */
     private $tipo;

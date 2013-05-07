@@ -25,7 +25,7 @@
                 <tr>
                     <td>{{ entity.desde | date('d/m/Y') }}</td>
                     <td>{{ entity.hasta | date('d/m/Y') }}</td>
-                    <td>{{ entity.obraSocial is not empty ? entity.obraSocial.nombre : ""}}</td>
+                    <td>{{ entity.obraSocial is not empty ? entity.obraSocial.nombre : "Sin obra social"}}</td>
                     <td>
                         <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
                             <a class="btn" href="{{ path('factura_ver', {id: entity.id}) }}" title="Ver" >

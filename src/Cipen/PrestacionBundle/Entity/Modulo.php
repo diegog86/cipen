@@ -180,7 +180,7 @@ class Modulo
      * @param \Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad
      * @return Modulo
      */
-    public function addActoUnidad(\Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad)
+    public function addActoUnidad(\Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad = null)
     {
         $this->ActoUnidad[] = $actoUnidad;
     

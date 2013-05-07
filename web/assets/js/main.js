@@ -26584,56 +26584,39 @@ $('[data-jquery="datetime"]').datetimepicker({
 
 function cargarUnidadesNomenclador() {
     
-   var obraSocialId = $('[data-campo="obraSocial"] option:selected').val();
+   var obraSocialId = $('[data-id="obraSocial"] option:selected').val();
    var url = urlGetUnidadesPorObraSocial;
-   var nomenclador = $('[data-campo="nomenclador"] option:selected').val();
+   var nomenclador = $('[data-id="nomenclador"] option:selected').val();
    
-   $('[data-group-unidades="unidades"]').remove();
+   $('[data-id="unidadHonorario"] option').remove();
+   $('[data-id="unidadGasto"] option').remove();
 
    if (obraSocialId != "" && nomenclador != "SIN_NOMENCLADOR") {
        
         $.post(url,{obraSocialId:obraSocialId},function(datos){       
 
-            var option = '';
-            var html = '';
-
+            var option =   '<option value=""></option>'
             $.each(datos, function(id,unidad){
                option +=   '<option value="'+unidad.id+'">'+unidad.descripcion+'</option>'
-
             });
+            
+            $('[data-id="unidadHonorario"]').append(option);
+            $('[data-id="unidadGasto"]').append(option);
+            $('[data-id="control-group-unidad"]').show();
 
-
-                    html += '<div class="control-group" data-group-unidades="unidades">' +
-                                  '<label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Honorario</label>' +
-                                  '<div class="controls">' +                        
-                                      '<select class="span7" name="unidadHonorario" >' +
-                                          option
-                    html +=  '         </select>' +           
-                                  '</div>' +
-                            '</div>';
-
-
-                    html += '<div class="control-group" data-group-unidades="unidades">' +
-                                  '<label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Gasto</label>' +
-                                  '<div class="controls">' +                        
-                                      '<select class="span7" name="unidadGasto" >' +
-                                          option
-                    html +=  '         </select>' +           
-                                  '</div>' +
-                            '</div>';
-
-                   $(html).insertAfter('[data-campo-group="obraSocial"]');
-                   $('select').select2();
         });
+        
+    } else {
+        $('[data-id="control-group-unidad"]').hide();
     }
     
 }
 
-$('[data-campo="nomenclador"]').change(function(){ 
+$('[data-id="nomenclador"]').change(function(){ 
     cargarUnidadesNomenclador();
 });
 
-$('[data-campo="obraSocial"]').change(function(){    
+$('[data-id="obraSocial"]').change(function(){    
    cargarUnidadesNomenclador();
 });
 
@@ -26648,12 +26631,12 @@ $('[data-campo="obraSocial"]').change(function(){
             var cos=$('[data-prestacion="con_os"]:checked').val();
             var tp=$('[data-prestacion="tipo_prestacion"]:checked').val();
             var url = urlInternacionPrestacionGetAjax ;
-            var p = $('[data-prestacion="p"]').val() ;
+            var i = $('[data-prestacion="i"]').val() ;
            
             $('[data-prestacion]').attr('disabled','disabled');
             $('[data-prestacion="prestacion"]').html('');
 
-            $.post(url,{cos:cos, tp:tp, p:p},function(datos){       
+            $.post(url,{cos:cos, tp:tp, i:i},function(datos){       
 
                  var option = '<option selected="selected" value=""></option>';
                  $.each(datos, function(id,prestacion){
@@ -26709,9 +26692,21 @@ $('[data-campo="obraSocial"]').change(function(){
 
   
 var isCatastro = function () {
+          
+            if ($('[data-id="catastro"] option:selected').val() == 0) {
+                $('[data-id="kairo"]').val(0)
+                $('[data-id="kairo-group"]').hide();
+            } else {
+                $('[data-id="kairo-group"]').show();
+            }
+            
+       
 
 }
 
+$('[data-id="catastro"]').change(function() {
+   isCatastro(); 
+});
 /*
  Copyright 2012 Igor Vaynberg
 

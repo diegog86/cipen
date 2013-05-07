@@ -8,7 +8,7 @@
         <li class="active"><a href="{{ path('acto_unidad_crear', { actoId: actoId }) }}">Agregar Obra Social</a></li>
     </ul>        
     
-    <form class="form-horizontal" method="POST" action="{{ path('acto_unidad_crear', { actoId: actoId }) }}" >
+    <form novalidate="true" class="form-horizontal" method="POST" action="{{ path('acto_unidad_crear', { actoId: actoId }) }}" >
 
         {% include 'CipenPrestacionBundle:ActoUnidad:_form.html.twig' %}               
         

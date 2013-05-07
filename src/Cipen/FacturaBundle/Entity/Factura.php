@@ -45,12 +45,9 @@ class Factura
     private $hasta;
 
     /**
-     *
-     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionPrestacion", mappedBy="factura")
+     * @ORM\OneToMany(targetEntity="Cipen\FacturaBundle\Entity\FacturaInternacion", mappedBy="factura")
      */
-    private $internacionPrestacion;
-
-    
+    private $facturaInternacion;   
 
 
     /**
@@ -58,7 +55,7 @@ class Factura
      */
     public function __construct()
     {
-        $this->internacionPrestacion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->internacion = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -140,37 +137,71 @@ class Factura
         return $this->obraSocial;
     }
 
+
+
     /**
-     * Add internacionPrestacion
+     * Add internacion
      *
-     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion
+     * @param \Cipen\InternacionBundle\Entity\Internacion $internacion
      * @return Factura
      */
-    public function addInternacionPrestacion(\Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion)
+    public function addInternacion(\Cipen\InternacionBundle\Entity\Internacion $internacion)
     {
-        $this->internacionPrestacion[] = $internacionPrestacion;
-        $internacionPrestacion->setFactura($this);
-        
+        $this->internacion[] = $internacion;
+    
         return $this;
     }
 
     /**
-     * Remove internacionPrestacion
+     * Remove internacion
      *
-     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion
+     * @param \Cipen\InternacionBundle\Entity\Internacion $internacion
      */
-    public function removeInternacionPrestacion(\Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion)
+    public function removeInternacion(\Cipen\InternacionBundle\Entity\Internacion $internacion)
     {
-        $this->internacionPrestacion->removeElement($internacionPrestacion);
+        $this->internacion->removeElement($internacion);
     }
 
     /**
-     * Get internacionPrestacion
+     * Get internacion
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getInternacionPrestacion()
+    public function getInternacion()
     {
-        return $this->internacionPrestacion;
+        return $this->internacion;
+    }
+
+    /**
+     * Add facturaInternacion
+     *
+     * @param \Cipen\FacturaBundle\Entity\FacturaInternacion $facturaInternacion
+     * @return Factura
+     */
+    public function addFacturaInternacion(\Cipen\FacturaBundle\Entity\FacturaInternacion $facturaInternacion)
+    {
+        $this->facturaInternacion[] = $facturaInternacion;
+    
+        return $this;
+    }
+
+    /**
+     * Remove facturaInternacion
+     *
+     * @param \Cipen\FacturaBundle\Entity\FacturaInternacion $facturaInternacion
+     */
+    public function removeFacturaInternacion(\Cipen\FacturaBundle\Entity\FacturaInternacion $facturaInternacion)
+    {
+        $this->facturaInternacion->removeElement($facturaInternacion);
+    }
+
+    /**
+     * Get facturaInternacion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFacturaInternacion()
+    {
+        return $this->facturaInternacion;
     }
 }

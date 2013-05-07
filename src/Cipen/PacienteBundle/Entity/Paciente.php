@@ -41,9 +41,15 @@ class Paciente extends Persona
      */
     protected $responsable;
 
-
+    public function getNumero(){
+    	return "PAC".str_pad($this->getId(),5,0,STR_PAD_LEFT);
+    }
     
-        /**
+    public function __toString () {
+        return $this->getDni()." - ".$this->getApellido ().", ".$this->getNombre ();
+    }
+
+    /**
      * Set fechaNacimiento
      *
      * @param \DateTime $fechaNacimiento
@@ -136,9 +142,4 @@ class Paciente extends Persona
         return $this->responsable;
     }
     
-    public function __toString () {
-        return $this->getDni()." - ".$this->getApellido ().", ".$this->getNombre ();
-    }
-    
-
 }

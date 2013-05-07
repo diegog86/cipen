@@ -12,6 +12,7 @@
         'bundles/comuncomun/bootstrap/less/bootstrap.less'
         'bundles/comuncomun/bootstrap/less/responsive.less'
         'bundles/comuncomun/css/jquery/jquery-ui-1.10.1.custom.css'
+        'bundles/comuncomun/css/less/comun.less'
         'bundles/comuncomun/select2/select2.css'
         'bundles/cipeninternacion/css/internacion.less'
     %}
@@ -121,8 +122,33 @@
                     {# fin navegacion #}
 
                 </div>
-                <div class="span9 pull-right" style="margin-right: 40px;">
+                <div class="span10 pull-right" style="margin-right: 10px;">
 
+                    {% if app.session.hasFlash('alert') %}
+                        <div class="alert" style="margin-top: 15px;">
+                            {{ app.session.getFlash('alert') | raw }}
+                        </div>
+                    {% endif %}
+                    
+                    {% if app.session.hasFlash('alert-info') %}
+                        <div class="alert alert-info" style="margin-top: 15px;">
+                            {{ app.session.getFlash('alert-info') | raw }}
+                        </div>
+                    {% endif %}
+
+                    {% if app.session.hasFlash('alert-success') %}
+                        <div class="alert alert-success" style="margin-top: 15px;">
+                            {{ app.session.getFlash('alert-success') | raw }}
+                        </div>
+                    {% endif %}
+
+                    {% if app.session.hasFlash('alert-error') %}
+                        <div class="alert alert-error" style="margin-top: 15px;">
+                            {{ app.session.getFlash('alert-error') | raw }}
+                        </div>
+                    {% endif %}
+                    
+                    
                     {# titulo y acciones #}
                     <div class="page-header">
                       <ul class="nav nav-pills pull-right">

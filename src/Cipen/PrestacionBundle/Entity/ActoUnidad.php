@@ -35,18 +35,21 @@ class ActoUnidad
     
     /**
      * @ORM\ManyToOne(targetEntity="Cipen\ObraSocialBundle\Entity\ObraSocial")
+     * @assert\NotNull(message="Seleccione Obra Social")
      */
     private $obraSocial;    
 
     /**
      * @ORM\ManyToOne(targetEntity="Cipen\ObraSocialBundle\Entity\Unidad")
      * @ORM\JoinColumn(name="unidad_honorario_id",nullable=true)
+     * @assert\NotNull(message="Seleccione unidad para honorario", groups={"unidad"})
      */
     private $unidadHonorario;    
     
     /**
      * @ORM\ManyToOne(targetEntity="Cipen\ObraSocialBundle\Entity\Unidad")
      * @ORM\JoinColumn(name="unidad_gasto_id", nullable=true)
+     * @assert\NotNull(message="Seleccione unidad para gasto", groups={"unidad"})
      */
     private $unidadGasto;        
     
@@ -319,27 +322,15 @@ class ActoUnidad
      */
     public function isObraSocialValida()
     {
-        $actoUnidades = $this->getActo()->getActoUnidades();
-        foreach($actoUnidades as $actoUnidad){
-            if ($actoUnidad->getObraSocial()->getId() == $this->getObraSocial ()->getId() and $actoUnidad->getId() != $this->getId() )   {
-                return false;
+        if($this->getObraSocial ()){
+            $actoUnidades = $this->getActo()->getActoUnidades();
+            foreach($actoUnidades as $actoUnidad){
+                if ($actoUnidad->getObraSocial()->getId() == $this->getObraSocial ()->getId() and $actoUnidad->getId() != $this->getId() )   {
+                    return false;
+                }
             }
         }
-        
         return true;
-    }
-    
-    
-    /**
-     * @Assert\True(message="Complete Unidad de honorario y/o unidad de gasto .")
-     */
-    public function isUnidadValida()
-    {
-        if ($this->nomenclador != "SIN_NOMENCLADOR" and ($this->unidadGasto == null or $this->unidadHonorario == null)) {
-            $this->setNomenclador("SIN_NOMENCLADOR");
-            return false;
-        }        
-        return true;
-    }    
+    }       
     
 }

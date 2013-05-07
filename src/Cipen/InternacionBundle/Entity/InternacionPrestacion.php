@@ -59,7 +59,8 @@ class InternacionPrestacion
     private $fecha;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="Cipen\FacturaBundle\Entity\Factura", inversedBy="internacionPrestacion")
+     * @ORM\ManyToOne(targetEntity="Cipen\FacturaBundle\Entity\FacturaInternacion")
+     * @ORM\JoinTable(name="Factura__Factura_Internacion_Prestacion")
      * @ORM\JoinColumn(nullable=true)
      */
     private $factura;
@@ -71,7 +72,6 @@ class InternacionPrestacion
     {
         $this->internacionPrestacionActo = new ArrayCollection();
         $this->conObraSocial = false;
-
     }
     
     /**
@@ -210,37 +210,24 @@ class InternacionPrestacion
         return $this->modulo;
     }
     
-   /* public function setInternacionPrestacionActo(ArrayCollection $internacionPrestacionActo){
-       
-        echo 'GASTO: '.$internacionPrestacionActo->getGasto();
-        exit();
-        
-        foreach ($internacionPrestacionActos as $internacionPrestacionActo){
-           // $this->addInternacionPrestacionActo($internacionPrestacionAct);
-            $internacionPrestacionActo->setInternacionPrestacion($this);
-            
-        }
-                
-        $this->internacionPrestacionActo = $internacionPrestacionActo;
-        
-    }*/
 
     /**
      * Set factura
      *
-     * @param \Cipen\FacturaBundle\Entity\Factura $factura
+     * @param \Cipen\FacturaBundle\Entity\FacturaInternacion $factura
      * @return InternacionPrestacion
      */
-    public function setFactura(\Cipen\FacturaBundle\Entity\Factura $factura = null)
+    public function setFactura(\Cipen\FacturaBundle\Entity\FacturaInternacion $factura = null)
     {
         $this->factura = $factura;
+    
         return $this;
     }
 
     /**
      * Get factura
      *
-     * @return \Cipen\FacturaBundle\Entity\Factura 
+     * @return \Cipen\FacturaBundle\Entity\FacturaInternacion 
      */
     public function getFactura()
     {

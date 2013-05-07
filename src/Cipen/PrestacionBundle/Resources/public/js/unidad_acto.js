@@ -1,55 +1,38 @@
 
 function cargarUnidadesNomenclador() {
     
-   var obraSocialId = $('[data-campo="obraSocial"] option:selected').val();
+   var obraSocialId = $('[data-id="obraSocial"] option:selected').val();
    var url = urlGetUnidadesPorObraSocial;
-   var nomenclador = $('[data-campo="nomenclador"] option:selected').val();
+   var nomenclador = $('[data-id="nomenclador"] option:selected').val();
    
-   $('[data-group-unidades="unidades"]').remove();
+   $('[data-id="unidadHonorario"] option').remove();
+   $('[data-id="unidadGasto"] option').remove();
 
    if (obraSocialId != "" && nomenclador != "SIN_NOMENCLADOR") {
        
         $.post(url,{obraSocialId:obraSocialId},function(datos){       
 
-            var option = '';
-            var html = '';
-
+            var option =   '<option value=""></option>'
             $.each(datos, function(id,unidad){
                option +=   '<option value="'+unidad.id+'">'+unidad.descripcion+'</option>'
-
             });
+            
+            $('[data-id="unidadHonorario"]').append(option);
+            $('[data-id="unidadGasto"]').append(option);
+            $('[data-id="control-group-unidad"]').show();
 
-
-                    html += '<div class="control-group" data-group-unidades="unidades">' +
-                                  '<label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Honorario</label>' +
-                                  '<div class="controls">' +                        
-                                      '<select class="span7" name="unidadHonorario" >' +
-                                          option
-                    html +=  '         </select>' +           
-                                  '</div>' +
-                            '</div>';
-
-
-                    html += '<div class="control-group" data-group-unidades="unidades">' +
-                                  '<label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Gasto</label>' +
-                                  '<div class="controls">' +                        
-                                      '<select class="span7" name="unidadGasto" >' +
-                                          option
-                    html +=  '         </select>' +           
-                                  '</div>' +
-                            '</div>';
-
-                   $(html).insertAfter('[data-campo-group="obraSocial"]');
-                   $('select').select2();
         });
+        
+    } else {
+        $('[data-id="control-group-unidad"]').hide();
     }
     
 }
 
-$('[data-campo="nomenclador"]').change(function(){ 
+$('[data-id="nomenclador"]').change(function(){ 
     cargarUnidadesNomenclador();
 });
 
-$('[data-campo="obraSocial"]').change(function(){    
+$('[data-id="obraSocial"]').change(function(){    
    cargarUnidadesNomenclador();
 });

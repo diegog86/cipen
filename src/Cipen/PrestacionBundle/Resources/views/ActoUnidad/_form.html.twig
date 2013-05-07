@@ -16,39 +16,21 @@
     </div>
 </div>  
 
-{% if entity.unidadHonorario and entity.unidadGasto  %}
-    
-    <div class="control-group" data-group-unidades="unidades">
-        <label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Honorario</label>
-        <div class="controls">
-            <select class="span7" name="unidadHonorario" >
-                {% for unidad in entity.obraSocial.unidades %}
-                    {% set selectedUH = '' %}
-                    {% if unidad.id == entity.unidadHonorario.id %}
-                        {% set selectedUH = 'selected="selected"' %}
-                    {% endif %}
-                     <option {{ selectedUH }} value="{{ unidad.id }}">{{ unidad.descripcion }}</option>
-                {% endfor %}
-            </select>
-        </div>
+<div class="control-group {{ entity.obraSocial is empty or entity.nomenclador == "SIN_NOMENCLADOR" ? "hide" : "" }}" data-id="control-group-unidad">
+    {{ form_label(form.unidadHonorario,'Unidad honorario',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.unidadHonorario, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.unidadHonorario) }}
     </div>
+</div>  
 
-    <div class="control-group" data-group-unidades="unidades">
-        <label for="actounidad_cantidadEspecialista" class="control-label required">Unidad Gasto</label>
-        <div class="controls">
-            <select class="span7" name="unidadGasto" >
-                {% for unidad in entity.obraSocial.unidades %}
-                    {% set selectedUG = '' %}
-                    {% if unidad.id == entity.unidadGasto.id %}
-                        {% set selectedUG = 'selected="selected"' %}
-                    {% endif %}
-                     <option {{ selectedUG }} value="{{ unidad.id }}">{{ unidad.descripcion }}</option>
-                {% endfor %}                
-            </select>
-        </div>
+<div class="control-group {{ entity.obraSocial is empty or entity.nomenclador == "SIN_NOMENCLADOR" ? "hide" : "" }}" data-id="control-group-unidad">
+    {{ form_label(form.unidadGasto,'Unidad gasto',{ label_attr : { class : 'control-label'} }) }}
+    <div class="controls">
+        {{ form_widget (form.unidadGasto, { attr : { class : 'span7' } }) }}
+        {{ form_errors (form.unidadGasto) }}
     </div>
-
-{% endif %}
+</div>  
 
 
 

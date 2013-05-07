@@ -67,12 +67,7 @@ class Internacion
      */
     private $numeroObraSocialPaciente;
     
-    /**
-     * @var string $numeroInternacionObraSocial
-     *
-     * @ORM\Column(name="numeroInternacionObraSocial", type="string", length=100, nullable=true)
-     */
-    private $numeroInternacionObraSocial;  
+    
 
     /**
      * @var integer $prestador
@@ -138,7 +133,13 @@ class Internacion
      */
     private $tipoAlta;
 
-
+    /**
+     *
+     * @ORM\Column(name="informacionExtra", type="string", nullable=true)
+     */
+    private $informacionExtra;
+    
+    
     /**
      * @var integer $diagnostico
      *
@@ -165,6 +166,18 @@ class Internacion
      */
     private $medicamento;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Cipen\FacturaBundle\Entity\FacturaInternacion", mappedBy="internacion")
+     */
+    private $facturaInternacion;
+
+    
+    /**
+     *
+     * @ORM\ManyToMany(targetEntity="Cipen\FacturaBundle\Entity\Factura", mappedBy="internacion")
+     */
+    private $factura;
+
     
     public function getNumero(){
     	return "INT".str_pad($this->getId(),5,0,STR_PAD_LEFT);
@@ -190,6 +203,7 @@ class Internacion
         $this->diagnosticoEgreso = new \Doctrine\Common\Collections\ArrayCollection();
         $this->habitacion = new \Doctrine\Common\Collections\ArrayCollection();
         $this->medicamento = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->factura = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -618,5 +632,94 @@ class Internacion
     public function getObraSocialPaciente()
     {
         return $this->obraSocialPaciente;
+    }
+
+    /**
+     * Add factura
+     *
+     * @param \Cipen\FacturaBundle\Entity\Factura $factura
+     * @return Internacion
+     */
+    public function addFactura(\Cipen\FacturaBundle\Entity\Factura $factura)
+    {
+        $this->factura[] = $factura;
+    
+        return $this;
+    }
+
+    /**
+     * Remove factura
+     *
+     * @param \Cipen\FacturaBundle\Entity\Factura $factura
+     */
+    public function removeFactura(\Cipen\FacturaBundle\Entity\Factura $factura)
+    {
+        $this->factura->removeElement($factura);
+    }
+
+    /**
+     * Get factura
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFactura()
+    {
+        return $this->factura;
+    }
+
+    /**
+     * Add facturaInternacion
+     *
+     * @param \Cipen\FacturaBundle\Entity\FacturaInternacion $facturaInternacion
+     * @return Internacion
+     */
+    public function addFacturaInternacion(\Cipen\FacturaBundle\Entity\FacturaInternacion $facturaInternacion)
+    {
+        $this->facturaInternacion[] = $facturaInternacion;
+    
+        return $this;
+    }
+
+    /**
+     * Remove facturaInternacion
+     *
+     * @param \Cipen\FacturaBundle\Entity\FacturaInternacion $facturaInternacion
+     */
+    public function removeFacturaInternacion(\Cipen\FacturaBundle\Entity\FacturaInternacion $facturaInternacion)
+    {
+        $this->facturaInternacion->removeElement($facturaInternacion);
+    }
+
+    /**
+     * Get facturaInternacion
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFacturaInternacion()
+    {
+        return $this->facturaInternacion;
+    }
+
+    /**
+     * Set informacionExtra
+     *
+     * @param string $informacionExtra
+     * @return Internacion
+     */
+    public function setInformacionExtra($informacionExtra)
+    {
+        $this->informacionExtra = $informacionExtra;
+    
+        return $this;
+    }
+
+    /**
+     * Get informacionExtra
+     *
+     * @return string 
+     */
+    public function getInformacionExtra()
+    {
+        return $this->informacionExtra;
     }
 }

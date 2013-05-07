@@ -100,7 +100,16 @@ class Medicamento
      */
     private $fin;
 
-
+    /**
+     * @ORM\Column(name="factura", type="boolean")
+     */
+    private $factura;
+    
+    
+    public function __construct ()
+    {
+        $this->factura = false;
+    }
 
     /**
      * Get id
@@ -294,5 +303,28 @@ class Medicamento
     public function getMedicamento()
     {
         return $this->medicamento;
+    }
+
+    /**
+     * Set factura
+     *
+     * @param boolean $factura
+     * @return Medicamento
+     */
+    public function setFactura($factura)
+    {
+        $this->factura = $factura;
+    
+        return $this;
+    }
+
+    /**
+     * Get factura
+     *
+     * @return boolean 
+     */
+    public function getFactura()
+    {
+        return $this->factura;
     }
 }
