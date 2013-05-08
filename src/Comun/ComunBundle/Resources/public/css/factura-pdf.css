@@ -1,0 +1,53 @@
+body{   
+    font-size: 12px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.titulo{
+    padding-top:10px;
+    font-size: 18px;
+}
+
+table {
+  float:left;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 5px 0px;;
+}
+
+table td, table th{
+    padding: 5px;
+}
+
+table th{
+    font-size: 11px;
+}
+
+.table-bordered thead th,.table-bordered tbody td  {
+    border: solid 1px #000;
+}
+
+.table-align-center tbody td, .table-align-center thead th{
+    text-align: center;
+}
+
+.table-align-left tbody td, .table-align-left thead th{
+    text-align: left;
+}
+
+.text-center{
+    text-align: left;
+}
+
+.text-left{
+    text-align: left;
+}
+
+.pull-left{
+    float: left;
+}
+
+.pull-right{
+    float:right;
+}

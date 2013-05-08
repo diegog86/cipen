@@ -5213,6 +5213,9 @@ a.badge:focus {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+@-ms-viewport {
+  width: device-width;
+}
 .hidden {
   display: none;
   visibility: hidden;
@@ -7474,13 +7477,35 @@ body .ui-tooltip {
     margin: 0;
     padding: 0.3em;
   }
-.table-align-center th {
-  text-align: center;
-}
+.table-align-center th,
 .table-align-center td {
   text-align: center;
 }
+.table-align-center .col-left {
+  text-align: left;
+}
+.table-align-center .col-right {
+  text-align: right;
+}
 
+body{
+    font-size: 12px;
+}
+
+table {
+  max-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table td, table th{
+    padding: 15px;
+}
+
+
+.table-bordered tbody td {
+    border: solid 1px #000;
+}
 /*
 Version: 3.2 Timestamp: Mon Sep 10 10:38:04 PDT 2012
 */

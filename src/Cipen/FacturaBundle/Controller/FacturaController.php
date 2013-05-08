@@ -10,6 +10,7 @@ use Cipen\FacturaBundle\Entity\FacturaInternacion;
 use Cipen\FacturaBundle\Entity\Factura;
 use Cipen\FacturaBundle\Form\FacturaType;
 use Cipen\FacturaBundle\Form\FacturaConInternacionesType;
+use Ps\PdfBundle\Annotation\Pdf;
 
 class FacturaController extends Controller
 {
@@ -93,39 +94,11 @@ class FacturaController extends Controller
         return $this->render('CipenFacturaBundle:Factura:nuevo.html.twig', $datos);
     }
 
-    public function verAction($id, Request $request)
+        
+    public function verAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $factura = $em->getRepository ('CipenFacturaBundle:Factura') ->find ($id) ;
-
-        if (!$factura) {
-            $this->createNotFoundException("No se encontro registro");
-        }
-        
-        $facturaInternaciones = $em->getRepository ('CipenFacturaBundle:FacturaInternacion')
-            ->findByFactura($factura);                        
-        
-        
-        
-        $desde = array();
-        $hasta = array();
-        $arrayPrestaciones = array();
-        
-        foreach($facturaInternaciones as $facturaInternacion) {
-            $internacion = $facturaInternacion->getInternacion();
-            $desde[$internacion->getId()] = $this->getInternacionDesde($factura,$internacion);
-            $hasta[$internacion->getId()] = $this->getInternacionHasta($factura,$internacion);
-            $arrayPrestaciones[$internacion->getId()] = $this->createArrayPrestaciones($facturaInternacion,$factura);
-        }        
-        
-        $datos["facturaInternaciones"] = $facturaInternaciones;
-        $datos["periodo"] = $this->determinarPeriodo ($factura);
-        $datos['factura'] = $factura;
-        $datos['tipo_total'] = $this->getTipoTotal($factura);
-        $datos['prestaciones'] = $arrayPrestaciones;
-        
-        return $this->render('CipenFacturaBundle:Factura:ver.html.twig', $datos);    
-       
+        $datos = $this->getFactura($id);
+        return $this->render('CipenFacturaBundle:Factura:ver.html.twig', $datos);      
     }
 
     public function eliminarAction($id)
@@ -298,6 +271,65 @@ class FacturaController extends Controller
         }
         
         return $hasta;
+    }
+    
+
+    public function imprimirAction($id)
+    {
+        $datos = $this->getFactura($id);
+        $html = $this->renderView('CipenFacturaBundle:Factura:imprimir.pdf.twig',$datos);
+        $header = $this->renderView('ComunComunBundle:Default:header_cipen.html.twig');
+      
+        $mpdf = new \Comun\ComunBundle\Util\mPdf('','',0,'',15,15,16,25,0,9);
+
+        $mpdf->charset_in='UTF-8';
+        $mpdf->ignore_invalid_utf8 = true;
+        $mpdf->SetDisplayMode('fullwidth');
+        $mpdf->SetCompression(false);
+        $mpdf->SetHTMLHeader($header);
+        $mpdf->AddPage();        
+
+        $stylesheet = file_get_contents('http://'.$this->getRequest()->getHost().'/cipen/web/bundles/comuncomun/css/factura-pdf.css');
+
+        $mpdf->WriteHTML($stylesheet,1);
+        $mpdf->WriteHTML($html,2);
+
+        return $mpdf->Output("fac.pdf", "D");
+           
+    }
+    
+    
+    private function getFactura($id) {
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $factura = $em->getRepository ('CipenFacturaBundle:Factura') ->find ($id) ;
+
+        if (!$factura) {
+            $this->createNotFoundException("No se encontro registro");
+        }
+        
+        $facturaInternaciones = $em->getRepository ('CipenFacturaBundle:FacturaInternacion')
+            ->findByFactura($factura);                        
+        
+        $desde = array();
+        $hasta = array();
+        $arrayPrestaciones = array();
+        
+        foreach($facturaInternaciones as $facturaInternacion) {
+            $internacion = $facturaInternacion->getInternacion();
+            $desde[$internacion->getId()] = $this->getInternacionDesde($factura,$internacion);
+            $hasta[$internacion->getId()] = $this->getInternacionHasta($factura,$internacion);
+            $arrayPrestaciones[$internacion->getId()] = $this->createArrayPrestaciones($facturaInternacion,$factura);
+        }        
+        
+
+        $datos["facturaInternaciones"] = $facturaInternaciones;
+        $datos["periodo"] = $this->determinarPeriodo ($factura);
+        $datos['factura'] = $factura;
+        $datos['tipo_total'] = $this->getTipoTotal($factura);
+        $datos['prestaciones'] = $arrayPrestaciones;
+        
+        return $datos;
     }
 
 }

@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Comun\ComunBundle\ComunComunBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new Cipen\FacturaBundle\CipenFacturaBundle(),
+            new Ps\PdfBundle\PsPdfBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

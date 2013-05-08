@@ -13,3 +13,7 @@ factura_ver:
 factura_eliminar:
   pattern:  /{id}/eliminar/
   defaults: { _controller: CipenFacturaBundle:Factura:eliminar }
+
+factura_imprimir:
+  pattern:  /{id}/imprimir/
+  defaults: { _controller: CipenFacturaBundle:Factura:imprimir } 

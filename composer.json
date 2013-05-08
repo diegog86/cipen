@@ -25,6 +25,7 @@
         "gedmo/doctrine-extensions": "dev-master",
         "psliwa/pdf-bundle": "dev-master"
     },
+    "minimum-stability": "dev", 
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
