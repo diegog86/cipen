@@ -13,6 +13,18 @@ use Comun\ComunBundle\Entity\Organizacion;
 class ObraSocial extends Organizacion
 {
     
+    public static $tiposFacturacion = array(0=>'Valor unitario',1=>'10% y 90%');
+    
+    /**
+     * @ORM\Column(name="tipoFacturacion", type="integer")
+     */
+    private $tipoFacturacion;
+    
+    /**
+     * @ORM\Column(name="sufijoMatriculaPersonal", type="string", nullable=true)
+     */
+    private $sufijoMatriculaPersonal;
+    
     /**
      *
      * @ORM\OneToMany(targetEntity="Cipen\ObraSocialBundle\Entity\Unidad", mappedBy="obraSocial")
@@ -65,5 +77,51 @@ class ObraSocial extends Organizacion
     public function getUnidades()
     {
         return $this->unidades;
+    }
+
+    /**
+     * Set tipoFacturacion
+     *
+     * @param integer $tipoFacturacion
+     * @return ObraSocial
+     */
+    public function setTipoFacturacion($tipoFacturacion)
+    {
+        $this->tipoFacturacion = $tipoFacturacion;
+    
+        return $this;
+    }
+
+    /**
+     * Get tipoFacturacion
+     *
+     * @return integer 
+     */
+    public function getTipoFacturacion()
+    {
+        return $this->tipoFacturacion;
+    }
+
+    /**
+     * Set sufijoMatriculaPersonal
+     *
+     * @param string $sufijoMatriculaPersonal
+     * @return ObraSocial
+     */
+    public function setSufijoMatriculaPersonal($sufijoMatriculaPersonal)
+    {
+        $this->sufijoMatriculaPersonal = $sufijoMatriculaPersonal;
+    
+        return $this;
+    }
+
+    /**
+     * Get sufijoMatriculaPersonal
+     *
+     * @return string 
+     */
+    public function getSufijoMatriculaPersonal()
+    {
+        return $this->sufijoMatriculaPersonal;
     }
 }

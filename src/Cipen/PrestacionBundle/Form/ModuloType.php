@@ -14,6 +14,7 @@ class ModuloType extends AbstractType
             ->add('codigo')
             ->add('descripcion')
             ->add('valor')                
+            ->add('anularFacturacion10y90')    
             ;
     }
 

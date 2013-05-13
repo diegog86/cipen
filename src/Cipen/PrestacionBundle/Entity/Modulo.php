@@ -63,7 +63,11 @@ class Modulo
      */
     private $ActoUnidad;
 
- 
+    /**
+     * @ORM\Column(name="anularFacturacion10y90", type="boolean")
+     */
+    private $anularFacturacion10y90;
+    
     /**
      * Constructor
      */
@@ -210,5 +214,28 @@ class Modulo
     public function __toString () {
         return $this->codigo;
 
+    }
+
+    /**
+     * Set anularFacturacion10y90
+     *
+     * @param boolean $anularFacturacion10y90
+     * @return Modulo
+     */
+    public function setAnularFacturacion10y90($anularFacturacion10y90)
+    {
+        $this->anularFacturacion10y90 = $anularFacturacion10y90;
+    
+        return $this;
+    }
+
+    /**
+     * Get anularFacturacion10y90
+     *
+     * @return boolean 
+     */
+    public function getAnularFacturacion10y90()
+    {
+        return $this->anularFacturacion10y90;
     }
 }
