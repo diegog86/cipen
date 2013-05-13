@@ -135,9 +135,16 @@ class Internacion
 
     /**
      *
-     * @ORM\Column(name="informacionExtra", type="string", nullable=true)
+     * @ORM\Column(name="informacionExtraLabel", type="string", nullable=true)
      */
-    private $informacionExtra;
+    private $informacionExtraLabel;
+    
+    /**
+     *
+     * @ORM\Column(name="informacionExtraValue", type="string", nullable=true)
+     */
+    private $informacionExtraValue;
+    
     
     
     /**

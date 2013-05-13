@@ -30,7 +30,12 @@ class FacturaInternacion
     /**
      * @ORM\ManyToOne(targetEntity="Cipen\InternacionBundle\Entity\Internacion")
      */
-    private $internacion;
+    private $internacion;    
+    
+    /**
+     * @ORM\Column(name="numeroFacturaFiscal", nullable=true)
+     */
+    private $numeroFacturaFiscal;
     
     /**
      * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionPrestacion", mappedBy="factura")
@@ -132,5 +137,29 @@ class FacturaInternacion
     public function getInternacionPrestacion()
     {
         return $this->internacionPrestacion;
+    }
+
+
+    /**
+     * Set numeroFacturaFiscal
+     *
+     * @param string $numeroFacturaFiscal
+     * @return FacturaInternacion
+     */
+    public function setNumeroFacturaFiscal($numeroFacturaFiscal)
+    {
+        $this->numeroFacturaFiscal = $numeroFacturaFiscal;
+    
+        return $this;
+    }
+
+    /**
+     * Get numeroFacturaFiscal
+     *
+     * @return string 
+     */
+    public function getNumeroFacturaFiscal()
+    {
+        return $this->numeroFacturaFiscal;
     }
 }

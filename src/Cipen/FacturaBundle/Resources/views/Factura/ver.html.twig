@@ -13,7 +13,8 @@
     
 {% block admin_content %}
         
-        
+    <form class="form-horizontal" method="POST" action="{{ path('factura_editar',{id:factura.id}) }}">  
+    
     {% for facturaInternacion in facturaInternaciones %}
         <h4>{{ factura.obraSocial is not empty ? "Obra social "~factura.obraSocial : "Sin obra social" }}</h4>
         {% set internacion = facturaInternacion.internacion %}
@@ -22,7 +23,13 @@
                 <tr >
                     <th style="border:none" width="25%">Periodo: {{ periodo }}</th>
                     <th style="border:none" width="25%">Historia clínica n°: {{ internacion.numero }} </th>
-                    <th style="border:none" width="49%"></th>
+                    <th style="border:none" width="49%">
+                            <div class="pull-left">N° factura: </div>
+                            <div class="pull-left">
+                                {{ form_widget(form.facturaInternacion[loop.index-1].numeroFacturaFiscal, {'attr':{style:'height:15px; width: 380px' }}) }}
+                            </div>                  
+                    
+                    </th>
                 </tr>
                 <tr>
                     <th style="border:none">
@@ -38,7 +45,14 @@
                 <tr>
                     <th style="border:none">Fecha de ingreso: {{ internacion.fechaHoraIngreso | date('d/m/Y') }}</th>
                     <th style="border:none">Fecha de egreso: {{ internacion.fechaHoraIngreso | date('d/m/Y') }} </th>
-                    <th style="border:none"></th>                
+                    <th style="border:none">
+                        {% if factura.obraSocial is not empty and (factura.obraSocial.nombre == 'APOS' or factura.obraSocial.nombre == 'APOS - ADHERENTE PARTICULAR') %}
+                            <div class="pull-left">Sasos: </div>
+                            <div class="pull-left">
+                                {{ form_widget(form.facturaInternacion[loop.index-1].sasos, {'attr':{style:'height:15px; width: 380px' }}) }}
+                            </div>                      
+                        {% endif %}
+                    </th>                
                 </tr>
             </table>
             {{ _self.internacion(facturaInternacion.internacion,prestaciones,tipo_total) }}
@@ -116,7 +130,13 @@
 
     
     {% endmacro %}
+       
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success pull-right">Guardar</button>
+        </div>
         
+        
+    </form>
     
 {% endblock %}
      
