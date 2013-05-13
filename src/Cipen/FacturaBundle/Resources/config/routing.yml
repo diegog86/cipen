@@ -6,6 +6,10 @@ factura_crear:
   pattern:  /crear/
   defaults: { _controller: CipenFacturaBundle:Factura:crear }
 
+factura_editar:
+  pattern:  /{id}/editar/
+  defaults: { _controller: CipenFacturaBundle:Factura:editar }
+
 factura_ver:
   pattern:  /{id}/ver/
   defaults: { _controller: CipenFacturaBundle:Factura:ver }

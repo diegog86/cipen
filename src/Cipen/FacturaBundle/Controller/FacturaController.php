@@ -215,6 +215,10 @@ class FacturaController extends Controller
             case 'apos':
                 $tipoTotal = "porcentaje_10_90";
             break;
+
+            case 'apos - adherente particular':
+                $tipoTotal = "porcentaje_10_90";
+            break;
         
             default:
                 $tipoTotal = "valor_unitario";
@@ -277,9 +281,10 @@ class FacturaController extends Controller
     public function imprimirAction($id)
     {
         $datos = $this->getFactura($id);
-        $html = $this->renderView('CipenFacturaBundle:Factura:imprimir.pdf.twig',$datos);
+        $html = $this->renderView('CipenFacturaBundle:Factura:imprimir_resumen_individual.pdf.twig',$datos);
         $header = $this->renderView('ComunComunBundle:Default:header_cipen.html.twig');
-      
+        $fileName = "factura-".$datos['factura']->getId().".pdf";
+        
         $mpdf = new \Comun\ComunBundle\Util\mPdf('','',0,'',15,15,16,25,0,9);
 
         $mpdf->charset_in='UTF-8';
@@ -294,7 +299,7 @@ class FacturaController extends Controller
         $mpdf->WriteHTML($stylesheet,1);
         $mpdf->WriteHTML($html,2);
 
-        return $mpdf->Output("fac.pdf", "D");
+        return $mpdf->Output($fileName, "D");
            
     }
     
@@ -322,7 +327,10 @@ class FacturaController extends Controller
             $arrayPrestaciones[$internacion->getId()] = $this->createArrayPrestaciones($facturaInternacion,$factura);
         }        
         
-
+       
+        $form =  $this->createForm(new FacturaConInternacionesType(), $factura);
+        $datos['form'] = $form->createView();
+        
         $datos["facturaInternaciones"] = $facturaInternaciones;
         $datos["periodo"] = $this->determinarPeriodo ($factura);
         $datos['factura'] = $factura;
@@ -330,6 +338,30 @@ class FacturaController extends Controller
         $datos['prestaciones'] = $arrayPrestaciones;
         
         return $datos;
+    }
+    
+    
+    public function editarAction($id,Request $request){
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $factura = $em->getRepository ('CipenFacturaBundle:Factura') ->find ($id) ;
+
+        if (!$factura) {
+            $this->createNotFoundException("No se encontro registro");
+        }
+        
+        $form =  $this->createForm(new FacturaConInternacionesType(), $factura);
+        
+        if($request->isMethod ('POST')){
+            
+            $form->bind($request);
+            
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($factura);
+            $em->flush();            
+        }
+        
+        return $this->redirect($this->generateUrl('factura_ver',array('id'=>$id)));        
     }
 
 }

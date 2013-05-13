@@ -15,6 +15,7 @@ class FacturaInternacionType extends AbstractType
             ->add('informacionExtraLabel')
             ->add('informacionExtraValor')                                
             ->add('facturaFiscalExtra')    
+
             ;
     }
 
