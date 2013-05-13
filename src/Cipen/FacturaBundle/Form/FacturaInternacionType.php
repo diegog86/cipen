@@ -11,10 +11,10 @@ class FacturaInternacionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('internacion','collection',array(
-                'type' => new InternacionType(),
-                'by_reference' => false
-            ))                                
+            ->add('facturaFiscal')                                                            
+            ->add('informacionExtraLabel')
+            ->add('informacionExtraValor')                                
+            ->add('facturaFiscalExtra')    
             ;
     }
 

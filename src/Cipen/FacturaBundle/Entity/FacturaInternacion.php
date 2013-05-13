@@ -33,9 +33,32 @@ class FacturaInternacion
     private $internacion;
     
     /**
+     * @ORM\Column(name="infomacionExtraLabel", type="string", nullable=true)
+     */
+    private $infomacionExtraLabel;    
+
+    /**
+     * @ORM\Column(name="infomacionExtraValor", type="string", nullable=true)
+     */
+    private $infomacionExtraValor;        
+    
+    /**
+     * @ORM\Column(name="facturaFiscal", type="string", nullable=true)
+     */
+    private $facturaFiscal;        
+
+    /**
+     * Se utilizaría cuando se facture al 10% y 90% y se necesite una factura para cada porcentaje
+     * N° de Factura del 10%
+     * @ORM\Column(name="facturaFiscalExtra", type="string", nullable=true)
+     */
+    private $facturaFiscalExtra;        
+    
+    /**
      * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionPrestacion", mappedBy="factura")
      */
     private $internacionPrestacion;
+
 
     /**
      * Constructor
