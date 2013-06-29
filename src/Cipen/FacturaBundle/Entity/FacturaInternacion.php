@@ -24,6 +24,7 @@ class FacturaInternacion
 
     /**
      * @ORM\ManyToOne(targetEntity="Cipen\FacturaBundle\Entity\Factura")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $factura;
 
@@ -32,20 +33,16 @@ class FacturaInternacion
      */
     private $internacion;    
     
-    /**
-     * @ORM\Column(name="numeroFacturaFiscal", nullable=true)
-     */
-    private $numeroFacturaFiscal;
     
     /**
-     * @ORM\Column(name="infomacionExtraLabel", type="string", nullable=true)
+     * @ORM\Column(name="informacionExtraLabel", type="string", nullable=true)
      */
-    private $infomacionExtraLabel;    
+    private $informacionExtraLabel;    
 
     /**
-     * @ORM\Column(name="infomacionExtraValor", type="string", nullable=true)
+     * @ORM\Column(name="informacionExtraValor", type="string", nullable=true)
      */
-    private $infomacionExtraValor;        
+    private $informacionExtraValor;        
     
     /**
      * @ORM\Column(name="facturaFiscal", type="string", nullable=true)
@@ -61,6 +58,7 @@ class FacturaInternacion
     
     /**
      * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionPrestacion", mappedBy="factura")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $internacionPrestacion;
 
@@ -162,27 +160,97 @@ class FacturaInternacion
         return $this->internacionPrestacion;
     }
 
+ 
 
     /**
-     * Set numeroFacturaFiscal
+     * Set informacionExtraLabel
      *
-     * @param string $numeroFacturaFiscal
+     * @param string $informacionExtraLabel
      * @return FacturaInternacion
      */
-    public function setNumeroFacturaFiscal($numeroFacturaFiscal)
+    public function setInformacionExtraLabel($informacionExtraLabel)
     {
-        $this->numeroFacturaFiscal = $numeroFacturaFiscal;
+        $this->informacionExtraLabel = $informacionExtraLabel;
     
         return $this;
     }
 
     /**
-     * Get numeroFacturaFiscal
+     * Get informacionExtraLabel
      *
      * @return string 
      */
-    public function getNumeroFacturaFiscal()
+    public function getInformacionExtraLabel()
     {
-        return $this->numeroFacturaFiscal;
+        return $this->informacionExtraLabel;
+    }
+
+    /**
+     * Set informacionExtraValor
+     *
+     * @param string $informacionExtraValor
+     * @return FacturaInternacion
+     */
+    public function setInformacionExtraValor($informacionExtraValor)
+    {
+        $this->informacionExtraValor = $informacionExtraValor;
+    
+        return $this;
+    }
+
+    /**
+     * Get informacionExtraValor
+     *
+     * @return string 
+     */
+    public function getInformacionExtraValor()
+    {
+        return $this->informacionExtraValor;
+    }
+
+    /**
+     * Set facturaFiscal
+     *
+     * @param string $facturaFiscal
+     * @return FacturaInternacion
+     */
+    public function setFacturaFiscal($facturaFiscal)
+    {
+        $this->facturaFiscal = $facturaFiscal;
+    
+        return $this;
+    }
+
+    /**
+     * Get facturaFiscal
+     *
+     * @return string 
+     */
+    public function getFacturaFiscal()
+    {
+        return $this->facturaFiscal;
+    }
+
+    /**
+     * Set facturaFiscalExtra
+     *
+     * @param string $facturaFiscalExtra
+     * @return FacturaInternacion
+     */
+    public function setFacturaFiscalExtra($facturaFiscalExtra)
+    {
+        $this->facturaFiscalExtra = $facturaFiscalExtra;
+    
+        return $this;
+    }
+
+    /**
+     * Get facturaFiscalExtra
+     *
+     * @return string 
+     */
+    public function getFacturaFiscalExtra()
+    {
+        return $this->facturaFiscalExtra;
     }
 }

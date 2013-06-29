@@ -1,13 +1,13 @@
 <?php
 
-namespace Util\ComunBundle\Controller;
+namespace Comun\ComunBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name)
+    public function inicioAction()
     {
-        return $this->render('UtilComunBundle:Default:index.html.twig', array('name' => $name));
+        return $this->render('ComunComunBundle:Default:inicio.html.twig');
     }
 }

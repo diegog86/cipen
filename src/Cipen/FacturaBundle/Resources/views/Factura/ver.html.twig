@@ -6,7 +6,32 @@
 
 {% block admin_actions %}
     <li><a href="{{ path('factura') }}"><i class="icon-chevron-left"></i> Volver a listado</a></li>  
-    <li><a href="{{ path('factura_imprimir',{id:factura.id}) }}"><i class="icon-print"></i> &nbsp;Imprimir</a></li>  
+    <li class="dropdown">    
+
+        <a class="dropdown-toggle"  data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+          <i class="icon-print"></i> &nbsp;Imprimir
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu nav pull-right" >
+            <li>
+                <a href="{{ path('factura_imprimir_resumen_individual',{id:factura.id}) }}">
+                    Imprimir resumen de facturación
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('factura_imprimir_resumen_fiscal_individual',{id:factura.id}) }}">
+                    Imprimir facturas fiscales
+                </a>
+             </li>
+             <li>
+                 <a href="{{ path('factura_imprimir_resumen_general',{id:factura.id}) }}">
+                     Imprimir resumen general de facturación
+                 </a>
+             </li>
+        </ul>
+
+    
+    </li>
 {% endblock %}
     
 {% set admin_menu_active = 'factura' %}
@@ -22,12 +47,25 @@
             <table class="table">
                 <tr >
                     <th style="border:none" width="25%">Periodo: {{ periodo }}</th>
-                    <th style="border:none" width="25%">Historia clínica n°: {{ internacion.numero }} </th>
+                    <th style="border:none" width="25%">Historia clínica n°: {{ internacion.numeroFormateado }} </th>
                     <th style="border:none" width="49%">
-                            <div class="pull-left">N° factura: </div>
-                            <div class="pull-left">
-                                {{ form_widget(form.facturaInternacion[loop.index-1].numeroFacturaFiscal, {'attr':{style:'height:15px; width: 380px' }}) }}
-                            </div>                  
+                        N° factura:     
+                        {% if tipo_total == "porcentaje_10_90" %}
+                            <div class="input-append" style="width: 180px; margin-right: 15px;">
+                                {{ form_widget(form.facturaInternacion[loop.index-1].facturaFiscal, {'attr':{class:'span10','placeholder':'Factura 90%' }}) }}                                
+                                <span class="add-on">90%</span>
+                            </div>
+
+                            <div class="input-append" style="width: 180px">
+                                {{ form_widget(form.facturaInternacion[loop.index-1].facturaFiscalExtra, {'attr':{class:'span10','placeholder':'Factura 10%' }}) }}                                    
+                                <span class="add-on">10%</span>
+                            </div>
+                                                                    
+                       {% else %} 
+                           {{ form_widget(form.facturaInternacion[loop.index-1].facturaFiscal, {'attr':{style:'margin-top:-5px;; width: 370px' }}) }}
+
+                       {% endif %}
+                            
                     
                     </th>
                 </tr>
@@ -39,19 +77,19 @@
                             Paciente n°: {{ internacion.paciente.numero  }} 
                        {% endif %}
                     </th>
-                    <th style="border:none">DNI: {{ internacion.paciente.dni }}</th>
+                    <th style="border:none">DNI: {{ internacion.paciente.dni is not empty ? internacion.paciente.dni : ""  }}</th>
                     <th style="border:none">Apellido, nombre: {{ internacion.paciente.apellido~", "~internacion.paciente.nombre }}</th>
                 </tr>
                 <tr>
                     <th style="border:none">Fecha de ingreso: {{ internacion.fechaHoraIngreso | date('d/m/Y') }}</th>
                     <th style="border:none">Fecha de egreso: {{ internacion.fechaHoraIngreso | date('d/m/Y') }} </th>
-                    <th style="border:none">
-                        {% if factura.obraSocial is not empty and (factura.obraSocial.nombre == 'APOS' or factura.obraSocial.nombre == 'APOS - ADHERENTE PARTICULAR') %}
-                            <div class="pull-left">Sasos: </div>
-                            <div class="pull-left">
-                                {{ form_widget(form.facturaInternacion[loop.index-1].sasos, {'attr':{style:'height:15px; width: 380px' }}) }}
-                            </div>                      
-                        {% endif %}
+                    <th style="border:none">                       
+                        <div class="pull-left">
+                                {{ form_widget(form.facturaInternacion[loop.index-1].informacionExtraLabel, {'attr':{style:'margin-top:-5px; width: 120px' }}) }} :
+                        </div>
+                        <div class="pull-left">
+                                {{ form_widget(form.facturaInternacion[loop.index-1].informacionExtraValor, {'attr':{style:'margin-top:-5px; width: 300px' }}) }}
+                        </div>                      
                     </th>                
                 </tr>
             </table>
@@ -101,7 +139,7 @@
                     <td class="col-left">
                         {{ prestacion.tipo == "modulo" ?  prestacion.object.descripcion : prestacion.object.acto.descripcion }}
                     </td>
-                    <td>{{ internacion.prescriptor.matricula }}01</td>
+                    <td>{{ internacion.prescriptor.matricula }}{{ internacion.obraSocialPaciente.sufijoMatriculaPersonal}}</td>
                     
                     {% if tipo_total == "porcentaje_10_90" %}
                         <td>{{ prestacion.porcentaje_90 }}</td>
@@ -127,16 +165,22 @@
                 <th width="260">{{totalSum}}</th>
             </tr>
         </table>
-
     
     {% endmacro %}
        
         <div class="form-actions">
             <button type="submit" class="btn btn-success pull-right">Guardar</button>
         </div>
-        
-        
+
     </form>
     
 {% endblock %}
+
+{% block javascripts %}
      
+    {{ parent() }}
+    <script type="text/javascript">
+         $('.dropdown-toggle').dropdown()         
+    </script>
+        
+{% endblock %}

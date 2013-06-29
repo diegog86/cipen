@@ -13,7 +13,7 @@
     
 {% block admin_content %}
         
-    <form class="form-horizontal" method="POST" action="{{ path('medicamento_editar', { 'id': entity.id }) }}">
+    <form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('medicamento_editar', { 'id': entity.id }) }}">
 
         {% include 'CipenMedicamentoBundle:Medicamento:_form.html.twig' %}        
         
@@ -23,9 +23,4 @@
         
     </form>
     
-{% endblock %}
-    
-{% block javascripts %}
-    {{ parent() }}
-    {% include 'CipenMedicamentoBundle:Medicamento:_form_js.html.twig' %}
-{% endblock %}      
+{% endblock %}   

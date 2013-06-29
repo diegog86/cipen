@@ -1,7 +1,15 @@
-{{ form_errors (form) }}
+
 
 <div class="control-group">
-    {{ form_label(form.medicamento,'Medicamento',{ label_attr : { class : 'control-label'} }) }} 
+        {{ form_label(form.fecha,'Fecha *',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls" style="width:575px;">
+        {{ form_widget (form.fecha, { attr : { class : 'span3' } }) }}
+        {{ form_errors (form.fecha) }}
+    </div>
+</div>  
+
+<div class="control-group">
+    {{ form_label(form.medicamento,'Medicamento *',{ label_attr : { class : 'control-label'} }) }} 
     <div class="controls">
         {{ form_widget (form.medicamento, { attr : { class : 'span7' } }) }}
         {{ form_errors (form.medicamento) }}
@@ -17,43 +25,11 @@
 </div> 
 
 <div class="control-group">
-    {{ form_label(form.cantidad,'Cantidad',{ label_attr : { class : 'control-label'} }) }} 
+    {{ form_label(form.cantidad,'Cantidad *',{ label_attr : { class : 'control-label'} }) }} 
     <div class="controls">
-        {{ form_widget (form.cantidad, { attr : { class : 'span7' } }) }}
+        {{ form_widget (form.cantidad, { attr : { class : 'span2' } }) }}
         {{ form_errors (form.cantidad) }}
     </div>
 </div>   
-
-<div class="control-group">
-        {{ form_label(form.unidad,'Unidad',{ label_attr : { class : 'control-label'} }) }} 
-    <div class="controls" >
-        {{ form_widget (form.unidad, { attr : { class : 'span3' } }) }}
-        {{ form_errors (form.unidad) }}
-    </div>
-</div>   
-
-<div class="control-group">
-        {{ form_label(form.inicio,'Inicio',{ label_attr : { class : 'control-label'} }) }} 
-    <div class="controls">
-        {{ form_widget (form.inicio, { attr : { class : 'span3' } }) }}
-        {{ form_errors (form.inicio) }}
-    </div>
-</div>   
-
-<div class="control-group">
-        {{ form_label(form.frecuencia,'Frecuencia',{ label_attr : { class : 'control-label'} }) }} 
-    <div class="controls">
-        {{ form_widget (form.frecuencia, { attr : { class : 'span3' } }) }}
-        {{ form_errors (form.frecuencia) }}
-    </div>
-</div>   
-
-<div class="control-group">
-        {{ form_label(form.fin,'Fin',{ label_attr : { class : 'control-label'} }) }} 
-    <div class="controls">
-        {{ form_widget (form.fin, { attr : { class : 'span3' } }) }}
-        {{ form_errors (form.fin) }}
-    </div>
-</div> 
 
 {{ form_rest(form) }}

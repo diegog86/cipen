@@ -15,12 +15,14 @@
         <thead>
             <tr>
                 <th>Personal</th>
+                <th>Tipo</th>
             </tr>
         </thead>
         <tbody>
             {% for entity in entities %}
                 <tr>
-                    <td>{{ entity.nombre }}, {{ entity.apellido }}</td>
+                    <td>{{ entity.apellido }}, {{ entity.nombre }}</td>
+                    <td>{{ entity.tipo.nombre }}</td>
                     <td>
                         <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
                             <a class="btn" href="{{ path('personal_editar', {id: entity.id}) }}" title="Editar" >
@@ -40,4 +42,9 @@
             {% endfor %}
         </tbody>
     </table>    
+
+    <div class="navigation">
+        {{ knp_pagination_render(entities) }}
+    </div>        
+    
 {% endblock %}

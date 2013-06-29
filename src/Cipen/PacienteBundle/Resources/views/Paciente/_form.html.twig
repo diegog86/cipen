@@ -9,7 +9,7 @@
 </div>
 
 <div class="control-group">
-    {{ form_label(form.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }} 
+    {{ form_label(form.nombre,'Nombre *',{ label_attr : { class : 'control-label'} }) }} 
     <div class="controls">
         {{ form_widget (form.nombre, { attr : { class : 'span7' } }) }}
         {{ form_errors (form.nombre) }}
@@ -17,7 +17,7 @@
 </div>        
 
 <div class="control-group">
-    {{ form_label(form.apellido,'Apellido',{ label_attr : { class : 'control-label'} }) }}
+    {{ form_label(form.apellido,'Apellido *',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
         {{ form_widget (form.apellido, { attr : { class : 'span7' } }) }}
         {{ form_errors (form.apellido) }}
@@ -25,9 +25,10 @@
 </div>             
 
 <div class="control-group">
-    {{ form_label(form.fechaNacimiento,'Fecha de Nacimiento',{ label_attr : { class : 'control-label'} }) }}
+    {{ form_label(form.fechaNacimiento,'Fecha de Nacimiento *',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
-        {{ form_widget (form.fechaNacimiento) }}
+        {{ form_widget (form.fechaNacimiento,{attr:{class:'span2',style:'margin-left: -1px'}}) }}
+        <div class="clearfix"></div>
         {{ form_errors (form.fechaNacimiento) }}
     </div>
 </div> 
@@ -57,12 +58,9 @@
     </div>
 </div> 
 
-<br><hr>
+<br>
 
-<h4>Obra social</h4>
-
-
-
+<legend>Obra Social</legend>
 <div class="control-group">
     {{ form_label(form.obraSocial,'Empresa',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
@@ -73,80 +71,103 @@
 
 
 <div class="control-group">
-    {{ form_label(form.numeroObraSocial,'Número',{ label_attr : { class : 'control-label'} }) }}
+    {{ form_label(form.numeroObraSocial,'Número *',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
         {{ form_widget (form.numeroObraSocial, { attr : { class : 'span7' } }) }}
         {{ form_errors (form.numeroObraSocial) }}
     </div>
 </div> 
 
-<br><hr>
+<br>
 
-<h4>Responsable</h4>
+<legend>Responsables</legend>
 
-
+<div data-collection="responsables" data-prototype="{{ _self.responsables(form.responsables.vars.prototype)|e }}">
+    {{ form_errors(form.responsables) }}
+    {% for responsable in form.responsables %}
+        {{ _self.responsables(responsable) }}
+    {% endfor %}
+</div>
 <div class="control-group">
-    {{ form_label(form.responsable.dni,'DNI',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
-        {{ form_widget (form.responsable.dni, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.responsable.dni) }}
-    </div>
-</div> 
-
-<div class="control-group">
-    {{ form_label(form.responsable.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }}
-    <div class="controls">
-        {{ form_widget (form.responsable.nombre, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.responsable.nombre) }}
-    </div>
-</div> 
-
-<div class="control-group">
-    {{ form_label(form.responsable.apellido,'Apellido',{ label_attr : { class : 'control-label'} }) }}
-    <div class="controls">
-        {{ form_widget (form.responsable.apellido, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.responsable.apellido) }}
+        <button class="btn btn-small" data-collection-add="responsables"><i class="icon-plus"></i></button>
     </div>
 </div>
 
-<div class="control-group">
-    {{ form_label(form.responsable.direccionBarrio,'Barrio',{ label_attr : { class : 'control-label'} }) }}
-    <div class="controls">
-        {{ form_widget (form.responsable.direccionBarrio, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.responsable.direccionBarrio) }}
-    </div>
-</div> 
+{% macro responsables(responsable) %}
 
-<div class="control-group">
-    {{ form_label(form.responsable.direccionCalle,'Calle',{ label_attr : { class : 'control-label'} }) }}
-    <div class="controls">
-        {{ form_widget (form.responsable.direccionCalle, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.responsable.direccionCalle) }}
-    </div>
-</div> 
+    <div id="itemPaciente">
+        
+        <button data-collection-del="responsables" data-collection-parent-to-remove="#itemPaciente" class="btn"><i class="icon-minus"></i></button>        
+        
+        <div class="control-group">
+            {{ form_label(responsable.dni,'DNI',{ label_attr : { class : 'control-label'} }) }}
+            <div class="controls">
+                {{ form_widget (responsable.dni, { attr : { class : 'span7' } }) }}
+                {{ form_errors (responsable.dni) }}
+            </div>
+        </div> 
 
-<div class="control-group">
-    {{ form_label(form.responsable.direccionNumero,'Número',{ label_attr : { class : 'control-label'} }) }}
-    <div class="controls">
-        {{ form_widget (form.responsable.direccionNumero, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.responsable.direccionNumero) }}
-    </div>
-</div>
+        <div class="control-group">
+            {{ form_label(responsable.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }}
+            <div class="controls">
+                {{ form_widget (responsable.nombre, { attr : { class : 'span7' } }) }}
+                {{ form_errors (responsable.nombre) }}
+            </div>
+        </div> 
 
-<div class="control-group">
-    {{ form_label(form.responsable.telefono,'Teléfono',{ label_attr : { class : 'control-label'} }) }}
-    <div class="controls">
-        {{ form_widget (form.responsable.telefono, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.responsable.telefono) }}
-    </div>
-</div> 
+        <div class="control-group">
+            {{ form_label(responsable.apellido,'Apellido',{ label_attr : { class : 'control-label'} }) }}
+            <div class="controls">
+                {{ form_widget (responsable.apellido, { attr : { class : 'span7' } }) }}
+                {{ form_errors (responsable.apellido) }}
+            </div>
+        </div>
 
-<div class="control-group">
-    {{ form_label(form.responsable.celular,'Celular',{ label_attr : { class : 'control-label'} }) }}
-    <div class="controls">
-        {{ form_widget (form.responsable.celular, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.responsable.celular) }}
-    </div>
-</div>
+        <div class="control-group">
+            {{ form_label(responsable.direccionBarrio,'Barrio',{ label_attr : { class : 'control-label'} }) }}
+            <div class="controls">
+                {{ form_widget (responsable.direccionBarrio, { attr : { class : 'span7' } }) }}
+                {{ form_errors (responsable.direccionBarrio) }}
+            </div>
+        </div> 
 
-{{ form_rest (form) }}
+        <div class="control-group">
+            {{ form_label(responsable.direccionCalle,'Calle',{ label_attr : { class : 'control-label'} }) }}
+            <div class="controls">
+                {{ form_widget (responsable.direccionCalle, { attr : { class : 'span7' } }) }}
+                {{ form_errors (responsable.direccionCalle) }}
+            </div>
+        </div> 
+
+        <div class="control-group">
+            {{ form_label(responsable.direccionNumero,'Número',{ label_attr : { class : 'control-label'} }) }}
+            <div class="controls">
+                {{ form_widget (responsable.direccionNumero, { attr : { class : 'span7' } }) }}
+                {{ form_errors (responsable.direccionNumero) }}
+            </div>
+        </div>
+
+        <div class="control-group">
+            {{ form_label(responsable.telefono,'Teléfono',{ label_attr : { class : 'control-label'} }) }}
+            <div class="controls">
+                {{ form_widget (responsable.telefono, { attr : { class : 'span7' } }) }}
+                {{ form_errors (responsable.telefono) }}
+            </div>
+        </div> 
+
+        <div class="control-group">
+            {{ form_label(responsable.celular,'Celular',{ label_attr : { class : 'control-label'} }) }}
+            <div class="controls">
+                {{ form_widget (responsable.celular, { attr : { class : 'span7' } }) }}
+                {{ form_errors (responsable.celular) }}
+            </div>
+        </div>      
+    
+    <hr>        
+        
+    </div>        
+
+{% endmacro %}
+
+{{ form_widget (form._token) }}

@@ -1,12 +1,4 @@
-{{ form_errors (form) }}
-
-<div class="control-group">
-    {{ form_label(form.diagnosticoEgreso,'Diagnóstico',{ label_attr : { class : 'control-label'} }) }} 
-    <div class="controls">
-        {{ form_widget (form.diagnosticoEgreso, { attr : { class : 'span7' } }) }}
-        {{ form_errors (form.diagnosticoEgreso) }}
-    </div>
-</div>                 
+{{ form_errors (form) }}          
 
 <div class="control-group">
     {{ form_label(form.fechaHoraEgreso,'Fecha/hora egreso',{ label_attr : { class : 'control-label'} }) }} 
@@ -25,4 +17,31 @@
 </div>   
 
 
-{{ form_rest(form) }}
+<legend>Diagnósticos de egreso</legend>
+
+<div data-collection="diagnosticos" data-prototype="{{ _self.diagnosticos(form.diagnosticoEgreso.vars.prototype)|e }}">
+    {% for diagnostico in form.diagnosticoEgreso %}
+        {{ _self.diagnosticos(diagnostico) }}
+    {% endfor %}
+</div>
+
+<div class="control-group">
+    <div class="controls">
+        <button class="btn btn-small" data-collection-add="diagnosticos"><i class="icon-plus"></i></button>
+    </div>
+</div>
+
+{% macro diagnosticos(diagnostico) %}
+    <div class="control-group">        
+        <div class="controls">
+            <div class="span7">
+                {{ form_widget(diagnostico, { attr: { class: 'span11' } }) }}        
+            </div>
+            <button data-collection-del="diagnosticos" data-collection-parent-to-remove=".control-group" class="btn"><i class="icon-minus"></i></button>
+            {{ form_errors(diagnostico) }}
+        </div>
+    </div>
+{% endmacro %}
+
+
+{{ form_widget(form._token) }}

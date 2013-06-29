@@ -9,7 +9,7 @@
 </div>
 
 <div class="control-group">
-    {{ form_label(form.codigo,'Código',{ label_attr : { class : 'control-label'} }) }}
+    {{ form_label(form.codigo,'Código *',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
         {{ form_widget (form.codigo, { attr : { class : 'span4' } }) }}
         {{ form_errors (form.codigo) }}
@@ -17,7 +17,7 @@
 </div>
 
 <div class="control-group">
-    {{ form_label(form.descripcion,'Descripción',{ label_attr : { class : 'control-label'} }) }}
+    {{ form_label(form.descripcion,'Descripción *',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
         {{ form_widget (form.descripcion, { attr : { class : 'span7' } }) }}
         {{ form_errors (form.descripcion) }}
@@ -25,13 +25,14 @@
 </div> 
 
 <div class="control-group">
-    {{ form_label(form.valor,'Valor',{ label_attr : { class : 'control-label'} }) }}
+    {{ form_label(form.valor,'Valor *',{ label_attr : { class : 'control-label'} }) }}
     <div class="controls">
         {{ form_widget (form.valor, { attr : { class : 'span3' } }) }}
+        {{ form_errors (form.valor) }}
+            
         <div class="checkbox">
             {{ form_widget (form.anularFacturacion10y90) }} Anular tipo de facturación de 10%
         </div>
-        {{ form_errors (form.valor) }}
     </div>
 </div> 
 

@@ -61,7 +61,7 @@ class InternacionPrestacion
     /**
      * @ORM\ManyToOne(targetEntity="Cipen\FacturaBundle\Entity\FacturaInternacion")
      * @ORM\JoinTable(name="Factura__Factura_Internacion_Prestacion")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true,onDelete="set null")
      */
     private $factura;
     

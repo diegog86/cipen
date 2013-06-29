@@ -28,7 +28,7 @@ class ResponsableType extends AbstractType
     
    public function getDefaultOptions (array $options) {
         return array(
-            'data_class' => 'Cipen\\PacienteBundle\\Entity\\Responsable'
+            'data_class' => 'Cipen\\PacienteBundle\\Entity\\Responsables'
         );
 
     }

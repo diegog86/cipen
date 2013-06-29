@@ -10,7 +10,10 @@ class PersonalType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('tipoId','hidden',array('property_path'=>false,'attr'=>array('data-id'=>'tipo')))
+            ->add('tipo','entity_hidden',array(
+                'attr' => array('data-id'=>'tipo'),
+                'class' => 'CipenPersonalBundle:Tipo',
+            ))
             ->add('matricula')            
             ->add('nombre')
             ->add('apellido')                               

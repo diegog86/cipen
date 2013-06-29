@@ -11,19 +11,10 @@ class FacturaType extends AbstractType
     {
         $builder
             ->add('obraSocial',null,array('empty_value'=>'SIN OBRA SOCIAL'))                                
-            ->add('desde', 'date', array(
-                'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy',
-                'attr'=>array(
-                    'data-jquery'=>'date'
-                    ),
-            ))
-            ->add ('hasta','date',array(                        
-                'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy',
-                'attr' => array(
-                    'data-jquery' => 'date',
-                )
+            ->add('periodo', 'date', array(
+                'input'  => 'datetime',
+                'widget' => 'choice',
+                'format' => 'd/M/y'
             ))                     
             ;
     }

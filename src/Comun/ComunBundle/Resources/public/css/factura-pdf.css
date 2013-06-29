@@ -51,3 +51,59 @@ table th{
 .pull-right{
     float:right;
 }
+
+
+/*************factura fiscal*************************/
+
+.factura-fiscal-section-1{
+    float: left;
+    width: 100%;    
+}
+
+.factura-fiscal-fecha {
+    float: right;
+    width: 400px;
+}
+
+.factura-fiscal-fecha div {
+    float: right;
+    margin-right: 15px;
+    width: 50px;
+    text-align: center;
+}
+
+.factura-fiscal-section-2{
+    float: left;
+    margin-top: 70px;
+    width: 100%;    
+}
+
+.factura-fiscal-section-2 div{
+    float: right;
+    width: 80%;
+    margin-top: 8px;
+}
+
+.factura-fiscal-section-3{
+    font-size: 11px;
+    float: left;
+    margin-top: 65px;
+    width: 100%;    
+}
+
+.factura-fiscal-section-4{
+    font-size: 11px;
+    float: left;
+    margin-top: 20px;
+    margin-left: 10px;
+    width: 97%;    
+    height: 610px;
+}
+
+.factura-fiscal-total{
+    float: right;
+    margin-top: 10px;    
+    margin-right: 10px;
+    width: 100px;
+    text-align: center;
+}

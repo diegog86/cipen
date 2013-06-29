@@ -1,0 +1,7 @@
+parameters:
+#    cipen_usuario.example.class: Cipen\UsuarioBundle\Example
+
+services:
+#    cipen_usuario.example:
+#        class: %cipen_usuario.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

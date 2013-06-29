@@ -20,7 +20,11 @@ class IngresoController extends Controller
         }       
 
 
-        $form   = $this->createForm(new IngresoType(), $entity);
+        $form   = $this->createForm(new IngresoType(), $entity,array(
+            'urlPersonal' => $this->generateUrl ('personal_autocomplete_ajax'),
+            'urlDiagnostico' => $this->generateUrl ('diagnostico_autocomplete_ajax'),
+            'urlPaciente' => $this->generateUrl ('paciente_autocomplete_ajax'),
+        ));
         
         if ($request->isMethod ("POST")) {
             

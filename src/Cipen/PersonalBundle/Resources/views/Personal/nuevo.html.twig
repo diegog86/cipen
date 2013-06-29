@@ -12,7 +12,7 @@
     
 {% block admin_content %}
         
-    <form class="form-horizontal" method="POST" action="{{ path('personal_crear') }}" novalidate="novalidate" >
+    <form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('personal_crear') }}" novalidate="novalidate" >
 
         {% include 'CipenPersonalBundle:Personal:_form.html.twig' %}        
         

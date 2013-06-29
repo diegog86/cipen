@@ -25,8 +25,8 @@
                     <td>{{ entity.descripcion }}</td>
                     <td>
                         <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
-                            <a class="btn" href="{{ path('acto_unidad', {actoId: entity.id}) }}" title="Unidad Obra Social" >
-                                <i class="icon-list"></i> &nbsp;OS
+                            <a class="btn" href="{{ path('acto_unidad', {actoId: entity.id}) }}" title="Obras Sociales asociadas" >
+                                <i class="icon-list"></i>
                             </a>
                             <a class="btn" href="{{ path('acto_editar', {id: entity.id}) }}" title="Editar" >
                                 <i class="icon-pencil"></i>
@@ -45,4 +45,9 @@
             {% endfor %}
         </tbody>
     </table>    
+
+    <div class="navigation">
+        {{ knp_pagination_render(entities) }}
+    </div>        
+    
 {% endblock %}

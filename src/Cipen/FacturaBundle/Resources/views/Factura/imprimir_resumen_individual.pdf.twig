@@ -14,9 +14,9 @@
             <table class="table table-align-left">
                 <thead>
                     <tr>
-                        <th  width="25%">Periodo: {{ periodo }}</th>
-                        <th  width="25%">Historia clínica n°: {{ internacion.numero }} </th>
-                        <th  width="49%"> {{ facturaInternacion.sasos is not empty ? "Sasos n°: "~facturaInternacion.sasos : "" }} </th>
+                        <th  width="25%">Periodo: {{ periodo is not empty ? periodo : "-" }}</th>
+                        <th  width="25%">Historia clínica n°: {{ internacion.numero is not empty ? internacion.getNumeroFormateado : '' }} </th>
+                        <th  width="49%"> {{ facturaInternacion.informacionExtraLabel is not empty and facturaInternacion.informacionExtraValor is not empty  ? facturaInternacion.informacionExtraLabel~": "~facturaInternacion.informacionExtraValor : "" }} </th>
                     </tr>
                     <tr>
                         <th >
@@ -26,7 +26,7 @@
                                 Paciente n°: {{ internacion.paciente.numero  }} 
                            {% endif %}
                         </th>
-                        <th >DNI: {{ internacion.paciente.dni }}</th>
+                        <th >DNI: {{ internacion.paciente.dni is not empty ? internacion.paciente.dni : "-"  }}</th>
                         <th >
                             Apellido, nombre: {{ internacion.paciente.apellido~", "~internacion.paciente.nombre }}
                         </th>

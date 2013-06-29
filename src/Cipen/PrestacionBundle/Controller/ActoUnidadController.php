@@ -4,7 +4,7 @@ namespace Cipen\PrestacionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cipen\PrestacionBundle\Entity\ActoUnidad;
 use Cipen\PrestacionBundle\Form\ActoUnidadType;
@@ -58,9 +58,13 @@ class ActoUnidadController extends Controller
                 $em->persist($entity);
                 $em->flush();
                 
+                $request->getSession()->getFlashBag()->add('alert-success','Se agrego obra social con éxito.');
+                
                 return $this->redirect($this->generateUrl('acto_unidad_editar',array('actoId'=>$actoId,'id'=>$entity->getId())));
                 
             }
+            
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo agregar obra social.');            
             
         } else {
             
@@ -78,6 +82,7 @@ class ActoUnidadController extends Controller
             }
             
             $form = $this->createForm(new ActoUnidadType(), $entity);
+            
         }
 
         $datos["actoId"] = $actoId;
@@ -110,8 +115,11 @@ class ActoUnidadController extends Controller
                 $entity = $this->setUnidades($entity);
                 $em->persist($entity);
                 $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('alert-success','Se actualizo obra social con éxito.');                             return $this->redirect($this->generateUrl('acto_unidad_editar',array('actoId'=>$actoId,'id'=>$entity->getId())));  
             }
             
+                      
         }
 
         $datos["actoId"] = $actoId;
@@ -137,7 +145,7 @@ class ActoUnidadController extends Controller
      * Deletes a Paciente entity.
      *
      */
-    public function eliminarAction($actoId,$id)
+    public function eliminarAction($actoId,$id, Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('CipenPrestacionBundle:ActoUnidad')->find($id);
@@ -148,8 +156,35 @@ class ActoUnidadController extends Controller
 
         $em->remove($entity);
         $em->flush();
+        
+        $request->getSession()->getFlashBag()->add('alert-success','Se quito obra social de acto médico con éxito.'); 
 
         return $this->redirect($this->generateUrl('acto_unidad',array('actoId'=>$actoId)));
+    }
+    
+    public function ajaxAutocompleteAction(Request $request)
+    {        
+        $actoUnidadRepository = $this->getDoctrine()->getRepository('CipenPrestacionBundle:ActoUnidad');
+        $actosUnidades = $actoUnidadRepository->
+                                       createQueryBuilderForSearchAutocomplete(
+                                           $request->query->get('term'),
+                                           $request->query->get('obraSocial')
+                                        )
+                                        ->getQuery()->getResult();
+
+        $data = array();
+        foreach ($actosUnidades as $actoUnidad){
+            
+            if($actoUnidad->getActo()->getCodigo()){
+                $label =  $actoUnidad->getActo()->getCodigo()." - ".$actoUnidad->getActo()->getDescripcion();
+            } else {
+                $label =  $actoUnidad->getActo()->getDescripcion();
+            }
+            
+            $data[] = array($actoUnidad->getId(), $label);
+        }
+
+        return JsonResponse::create($data);        
     }
        
 

@@ -21,3 +21,8 @@
     </form>
     
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'CipenInternacionBundle:InternacionEgreso:_form_js.html.twig' %}
+{% endblock %}  

@@ -4,6 +4,7 @@ namespace Cipen\DiagnosticoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cipen\DiagnosticoBundle\Entity\Diagnostico;
 use Cipen\DiagnosticoBundle\Form\DiagnosticoType;
@@ -14,24 +15,24 @@ use Cipen\DiagnosticoBundle\Form\DiagnosticoType;
  */
 class DiagnosticoController extends Controller
 {
-    /**
-     * Lists all Paciente entities.
-     *
-     */
+
     public function listarAction()
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $datos["entities"] = $em->getRepository('CipenDiagnosticoBundle:Diagnostico')->findAll();
-        
-    	return $this->render('CipenDiagnosticoBundle:Diagnostico:listar.html.twig',$datos);
-    
+        $em = $this->getDoctrine()->getManager();
+        $dql   = "SELECT d FROM CipenDiagnosticoBundle:Diagnostico d order by d.nombre asc";
+        $query = $em->createQuery($dql);
+
+        $paginator  = $this->get('knp_paginator');
+        $datos["entities"] = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            15
+        );
+
+        return $this->render('CipenDiagnosticoBundle:Diagnostico:listar.html.twig', $datos);
+
     }
 
-    
-    /**
-     * Displays a form to create a new Paciente entity.
-     *
-     */
     public function crearAction(Request $request)
     {
         $entity = new Diagnostico();
@@ -42,12 +43,17 @@ class DiagnosticoController extends Controller
             $form->bind($request);
             
             if ($form->isValid ()) {
-                $em = $this->getDoctrine()->getEntityManager();
+                
+                $em = $this->getDoctrine()->getManager();
                 $em->persist($entity);
                 $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('alert-success','El diagnóstico fue creado con éxito.');
+                
+                return $this->redirect($this->generateUrl('diagnostico_editar',array('id'=>$entity->getId())));                
             }
             
-            return $this->redirect($this->generateUrl('diagnostico_editar',array('id'=>$entity->getId())));
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo crear diagnóstico');            
             
         }
 
@@ -57,10 +63,7 @@ class DiagnosticoController extends Controller
         return $this->render('CipenDiagnosticoBundle:Diagnostico:nuevo.html.twig', $datos);
     }
 
-    /**
-     * Creates a new Paciente entity.
-     *
-     */
+
     public function editarAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -80,7 +83,13 @@ class DiagnosticoController extends Controller
                 
                 $em->persist($entity);
                 $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('alert-success','El diagnóstico fue actualizado con éxito.');
+                
+                return $this->redirect($this->generateUrl('diagnostico_editar',array('id'=>$entity->getId())));                
             }
+            
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo actualizar diagnóstico');
             
         }
 
@@ -92,12 +101,7 @@ class DiagnosticoController extends Controller
     }
 
   
-
-    /**
-     * Deletes a Paciente entity.
-     *
-     */
-    public function eliminarAction($id)
+    public function eliminarAction($id,Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('CipenDiagnosticoBundle:Diagnostico')->find($id);
@@ -109,7 +113,29 @@ class DiagnosticoController extends Controller
         $em->remove($entity);
         $em->flush();
 
+        $request->getSession()->getFlashBag()->add('alert-success','El diagnóstico fue eliminado con éxito.');
+        
         return $this->redirect($this->generateUrl('diagnostico'));
+    }
+    
+    public function ajaxAutocompleteAction(Request $request) 
+    {
+              	
+        $term = $request->query->get('term');
+        $em = $this->getDoctrine()->getManager();
+        
+        $diagnosticos = $em
+            ->createQuery('select d from CipenDiagnosticoBundle:Diagnostico d 
+                           where d.nombre LIKE :term or d.codigo LIKE :term')
+            ->setParameter('term',$term.'%')->getResult();
+
+        $data = array();
+        foreach ($diagnosticos as $diagnostico){                        
+            $data[] = array($diagnostico->getId(), $diagnostico->__toString());
+        }
+
+        return JsonResponse::create($data);   
+        
     }
 
 }

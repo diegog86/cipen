@@ -1,0 +1,21 @@
+{% extends "CipenObraSocialBundle:ObraSocial:editar_layout.html.twig" %}
+ 
+{% block admin_content %}
+
+   <ul class="nav nav-tabs">
+        <li><a href="{{ path('obra_social_editar', { id: entity.id }) }}">Datos de Obra Social</a></li>
+        <li><a href="{{ path('obra_social_unidad', { obraSocialId: entity.id }) }}">Unidades</a></li>
+        <li class="active" ><a href="{{ path('obra_social_factura_editar', { id: entity.id }) }}">Configurar facura</a></li>        
+    </ul> 
+        
+    <form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('obra_social_factura_editar', { 'id': entity.id }) }}">
+
+        {% include 'CipenObraSocialBundle:ObraSocial:factura/_form.html.twig' %}        
+        
+        <div class="form-actions">
+            <button class="btn btn-success pull-right" type="submit">Guardar</button>
+        </div>
+        
+    </form>
+    
+{% endblock %}

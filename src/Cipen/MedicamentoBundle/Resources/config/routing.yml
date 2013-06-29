@@ -17,3 +17,7 @@ medicamento_editar:
 medicamento_eliminar:
   pattern:  /{id}/eliminar/
   defaults: {_controller: "CipenMedicamentoBundle:Medicamento:eliminar" }
+
+medicamento_autocomplete_ajax:
+  pattern:  /medicamento/autocomplete/
+  defaults: { _controller: "CipenMedicamentoBundle:Medicamento:ajaxAutocomplete" }

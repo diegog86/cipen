@@ -1,7 +1,7 @@
 {{ form_errors (form) }}
 
 <div class="control-group">
-    {{ form_label(form.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }} 
+    {{ form_label(form.nombre,'Nombre *',{ label_attr : { class : 'control-label'} }) }} 
     <div class="controls">
         {{ form_widget (form.nombre, { attr : { class : 'span7' } }) }}
         {{ form_errors (form.nombre) }}
@@ -17,17 +17,20 @@
 </div> 
 
 <div class="control-group">
-    {{ form_label(form.catastro,'Catastro',{ label_attr : { class : 'control-label'} }) }} 
+    {{ form_label(form.catastro,'Es catastro?',{ label_attr : { class : 'control-label'} }) }} 
     <div class="controls">
-        {{ form_widget (form.catastro, { attr : { class : 'span7' } }) }}
+        {{ form_widget (form.catastro, { attr : { class : 'span1' } }) }}
         {{ form_errors (form.catastro) }}
     </div>
 </div> 
 
 <div class="control-group" data-id="kairo-group" >
-    {{ form_label(form.kairo,'Kairos',{ label_attr : { class : 'control-label'} }) }} 
+    {{ form_label(form.kairo,'Precio *',{ label_attr : { class : 'control-label'} }) }} 
     <div class="controls">
-        {{ form_widget (form.kairo, { attr : { class : 'span7' } }) }}
+        <div class="input-prepend">
+            <span class="add-on">$</span>
+            {{ form_widget (form.kairo, { attr : { class : 'span6' } }) }}
+        </div>
         {{ form_errors (form.kairo) }}
     </div>
 </div> 

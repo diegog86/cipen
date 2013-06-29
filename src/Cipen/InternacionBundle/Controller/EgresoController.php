@@ -19,7 +19,9 @@ class EgresoController extends Controller
             $this->createNotFoundException("No se encontro registro");
         }
         
-        $form   = $this->createForm(new EgresoType(), $entity);
+        $form   = $this->createForm(new EgresoType(), $entity,array(
+            'urlDiagnostico' => $this->generateUrl ('diagnostico_autocomplete_ajax'),
+        ));
         
         if ($request->isMethod ("POST")) {
             

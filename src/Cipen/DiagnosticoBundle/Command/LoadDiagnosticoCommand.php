@@ -39,7 +39,7 @@ class LoadDiagnosticoCommand extends ContainerAwareCommand
         $entity = array();
         $j=0;
         foreach($diagnosticos as $diagnostico){
-            $campo = explode(",", $diagnostico);
+            $campo = explode("@", $diagnostico);
             
             if (isset($campo[1])) {
                 $output->writeln($j."->Nombre: ".$campo[1]."->Codigo: ".$campo[2]);
@@ -51,11 +51,7 @@ class LoadDiagnosticoCommand extends ContainerAwareCommand
                 $em->persist($entity[$j]);
                 $j++;
                 
-                if($j == 100) {
-                    break;
-                }
-            }
-            
+            }           
             
         }
         

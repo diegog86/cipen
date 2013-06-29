@@ -19,18 +19,14 @@
             <tr>
                 <th>Medicamento</th>                
                 <th width="100">Cantidad</th>
-                <th width="160">Inicio</th>
-                <th width="100">Frecuencia</th>
                 <th width="100">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
-            {% for entity in internacion.medicamento %}
+            {% for entity in internacion.internacionMedicamento %}
                 <tr>
                     <td>{{ entity.medicamento.nombre }}</td>
-                    <td>{{ entity.cantidad }}</td>
-                    <td>{{ entity.inicio | date('d/m/Y h:i') }} hs</td>                    
-                    <td>{{ entity.frecuencia | date('h:i:s') }} hs</td>
+                    <td>{{ entity.cantidad }}</td>                
                     <td>
                         <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
                             <a class="btn" href="{{ path('internacion_medicamento_editar', {id:internacion.id, medicamentoId: entity.id}) }}" title="Editar" >

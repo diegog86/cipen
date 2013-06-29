@@ -13,7 +13,7 @@
     
 {% block admin_content %}
         
-    <form class="form-horizontal" method="POST" action="{{ path('personal_editar', {'id':entity.id}) }}">
+    <form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('personal_editar', {'id':entity.id}) }}">
 
         {% include 'CipenPersonalBundle:Personal:_form.html.twig' %}        
         

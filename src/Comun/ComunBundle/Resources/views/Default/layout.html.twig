@@ -13,15 +13,15 @@
         'bundles/comuncomun/bootstrap/less/responsive.less'
         'bundles/comuncomun/css/jquery/jquery-ui-1.10.1.custom.css'
         'bundles/comuncomun/css/less/comun.less'
-        'bundles/comuncomun/select2/select2.css'
         'bundles/cipeninternacion/css/internacion.less'
     %}
     
         <link rel="stylesheet" href="{{ asset_url }}" />
-        
     {% endstylesheets %}
 {% endblock %}
 
+        
+        
 {% block javascripts %}
         
     {{ parent() }}
@@ -31,11 +31,13 @@
         'bundles/comuncomun/jquery/jquery.optionTree.js'
         'bundles/comuncomun/jquery/jquery-ui-1.10.1.custom.js'
         'bundles/comuncomun/jquery/extension/timepicker.js'
-        'bundles/comuncomun/js/ui.js'
+        'bundles/comuncomun/js/date.js'
+        'bundles/comuncomun/js/form-collection.js'
+        'bundles/comuncomun/js/autocomplete.js'
         'bundles/cipenprestacion/js/unidad_acto.js'
         'bundles/cipeninternacion/js/internacion_prestacion.js'
-        'bundles/cipenmedicamento/js/medicamento.js'
-        'bundles/comuncomun/select2/select2.js'
+        'bundles/comuncomun/bootstrap/js/bootstrap-dropdown.js'
+
     %}
     
     <script src="{{ asset_url }}"></script>
@@ -62,14 +64,14 @@
 
                 <ul class="nav pull-right">
                     
-                    {# panel de usuario }
+                    {# panel de usuario #}
                     {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         <li><a href="{{ path('fos_user_security_login') }}">Iniciar Sesión</a></li>                    
                     {% else %}
                         <li><a href="{{ path('fos_user_profile_show') }}" title="Mi cuenta"><i class="icon-user"></i> {{ app.user.username }}</a></li>
-                        {% if is_granted('ROLE_ADMIN') %}
+                        {# if is_granted('ROLE_ADMIN') %}
                             <li><a href="{{ path('admin_dashboard') }}" title="Administración"><i class="icon-wrench"></i></a></li>
-                        {% endif %}                      
+                        {% endif #}                      
                         <li><a href="{{ path('fos_user_security_logout') }}" title="Cerrar sesión" onclick="return confirm('¿Está seguro que desea cerrar su sesión?');"><i class="icon-off"></i></a></li>
                     {% endif %}
                     {# fin panel de usuario #}
@@ -123,30 +125,30 @@
 
                 </div>
                 <div class="span10 pull-right" style="margin-right: 10px;">
-
-                    {% if app.session.hasFlash('alert') %}
-                        <div class="alert" style="margin-top: 15px;">
-                            {{ app.session.getFlash('alert') | raw }}
-                        </div>
-                    {% endif %}
                     
-                    {% if app.session.hasFlash('alert-info') %}
-                        <div class="alert alert-info" style="margin-top: 15px;">
-                            {{ app.session.getFlash('alert-info') | raw }}
-                        </div>
-                    {% endif %}
-
-                    {% if app.session.hasFlash('alert-success') %}
+                    {% for mensaje in app.session.getFlashBag.get('alert-success') %}
                         <div class="alert alert-success" style="margin-top: 15px;">
-                            {{ app.session.getFlash('alert-success') | raw }}
+                            {{ mensaje }}
                         </div>
-                    {% endif %}
+                    {% endfor %}
 
-                    {% if app.session.hasFlash('alert-error') %}
+                    {% for mensaje in app.session.getFlashBag.get('alert-error') %}
                         <div class="alert alert-error" style="margin-top: 15px;">
-                            {{ app.session.getFlash('alert-error') | raw }}
+                            {{ mensaje }}
                         </div>
-                    {% endif %}
+                    {% endfor %}
+
+                    {% for mensaje in app.session.getFlashBag.get('alert-info') %}
+                        <div class="alert alert-info" style="margin-top: 15px;">
+                            {{ mensaje }}
+                        </div>
+                    {% endfor %}
+
+                    {% for mensaje in app.session.getFlashBag.get('alert') %}
+                        <div class="alert" style="margin-top: 15px;">
+                            {{ mensaje }}
+                        </div>
+                    {% endfor %}                    
                     
                     
                     {# titulo y acciones #}

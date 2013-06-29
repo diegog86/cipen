@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as assert;
  * @ORM\Entity
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminador", type="string")
- * @ORM\DiscriminatorMap({"ObraSocial" = "Cipen\ObraSocialBundle\Entity\ObraSocial"})
+ * @ORM\DiscriminatorMap({"ObraSocial" = "Cipen\ObraSocialBundle\Entity\ObraSocial","OrganizacionGenerica" = "Comun\ComunBundle\Entity\OrganizacionGenerica"})
  */
 class Organizacion
 {
@@ -74,6 +74,16 @@ class Organizacion
      */
     private $celular;
 
+    /**
+     * @ORM\Column(name="provincia", type="string", length=100, nullable=true)
+     */
+    private $provincia;    
+
+    /**
+     * @ORM\Column(name="codigoPostal", type="string", length=100, nullable=true)
+     */
+    private $codigoPostal;    
+    
 
     /**
      * Get id
@@ -244,5 +254,51 @@ class Organizacion
     public function getCelular()
     {
         return $this->celular;
+    }
+
+    /**
+     * Set provincia
+     *
+     * @param string $provincia
+     * @return Organizacion
+     */
+    public function setProvincia($provincia)
+    {
+        $this->provincia = $provincia;
+    
+        return $this;
+    }
+
+    /**
+     * Get provincia
+     *
+     * @return string 
+     */
+    public function getProvincia()
+    {
+        return $this->provincia;
+    }
+
+    /**
+     * Set codigoPostal
+     *
+     * @param string $codigoPostal
+     * @return Organizacion
+     */
+    public function setCodigoPostal($codigoPostal)
+    {
+        $this->codigoPostal = $codigoPostal;
+    
+        return $this;
+    }
+
+    /**
+     * Get codigoPostal
+     *
+     * @return string 
+     */
+    public function getCodigoPostal()
+    {
+        return $this->codigoPostal;
     }
 }

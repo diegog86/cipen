@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Cipen\ObraSocialBundle\Entity\ObraSocial;
 use Cipen\ObraSocialBundle\Form\ObraSocialType;
+use Cipen\ObraSocialBundle\Form\FacturaType;
 
 /**
  * Paciente controller.
@@ -14,10 +15,6 @@ use Cipen\ObraSocialBundle\Form\ObraSocialType;
  */
 class ObraSocialController extends Controller
 {
-    /**
-     * Lists all Paciente entities.
-     *
-     */
     public function listarAction()
     {
     	$em = $this->getDoctrine()->getEntityManager();
@@ -27,11 +24,6 @@ class ObraSocialController extends Controller
     
     }
 
-    
-    /**
-     * Displays a form to create a new Paciente entity.
-     *
-     */
     public function crearAction(Request $request)
     {
         $entity = new ObraSocial();
@@ -45,9 +37,13 @@ class ObraSocialController extends Controller
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($entity);
                 $em->flush();
-            }
-            
-            return $this->redirect($this->generateUrl('obra_social_editar',array('id'=>$entity->getId())));
+                
+                $request->getSession()->getFlashBag()->add('alert-success','La obra social fue creada con éxito.');   
+                return $this->redirect($this->generateUrl('obra_social_editar',array('id'=>$entity->getId())));       
+                
+            }            
+
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo crear obra social');                          
             
         }
 
@@ -80,8 +76,13 @@ class ObraSocialController extends Controller
                 
                 $em->persist($entity);
                 $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('alert-success','La obra social fue actualizada con éxito.');   
+                return $this->redirect($this->generateUrl('obra_social_editar',array('id'=>$entity->getId())));                
+                
             }
             
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo actualizar obra social');                          
         }
 
         $datos["entity"] = $entity;
@@ -97,7 +98,7 @@ class ObraSocialController extends Controller
      * Deletes a Paciente entity.
      *
      */
-    public function eliminarAction($id)
+    public function eliminarAction($id,Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('CipenObraSocialBundle:ObraSocial')->find($id);
@@ -109,7 +110,43 @@ class ObraSocialController extends Controller
         $em->remove($entity);
         $em->flush();
 
+        $request->getSession()->getFlashBag()->add('alert-success','La obra social fue eliminada con éxito.');           
         return $this->redirect($this->generateUrl('obra_social'));
+    }
+    
+    public function editarFacturaAction(Request $request,$id)
+    {
+       $em = $this->getDoctrine()->getEntityManager();
+       $entity = $em->getRepository ('CipenObraSocialBundle:ObraSocial')->find ($id) ;
+        
+        if (!$entity) {
+            $this->createNotFoundException("No se encontro registro");
+        }
+        
+        $form   = $this->createForm(new FacturaType(), $entity);
+        
+        if ($request->isMethod ("POST")) {
+            
+            $form->bind($request);
+            
+            if ($form->isValid ()) {
+                
+                $em->persist($entity);
+                $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('alert-success','La obra social fue actualizada con éxito.');   
+                return $this->redirect($this->generateUrl('obra_social_factura_editar',array('id'=>$id)));
+                
+            }
+            
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo actualizar obra social');                      
+        }
+
+        $datos["entity"] = $entity;
+        $datos["form"] = $form->createView ();
+        
+        return $this->render('CipenObraSocialBundle:ObraSocial:factura/editar.html.twig', $datos);         
+        
     }
 
 }

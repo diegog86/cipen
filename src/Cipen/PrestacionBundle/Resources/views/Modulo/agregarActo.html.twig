@@ -8,11 +8,13 @@
     </ul>  
 
     
-    <form action = "{{ path('modulo_agregar_acto', { moduloId: entity.id }) }}" method = "POST" class="form-inline" >
+    <form novalidate="novalidate" action = "{{ path('modulo_agregar_acto', { moduloId: entity.id }) }}" method = "POST" class="form-inline" >
         <div class="well well-small">
-            {{ form_widget (form.actoUnidad, { attr : { class : 'span9' } }) }}
-            <button type="submit" class="btn btn-primary btn-small" style="margin-left: 10px" title="Agregar acto médico">
-                <i class="icon-plus icon-white"></i> Agregar acto médico
+            <div class="span11">
+                {{ form_widget (form.actoUnidad, { attr : {'placeholder':'Código o descripción del acto médico...', class:'span12','data-autocomplete-parametros':'{obraSocial:'~entity.ObraSocial.Id~'}' } }) }}            
+            </div>
+            <button type="submit" class="btn btn-primary btn-small" style="margin: 2px 0 0 45px" title="Agregar acto médico">
+                <i class="icon-plus icon-white"></i>
             </button>
         </div>
     </form>
@@ -21,8 +23,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Actos Médicos</th>
-                
+                <th>Acto médico</th>
             </tr>
         </thead>
         <tbody>

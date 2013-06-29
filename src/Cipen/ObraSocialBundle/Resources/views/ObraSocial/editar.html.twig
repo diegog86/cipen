@@ -4,10 +4,11 @@
 
    <ul class="nav nav-tabs">
         <li class="active" ><a href="{{ path('obra_social_editar', { id: entity.id }) }}">Datos de Obra Social</a></li>
-        <li><a href="{{ path('unidad', { obraSocialId: entity.id }) }}">Unidades</a></li>
+        <li><a href="{{ path('obra_social_unidad', { obraSocialId: entity.id }) }}">Unidades</a></li>
+        <li><a href="{{ path('obra_social_factura_editar', { id: entity.id }) }}">Configurar factura</a></li>
     </ul> 
         
-    <form class="form-horizontal" method="POST" action="{{ path('obra_social_editar', { 'id': entity.id }) }}">
+    <form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('obra_social_editar', { 'id': entity.id }) }}">
 
         {% include 'CipenObraSocialBundle:ObraSocial:_form.html.twig' %}        
         

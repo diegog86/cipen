@@ -9,16 +9,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Cipen\ObraSocialBundle\Entity\Unidad;
 use Cipen\ObraSocialBundle\Form\UnidadType;
 
-/**
- * Paciente controller.
- *
- */
+
 class UnidadController extends Controller
 {
-    /**
-     * Lists all Paciente entities.
-     *
-     */
+
     public function listarAction($obraSocialId)
     {
     	$em = $this->getDoctrine()->getEntityManager();      
@@ -30,10 +24,6 @@ class UnidadController extends Controller
     }
 
     
-    /**
-     * Displays a form to create a new Paciente entity.
-     *
-     */
     public function crearAction($obraSocialId,Request $request)
     {
         $entity = new Unidad();
@@ -55,10 +45,13 @@ class UnidadController extends Controller
                 
                 $em->persist($entity);
                 $em->flush();
-                
-                return $this->redirect($this->generateUrl('unidad_editar',array('id'=>$entity->getId(),'obraSocialId'=>$obraSocial->getId())));
+
+                $request->getSession()->getFlashBag()->add('alert-success','La unidad fue creada con éxito.');                
+                return $this->redirect($this->generateUrl('obra_social_unidad_editar',array('id'=>$entity->getId(),'obraSocialId'=>$obraSocial->getId())));
                 
             }
+            
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo crear unidad');         
         }
         
         $datos["entity"] = $entity;
@@ -68,10 +61,6 @@ class UnidadController extends Controller
         return $this->render('CipenObraSocialBundle:Unidad:nuevo.html.twig', $datos);
     }
 
-    /**
-     * Creates a new Paciente entity.
-     *
-     */
     public function editarAction($id, $obraSocialId, Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -91,8 +80,13 @@ class UnidadController extends Controller
                 
                 $em->persist($entity);
                 $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('alert-success','La unidad fue actualizada con éxito.');                
+                return $this->redirect($this->generateUrl('obra_social_unidad_editar',array('id'=>$entity->getId(),'obraSocialId'=>$obraSocialId)));                
+                
             }
             
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo actualizar unidad');                                 
         }
 
 
@@ -104,12 +98,7 @@ class UnidadController extends Controller
     }
 
   
-
-    /**
-     * Deletes a Paciente entity.
-     *
-     */
-    public function eliminarAction($id,$obraSocialId)
+    public function eliminarAction($id,$obraSocialId,Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('CipenObraSocialBundle:Unidad')->find($id);
@@ -118,10 +107,14 @@ class UnidadController extends Controller
         throw $this->createNotFoundException('No se encontro registro.');
         }
 
+        
+        
         $em->remove($entity);
         $em->flush();
+        
+        $request->getSession()->getFlashBag()->add('alert-success','La unidad de la obra social fue eliminada con éxito.');  
 
-        return $this->redirect($this->generateUrl('unidad',array('obraSocialId'=>$obraSocialId)));
+        return $this->redirect($this->generateUrl('obra_social_unidad',array('obraSocialId'=>$obraSocialId)));
         
     }
     
@@ -131,7 +124,8 @@ class UnidadController extends Controller
         $obraSocialId = $request->request->get('obraSocialId');
         
         $em = $this->getDoctrine()->getEntityManager();
-        $entities = $em->getRepository('CipenObraSocialBundle:Unidad')->findBy(array('obraSocial'=>$obraSocialId),array('descripcion'=>'ASC'));
+        $entities = $em->getRepository('CipenObraSocialBundle:Unidad')
+            ->findBy(array('obraSocial'=>$obraSocialId),array('descripcion'=>'ASC'));
 
         $unidades = array();
         $j = 0;

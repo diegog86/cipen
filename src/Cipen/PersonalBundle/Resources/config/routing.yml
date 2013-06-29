@@ -17,3 +17,7 @@ personal_eliminar:
 personal_get_tipo_ajax:
   pattern: /get-personal-ajax
   defaults: {_controller: "CipenPersonalBundle:Personal:getTipos"}
+
+personal_autocomplete_ajax:
+    pattern:  /personal/autocomplete/
+    defaults: { _controller: "CipenPersonalBundle:Personal:ajaxAutocomplete" }

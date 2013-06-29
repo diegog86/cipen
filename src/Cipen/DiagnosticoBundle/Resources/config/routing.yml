@@ -13,3 +13,7 @@ diagnostico_editar:
 diagnostico_eliminar:
     pattern:  /{id}/eliminar/
     defaults: { _controller: "CipenDiagnosticoBundle:Diagnostico:eliminar" }
+
+diagnostico_autocomplete_ajax:
+    pattern:  /diagnostico/autocomplete/
+    defaults: { _controller: "CipenDiagnosticoBundle:Diagnostico:ajaxAutocomplete" }

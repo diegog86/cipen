@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as assert;
  * @ORM\Entity
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminador", type="string")
- * @ORM\DiscriminatorMap({"Personal" = "Cipen\PersonalBundle\Entity\Personal", "Paciente" = "Cipen\PacienteBundle\Entity\Paciente", "Responsable" = "Cipen\PacienteBundle\Entity\Responsable"})
+ * @ORM\DiscriminatorMap({"Personal" = "Cipen\PersonalBundle\Entity\Personal", "Paciente" = "Cipen\PacienteBundle\Entity\Paciente", "Responsable" = "Cipen\PacienteBundle\Entity\Responsables"})
  */
 class Persona
 {

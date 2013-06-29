@@ -24,7 +24,13 @@ class PacienteType extends AbstractType
             ->add('direccionNumero')                
             ->add('obraSocial','entity',array('class'=>'Cipen\\ObraSocialBundle\\Entity\\ObraSocial'))                   
             ->add('numeroObraSocial')                                
-            ->add('responsable',new ResponsableType)                   
+            ->add('responsables','collection',array(
+                'type'=>new ResponsableType,
+                'prototype'=>true,
+                'allow_add'=>true,
+                'allow_delete'=>true,
+                'by_reference'=>false
+            ))                   
             ;
     }
 

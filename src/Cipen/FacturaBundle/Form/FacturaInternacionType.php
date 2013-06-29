@@ -12,9 +12,8 @@ class FacturaInternacionType extends AbstractType
     {
         $builder
             ->add('facturaFiscal')                                                            
-            ->add('informacionExtraLabel')
-            ->add('informacionExtraValor')                                
-            ->add('facturaFiscalExtra')    
+            ->add('informacionExtraLabel',null,array('attr'=>array('placeholder'=>'Nombre')))
+            ->add('informacionExtraValor',null,array('attr'=>array('placeholder'=>'Valor información extra')))                            ->add('facturaFiscalExtra')    
 
             ;
     }

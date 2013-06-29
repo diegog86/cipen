@@ -13,3 +13,7 @@ paciente_editar:
 paciente_eliminar:
     pattern:  /{id}/eliminar/
     defaults: { _controller: "CipenPacienteBundle:Paciente:eliminar" }
+
+paciente_autocomplete_ajax:
+    pattern:  /paciente/autocomplete/
+    defaults: { _controller: "CipenPacienteBundle:Paciente:ajaxAutocomplete" }

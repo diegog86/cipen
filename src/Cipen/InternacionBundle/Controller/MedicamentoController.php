@@ -5,7 +5,7 @@ namespace Cipen\InternacionBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use Cipen\InternacionBundle\Entity\Medicamento;
+use Cipen\InternacionBundle\Entity\InternacionMedicamento;
 use Cipen\InternacionBundle\Form\MedicamentoType;
 
 
@@ -27,8 +27,10 @@ class MedicamentoController extends Controller
     
     public function crearAction($id, Request $request)
     {
-        $entity = new Medicamento();
-        $form = $this->createForm(new MedicamentoType(), $entity);        
+        $entity = new InternacionMedicamento();
+        $form = $this->createForm(new MedicamentoType(), $entity,array(
+            'urlMedicamento' => $this->generateUrl ('medicamento_autocomplete_ajax'),
+        ));        
         
         $em = $this->getDoctrine()->getEntityManager();
         $internacion = $em->getRepository('CipenInternacionBundle:Internacion')->find($id);
@@ -65,13 +67,15 @@ class MedicamentoController extends Controller
     public function editarAction($id,$medicamentoId, Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $entity = $em->getRepository ('CipenInternacionBundle:Medicamento')->find ($medicamentoId) ;
+        $entity = $em->getRepository ('CipenInternacionBundle:InternacionMedicamento')->find ($medicamentoId) ;
         
         if (!$entity) {
             $this->createNotFoundException("No se encontro registro");
         }
         
-        $form   = $this->createForm(new MedicamentoType(), $entity);
+        $form   = $this->createForm(new MedicamentoType(), $entity,array(
+            'urlMedicamento' => $this->generateUrl ('medicamento_autocomplete_ajax'),
+        ));        
         
         if ($request->isMethod ("POST")) {
             
@@ -93,10 +97,10 @@ class MedicamentoController extends Controller
        
     }
 
-      public function eliminarAction($id,$medicamentoId)
+    public function eliminarAction($id,$medicamentoId)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $entity = $em->getRepository('CipenInternacionBundle:Medicamento')->find($medicamentoId);
+        $entity = $em->getRepository('CipenInternacionBundle:InternacionMedicamento')->find($medicamentoId);
 
         if (!$entity) {
             throw $this->createNotFoundException('No se encontro registro.');

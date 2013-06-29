@@ -12,7 +12,7 @@
     
 {% block admin_content %}
         
-    <form class="form-horizontal" method="POST" action="{{ path('modulo_crear') }}" >
+    <form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('modulo_crear') }}" >
 
         {% include 'CipenPrestacionBundle:Modulo:_form.html.twig' %}
         

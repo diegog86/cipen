@@ -1,0 +1,107 @@
+{{ form_errors (form) }}
+
+{% set field = form.tipoFactura %}
+<div class="control-group">
+    {{ form_label(field,'Tipo',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {% for radio in field %}
+            <label class="radio inline" >
+                {{ form_widget (radio) }} {{ radio.vars.label }}
+            </label>                
+        {% endfor %}            
+        {{ form_errors (field) }}
+    </div>
+</div> 
+
+{% set field = form.destinatario %}
+<div class="control-group">
+    {{ form_label(field,'Destinatario',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (field, { attr : { class : 'span9' } }) }}
+        {{ form_errors (field) }}
+    </div>
+</div>  
+
+{% set field = form.tipoPeriodoFactura %}
+<div class="control-group">
+    {{ form_label(field,'Tipo periodo',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {% for radio in field %}
+             <label class="radio inline" >
+                {{ form_widget (radio) }} {{ radio.vars.label }}
+            </label>                       
+        {% endfor %}            
+        {{ form_errors (field) }}
+    </div>
+</div>  
+
+
+{% set field = form.tipoTotalFactura %}
+<div class="control-group">
+    {{ form_label(field,'Tipo total',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {% for radio in field %}
+             <label class="radio inline" >
+                {{ form_widget (radio) }} {{ radio.vars.label }}
+            </label>                       
+        {% endfor %}            
+        {{ form_errors (field) }}
+    </div>
+</div>   
+
+{% set field = form.coberturaMedicamentoCatastro %}
+<div class="control-group">
+    {{ form_label(field,'Cobert. medicamentos *',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        <div class="input-append">
+            {{ form_widget (field, { attr : { class : 'span4' } }) }}
+            <span class="add-on">%</span>
+        </div>
+        {{ form_errors (field) }}            
+        <div class="help-block">Cobertura medicamento es el porcentaje del valor de los medicamentos de catastro que cubre la obra social.</div>
+    </div>
+</div>  
+
+{% set field = form.ivaInscripto %}
+<div class="control-group">
+    {{ form_label(field,'Iva inscripto *',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        <div class="input-append">
+            {{ form_widget (field, { attr : { class : 'span4' } }) }}
+            <span class="add-on">%</span>
+        </div>
+        {{ form_errors (field) }}
+    </div>
+</div>  
+
+{% set field = form.dividePorTipoInternacion %}
+<div class="control-group">
+    {{ form_label(field,'Divide por internación?',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+       <label class="checkbox span12" >
+           {{ form_widget (field) }} Se dividen los resumenes generales en internaciones clínicas o cirujías
+        </label>          
+        {{ form_errors (field) }}
+    </div>
+</div>  
+
+{% set field = form.tiempoAcreditacionFactura %}
+<div class="control-group">
+    {{ form_label(field,'Días de acreditación',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (field, { attr : { class : 'span2' } }) }}
+        {{ form_errors (field) }}            
+        <div class="help-block">Cantidad de días en los que la obra social acredita el pago de la factura.</div>          
+    </div>
+</div> 
+
+{% set field = form.sufijoMatriculaPersonal %}
+<div class="control-group">
+    {{ form_label(field,'Sufijo matrícula',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (field, { attr : { class : 'span4' } }) }}
+        {{ form_errors (field) }}
+    </div>
+</div>   
+
+{{ form_widget (form._token) }}

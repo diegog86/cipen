@@ -16,18 +16,35 @@ class InternacionController extends Controller
 {
 
     public function listarAction()
-    {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $datos["entities"] = $em->getRepository('CipenInternacionBundle:Internacion')->findAll();
+    {   
+        $em = $this->getDoctrine()->getManager();
+        $dql   = "SELECT e FROM CipenInternacionBundle:Internacion e";
+        $query = $em->createQuery($dql);
+
+        $paginator  = $this->get('knp_paginator');
+        $datos["entities"] = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            15
+        );
+
+    	return $this->render('CipenInternacionBundle:Internacion:listar.html.twig',$datos);  
         
-    	return $this->render('CipenInternacionBundle:Internacion:listar.html.twig',$datos);    
     }
 
     
     public function crearAction(Request $request)
     {
         $entity = new Internacion();
-        $form = $this->createForm(new IngresoType(), $entity);
+        
+        $numero = $this->getDoctrine()->getRepository('CipenInternacionBundle:Internacion')->getNumeroMax();
+        $entity->setNumero($numero+1);
+        
+        $form = $this->createForm(new IngresoType(), $entity,array(
+            'urlPersonal' => $this->generateUrl ('personal_autocomplete_ajax'),
+            'urlDiagnostico' => $this->generateUrl ('diagnostico_autocomplete_ajax'),
+            'urlPaciente' => $this->generateUrl ('paciente_autocomplete_ajax'),
+        ));
         
         if ($request->isMethod("POST")) {
             
@@ -37,9 +54,9 @@ class InternacionController extends Controller
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($entity);
                 $em->flush();
+
+                return $this->redirect($this->generateUrl('internacion_ingreso_editar',array('id'=>$entity->getId())));                       
             }
-            
-            return $this->redirect($this->generateUrl('internacion_ingreso_editar',array('id'=>$entity->getId())));
             
         }
 

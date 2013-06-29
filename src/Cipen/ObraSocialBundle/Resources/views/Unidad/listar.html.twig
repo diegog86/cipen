@@ -4,11 +4,12 @@
 
    <ul class="nav nav-tabs">
         <li><a href="{{ path('obra_social_editar', { id: obraSocialId }) }}">Datos de Obra Social</a></li>
-        <li class="active"><a href="{{ path('unidad', { obraSocialId: obraSocialId }) }}">Unidades</a></li>
+        <li class="active"><a href="{{ path('obra_social_unidad', { obraSocialId: obraSocialId }) }}">Unidades</a></li>
+         <li><a href="{{ path('obra_social_factura_editar', { id: obraSocialId }) }}">Configurar factura</a></li>
     </ul>    
     
     <div class="well well-small">
-        <a href="{{ path('unidad_crear', { obraSocialId: obraSocialId }) }}"><i class="icon-plus"></i> Agregar unidad</a>
+        <a href="{{ path('obra_social_unidad_crear', { obraSocialId: obraSocialId }) }}"><i class="icon-plus"></i> Agregar unidad</a>
     </div>
 
     <table class="table table-hover">
@@ -26,10 +27,10 @@
                     <td>{{ entity.valor }}</td>
                     <td>
                         <div style="margin:0; padding:0;" class="btn-toolbar pull-right">
-                            <a class="btn" href="{{ path('unidad_editar', {id: entity.id, obraSocialId: obraSocialId }) }}" title="Editar" >
+                            <a class="btn" href="{{ path('obra_social_unidad_editar', {id: entity.id, obraSocialId: obraSocialId }) }}" title="Editar" >
                                 <i class="icon-pencil"></i>
                             </a>
-                            <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar esta unidad?')){ return false }" href="{{ path('unidad_eliminar', {id: entity.id, obraSocialId: obraSocialId}) }}" title="Eliminar" >
+                            <a class="btn btn-danger" onclick="if(!confirm('¿Seguro desea eliminar esta unidad?')){ return false }" href="{{ path('obra_social_unidad_eliminar', {id: entity.id, obraSocialId: obraSocialId}) }}" title="Eliminar" >
                                 <i class="icon-white icon-trash"></i>
                             </a>                                
                         </div>

@@ -32,6 +32,10 @@ acto_unidad_eliminar:
     pattern:  /acto/{actoId}/unidad/{id}/eliminar/
     defaults: { _controller: "CipenPrestacionBundle:ActoUnidad:eliminar" }
 
+ajax_acto_unidad_buscar:
+    pattern:  /acto-unidad/autocomplete/
+    defaults: { _controller: "CipenPrestacionBundle:ActoUnidad:ajaxAutocomplete" }
+
 #-------------------MÓDULO---------------------#
 
 modulo:

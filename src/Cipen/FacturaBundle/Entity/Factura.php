@@ -4,12 +4,12 @@ namespace Cipen\FacturaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Cipen\ObraSocialBundle\Entity\ObraSocial;
 
 /**
- * Factura
- *
  * @ORM\Table("Factura__Factura")
  * @ORM\Entity(repositoryClass="Cipen\FacturaBundle\Entity\FacturaRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Factura
 {
@@ -31,24 +31,21 @@ class Factura
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="desde", type="date")
-     * @Assert\NotBlank(message="Ingrese fecha desde cuando quiere facturar")
+     * @ORM\Column(name="periodo", type="date")
+     * @Assert\NotBlank(message="Ingrese periodo a facturar")
      */
-    private $desde;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="hasta", type="date")
-     * @Assert\NotBlank(message="Ingrese fecha hasta cuando quiere facturar")
-     */
-    private $hasta;
+    private $periodo;
 
     /**
      * @ORM\OneToMany(targetEntity="Cipen\FacturaBundle\Entity\FacturaInternacion", mappedBy="factura")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $facturaInternacion;   
 
+    /**
+     *@ORM\Column(name="datos", type="text")
+     */
+    private $datos;
 
     /**
      * Constructor
@@ -56,6 +53,61 @@ class Factura
     public function __construct()
     {
         $this->internacion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodo = new \DateTime('NOW');
+    }
+    
+    /**
+     * Set datos
+     *
+     * @param array $datos
+     */
+    public function setDatos()
+    {
+        if($this->getObraSocial ()){
+            $obraSocial = $this->getObraSocial ();
+        } else {
+            //si no existe obra social es por que se facturan internaciones sin obra social. Para obtener los datos de 
+            // facturación utilizo los datos creados por defaults de una obra social
+            $obraSocial = new ObraSocial();   
+        }
+        
+        $datos['tipoFactura'] = $obraSocial->getTipoFactura ();
+        $datos['tipoTotalFactura'] = $obraSocial->getTipoTotalFactura ();
+        $datos['tipoPeriodoFactura'] = $obraSocial->getTipoPeriodoFactura ();
+        $datos['destinatario'] = $obraSocial->getDestinatario ();
+        $datos['coberturaMedicamentoCatastro'] = $obraSocial->getCoberturaMedicamentoCatastro ();
+        $datos['ivaInscripto'] = $obraSocial->getIvaInscripto ();
+        $datos['dividePorTipoInternacion'] = $obraSocial->getDividePorTipoInternacion ();
+        $datos['sufijoMatriculaPersonal'] = $obraSocial->getSufijoMatriculaPersonal ();
+        $datos['tiempoAcreditacionFactura'] = $obraSocial->getTiempoAcreditacionFactura ();       
+        
+        $this->datos = json_encode($datos);
+
+        return $this;
+    }
+
+    /**
+     * Get datos
+     *
+     * @return array
+     */
+    public function getDatos()
+    {
+        return (array)json_decode($this->datos);
+    }      
+    
+    public function getDato($key)
+    {
+        $datos = $this->getDatos();
+        return isset($datos[$key]) ? $datos[$key] : null;
+    }
+    
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist() 
+    {
+        $this->setDatos();
     }
     
     /**
@@ -68,51 +120,6 @@ class Factura
         return $this->id;
     }
 
-    /**
-     * Set desde
-     *
-     * @param \DateTime $desde
-     * @return Factura
-     */
-    public function setDesde($desde)
-    {
-        $this->desde = $desde;
-    
-        return $this;
-    }
-
-    /**
-     * Get desde
-     *
-     * @return \DateTime 
-     */
-    public function getDesde()
-    {
-        return $this->desde;
-    }
-
-    /**
-     * Set hasta
-     *
-     * @param \DateTime $hasta
-     * @return Factura
-     */
-    public function setHasta($hasta)
-    {
-        $this->hasta = $hasta;
-    
-        return $this;
-    }
-
-    /**
-     * Get hasta
-     *
-     * @return \DateTime 
-     */
-    public function getHasta()
-    {
-        return $this->hasta;
-    }
 
     /**
      * Set obraSocial
@@ -203,5 +210,30 @@ class Factura
     public function getFacturaInternacion()
     {
         return $this->facturaInternacion;
+    }
+
+  
+
+    /**
+     * Set periodo
+     *
+     * @param \DateTime $periodo
+     * @return Factura
+     */
+    public function setPeriodo($periodo)
+    {
+        $this->periodo = $periodo;
+    
+        return $this;
+    }
+
+    /**
+     * Get periodo
+     *
+     * @return \DateTime 
+     */
+    public function getPeriodo()
+    {
+        return $this->periodo;
     }
 }

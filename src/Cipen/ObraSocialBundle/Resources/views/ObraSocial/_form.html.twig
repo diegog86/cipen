@@ -9,7 +9,7 @@
 </div>
 
 <div class="control-group">
-    {{ form_label(form.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }} 
+    {{ form_label(form.nombre,'Nombre *',{ label_attr : { class : 'control-label'} }) }} 
     <div class="controls">
         {{ form_widget (form.nombre, { attr : { class : 'span7' } }) }}
         {{ form_errors (form.nombre) }}
@@ -39,30 +39,6 @@
         {{ form_errors (form.direccionNumero) }}
     </div>
 </div> 
+ 
 
-<hr>
-
-<div class="control-group">
-    {{ form_label(form.tipoFacturacion,'Tipo de facturación',{ label_attr : { class : 'control-label'} }) }} 
-    <div class="controls">
-        <label class="radio inline span2" style="margin-left:15px">
-            {{ form_widget (form.tipoFacturacion[0]) }} Valor unitario
-        </label>
-            
-            <label class="radio inline span2">
-            {{ form_widget (form.tipoFacturacion[1]) }} 10% y 90%
-        </label>                
-            
-        {{ form_errors (form.tipoFacturacion) }}
-    </div>
-</div>   
-
-<div class="control-group">
-    {{ form_label(form.sufijoMatriculaPersonal,'Sufijo matrícula',{ label_attr : { class : 'control-label'} }) }} 
-    <div class="controls">
-        {{ form_widget (form.sufijoMatriculaPersonal, { attr : { class : 'radio inline' } }) }}
-        {{ form_errors (form.sufijoMatriculaPersonal) }}
-    </div>
-</div>   
-
-{{ form_rest (form) }}
+{{ form_widget (form._token) }}

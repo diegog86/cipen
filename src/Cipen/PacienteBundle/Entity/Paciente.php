@@ -37,9 +37,10 @@ class Paciente extends Persona
     protected $obraSocial;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Cipen\PacienteBundle\Entity\Responsable", inversedBy="paciente")
+     * @ORM\OneToMany(targetEntity="Cipen\PacienteBundle\Entity\Responsables",  mappedBy="paciente", cascade={"persist","remove"})
+     * @assert\NotNull(message="Por favor, agregue un responsable")
      */
-    protected $responsable;
+    protected $responsables;
 
     public function getNumero(){
     	return "PAC".str_pad($this->getId(),5,0,STR_PAD_LEFT);
@@ -49,11 +50,21 @@ class Paciente extends Persona
         return $this->getDni()." - ".$this->getApellido ().", ".$this->getNombre ();
     }
 
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->responsables = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Set fechaNacimiento
      *
      * @param \DateTime $fechaNacimiento
-     * @return Persona
+     * @return Paciente
      */
     public function setFechaNacimiento($fechaNacimiento)
     {
@@ -71,7 +82,6 @@ class Paciente extends Persona
     {
         return $this->fechaNacimiento;
     }
-    
 
     /**
      * Set numeroObraSocial
@@ -120,26 +130,36 @@ class Paciente extends Persona
     }
 
     /**
-     * Set responsable
+     * Add responsables
      *
-     * @param \Cipen\PacienteBundle\Entity\Responsable $responsable
+     * @param \Cipen\PacienteBundle\Entity\Responsables $responsables
      * @return Paciente
      */
-    public function setResponsable(\Cipen\PacienteBundle\Entity\Responsable $responsable = null)
+    public function addResponsable(\Cipen\PacienteBundle\Entity\Responsables $responsables)
     {
-        $this->responsable = $responsable;
+        $responsables->setPaciente($this);
+        $this->responsables[] = $responsables;
     
         return $this;
     }
 
     /**
-     * Get responsable
+     * Remove responsables
      *
-     * @return \Cipen\PacienteBundle\Entity\Responsable 
+     * @param \Cipen\PacienteBundle\Entity\Responsables $responsables
      */
-    public function getResponsable()
+    public function removeResponsable(\Cipen\PacienteBundle\Entity\Responsables $responsables)
     {
-        return $this->responsable;
+        $this->responsables->removeElement($responsables);
     }
-    
+
+    /**
+     * Get responsables
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsables()
+    {
+        return $this->responsables;
+    }
 }

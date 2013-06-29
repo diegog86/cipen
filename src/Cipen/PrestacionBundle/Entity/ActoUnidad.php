@@ -10,15 +10,18 @@ use Symfony\Component\Validator\Constraints as assert;
  * Cipen\PrestacionBundle\Entity\Nomenclador
  *
  * @ORM\Table("Prestacion__Acto_Unidad")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Cipen\PrestacionBundle\Entity\ActoUnidadRepository")
  */
 class ActoUnidad
 {
+    const NOMENCLADOR_PMOE = 'PMOE' ;
+    const NOMENCLADOR_BIOQUIMICO = 'BIOQUIMICO' ;
+    const SIN_NOMENCLADOR = 'SIN_NOMENCLADOR' ;
     
     public static $tiposNomenclador = array(
-        'PMOE' => 'PMOE',
-        'BIOQUIMICO' => 'BIOQUÍMICO ÚNICO NBU - PMO',
-        'SIN_NOMENCLADOR' => 'SIN NOMENCLADOR'
+        self::NOMENCLADOR_PMOE => 'PMOE',
+        self::NOMENCLADOR_BIOQUIMICO => 'BIOQUÍMICO ÚNICO NBU - PMO',
+        self::SIN_NOMENCLADOR => 'SIN NOMENCLADOR'
     );
 
     /**
@@ -247,6 +250,7 @@ class ActoUnidad
     {
         return $this->acto;
     }
+    
 
     /**
      * Set obraSocial

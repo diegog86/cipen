@@ -9,19 +9,21 @@
 </div>          
 
 <div class="control-group">
-    {{ form_label(form.desde,'Desde',{ label_attr : { class : 'control-label'} }) }} 
+    {{ form_label(form.periodo,'Periodo',{ label_attr : { class : 'control-label'} }) }} 
+    {{ form_widget(form.periodo.day, { 'attr' : { 'style': 'display:none' }}) }}        
+    
     <div class="controls">
-        {{ form_widget (form.desde, { attr : { class : 'span2' } }) }}
-        {{ form_errors (form.desde) }}
+        <div class="input-append" style="margin-right: 20px;">
+            {{ form_widget (form.periodo.month, { attr : { class : 'span8' } }) }}   
+            <div class="add-on">Mes</div>                         
+        </div>
+        <div class="input-append">
+            {{ form_widget (form.periodo.year, { attr : { class : 'span8' } }) }}   
+            <div class="add-on">Año</div>                                     
+        </div>            
+        {{ form_errors (form.periodo) }}
     </div>
 </div> 
 
-<div class="control-group">
-    {{ form_label(form.hasta,'Hasta',{ label_attr : { class : 'control-label'} }) }} 
-    <div class="controls">
-        {{ form_widget (form.hasta, { attr : { class : 'span2' } }) }}
-        {{ form_errors (form.hasta) }}
-    </div>
-</div> 
 
-{{ form_rest (form) }}
+{{ form_widget (form._token) }}

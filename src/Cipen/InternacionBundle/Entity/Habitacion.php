@@ -3,6 +3,7 @@
 namespace Cipen\InternacionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as assert;
 
 /**
  * Habitacion
@@ -34,6 +35,7 @@ class Habitacion
      * @var string
      *
      * @ORM\Column(name="descripcion", type="string", length=100)
+     * @assert\NotBlank(message="Por favor, ingrese descripción")
      */
     private $descripcion;
 
@@ -41,6 +43,7 @@ class Habitacion
      * @var \DateTime
      *
      * @ORM\Column(name="fechaHoraIngreso", type="datetime")
+     * @assert\NotBlank(message="Por favor, ingrese fecha de ingreso")
      */
     private $fechaHoraIngreso;
     

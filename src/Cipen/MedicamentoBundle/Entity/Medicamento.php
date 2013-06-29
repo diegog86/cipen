@@ -3,6 +3,7 @@
 namespace Cipen\MedicamentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as assert;
 
 
 /**
@@ -28,6 +29,7 @@ class Medicamento
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
+     * @assert\NotBlank(message="Por favor, ingrese nombre")
      */
     private $nombre;
 
@@ -47,6 +49,7 @@ class Medicamento
     /**
      *
      * @ORM\Column(name="kairo", type="float")
+     * @assert\NotBlank(message="Por favor, ingrese precio")
      */
     private $kairo;
     

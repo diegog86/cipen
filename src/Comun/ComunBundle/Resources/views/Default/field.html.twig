@@ -1,0 +1,18 @@
+{% block autocomplete_widget %}
+{% spaceless %}
+    {% set type = type|default('hidden') %}
+    {{ block('form_widget_simple') }}
+    {% set id_value = id %}
+    {% set id = id ~ '_autocomplete' %}
+    {% set full_name = id %}
+    {% set type = 'text' %}
+    {% set value = property_value %}
+    {% set attr = attr|merge({ 'data-autocomplete': '{ id_value: "'~id_value~'", url: "'~url~'", min_length: '~min_length~' }' }) %}
+
+    <div class="input-prepend" style="width:100%;">
+        <span class="add-on" id="{{ id_value~"-add-on" }}"></span>
+        {{ block('form_widget_simple') }}
+     </div>
+
+{% endspaceless %}
+{% endblock %}

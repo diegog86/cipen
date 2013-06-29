@@ -33,6 +33,7 @@ class Internacion
         'Obito'=>'Obito'
      );
 
+    
 
     /**
      * @var integer $id
@@ -66,8 +67,6 @@ class Internacion
      * @ORM\Column(name="numeroObraSocialPaciente", type="string", length=100, nullable=true)
      */
     private $numeroObraSocialPaciente;
-    
-    
 
     /**
      * @var integer $prestador
@@ -105,6 +104,14 @@ class Internacion
      * @ORM\OrderBy({"fecha"="DESC"})
      */
     private $internacionPrestacion;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionMedicamento", mappedBy="internacion")
+     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"fecha"="DESC"})
+     */
+    private $internacionMedicamento;
+    
     
     /**
      *
@@ -146,7 +153,6 @@ class Internacion
     private $informacionExtraValue;
     
     
-    
     /**
      * @var integer $diagnostico
      *
@@ -167,17 +173,11 @@ class Internacion
      * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\Habitacion", mappedBy="internacion")
      */
     private $habitacion;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\Medicamento", mappedBy="internacion")
-     */
-    private $medicamento;
     
     /**
      * @ORM\OneToMany(targetEntity="Cipen\FacturaBundle\Entity\FacturaInternacion", mappedBy="internacion")
      */
     private $facturaInternacion;
-
     
     /**
      *
@@ -185,9 +185,17 @@ class Internacion
      */
     private $factura;
 
+    /**
+     * @ORM\column(name="numero", type="integer")
+     * @assert\NotBlank(message="Por favor, ingrese numero de internación")
+     */
+    private $numero;
     
-    public function getNumero(){
-    	return "INT".str_pad($this->getId(),5,0,STR_PAD_LEFT);
+   
+    
+    
+    public function getNumeroFormateado(){
+    	return "INT".str_pad($this->getNumero(),5,0,STR_PAD_LEFT);
     }
     
     /**
@@ -209,8 +217,8 @@ class Internacion
         $this->internacionPrestacion = new \Doctrine\Common\Collections\ArrayCollection();
         $this->diagnosticoEgreso = new \Doctrine\Common\Collections\ArrayCollection();
         $this->habitacion = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->medicamento = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->factura = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->internacionMedicamento = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->factura = new \Doctrine\Common\Collections\ArrayCollection();        
     }
     
     /**
@@ -367,7 +375,7 @@ class Internacion
      * @param \Cipen\PersonalBundle\Entity\Personal $prestador
      * @return Internacion
      */
-    public function setPrestador(\Cipen\PersonalBundle\Entity\Personal $prestador)
+    public function setPrestador(\Cipen\PersonalBundle\Entity\Personal $prestador = null)
     {
         $this->prestador = $prestador;
     
@@ -390,7 +398,7 @@ class Internacion
      * @param \Cipen\PersonalBundle\Entity\Personal $prescriptor
      * @return Internacion
      */
-    public function setPrescriptor(\Cipen\PersonalBundle\Entity\Personal $prescriptor)
+    public function setPrescriptor(\Cipen\PersonalBundle\Entity\Personal $prescriptor = null)
     {
         $this->prescriptor = $prescriptor;
     
@@ -540,36 +548,36 @@ class Internacion
     }
 
     /**
-     * Add medicamento
+     * Add internacionMedicamento
      *
-     * @param \Cipen\InternacionBundle\Entity\Medicamento $medicamento
+     * @param \Cipen\InternacionBundle\Entity\InternacionMedicamento $medicamento
      * @return Internacion
      */
-    public function addMedicamento(\Cipen\InternacionBundle\Entity\Medicamento $medicamento)
+    public function addInternacionMedicamento(\Cipen\InternacionBundle\Entity\InternacionMedicamento $internacionMedicamento)
     {
-        $this->medicamento[] = $medicamento;
+        $this->internacionMedicamento[] = $internacionMedicamento;
     
         return $this;
     }
 
     /**
-     * Remove medicamento
+     * Remove internacionMedicamento
      *
-     * @param \Cipen\InternacionBundle\Entity\Medicamento $medicamento
+     * @param \Cipen\InternacionBundle\Entity\InternacionMedicamento $internacionMedicamento
      */
-    public function removeMedicamento(\Cipen\InternacionBundle\Entity\Medicamento $medicamento)
+    public function removeInternacionMedicamento(\Cipen\InternacionBundle\Entity\InternacionMedicamento $internacionMedicamento)
     {
-        $this->medicamento->removeElement($medicamento);
+        $this->internacionMedicamento->removeElement($internacionMedicamento);
     }
 
     /**
-     * Get medicamento
+     * Get internacionMedicamento
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMedicamento()
+    public function getInternacionMedicamento()
     {
-        return $this->medicamento;
+        return $this->internacionMedicamento;
     }
 
     /**
@@ -728,5 +736,74 @@ class Internacion
     public function getInformacionExtra()
     {
         return $this->informacionExtra;
+    }
+
+    /**
+     * Set informacionExtraLabel
+     *
+     * @param string $informacionExtraLabel
+     * @return Internacion
+     */
+    public function setInformacionExtraLabel($informacionExtraLabel)
+    {
+        $this->informacionExtraLabel = $informacionExtraLabel;
+    
+        return $this;
+    }
+
+    /**
+     * Get informacionExtraLabel
+     *
+     * @return string 
+     */
+    public function getInformacionExtraLabel()
+    {
+        return $this->informacionExtraLabel;
+    }
+
+    /**
+     * Set informacionExtraValue
+     *
+     * @param string $informacionExtraValue
+     * @return Internacion
+     */
+    public function setInformacionExtraValue($informacionExtraValue)
+    {
+        $this->informacionExtraValue = $informacionExtraValue;
+    
+        return $this;
+    }
+
+    /**
+     * Get informacionExtraValue
+     *
+     * @return string 
+     */
+    public function getInformacionExtraValue()
+    {
+        return $this->informacionExtraValue;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     * @return Internacion
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+    
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer 
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 }

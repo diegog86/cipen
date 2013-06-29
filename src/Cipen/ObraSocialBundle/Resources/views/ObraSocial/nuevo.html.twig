@@ -12,7 +12,7 @@
     
 {% block admin_content %}
         
-    <form class="form-horizontal" method="POST" action="{{ path('obra_social_crear') }}" >
+    <form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('obra_social_crear') }}" >
 
         {% include 'CipenObraSocialBundle:ObraSocial:_form.html.twig' %}               
         

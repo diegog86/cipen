@@ -18,6 +18,14 @@ factura_eliminar:
   pattern:  /{id}/eliminar/
   defaults: { _controller: CipenFacturaBundle:Factura:eliminar }
 
-factura_imprimir:
-  pattern:  /{id}/imprimir/
-  defaults: { _controller: CipenFacturaBundle:Factura:imprimir } 
+factura_imprimir_resumen_individual:
+  pattern:  /{id}/imprimir-resumen-individual/
+  defaults: { _controller: CipenFacturaBundle:Factura:imprimirResumenIndividual } 
+
+factura_imprimir_resumen_fiscal_individual:
+  pattern:  /{id}/imprimir-resumen-fiscal-individual/
+  defaults: { _controller: CipenFacturaBundle:Factura:imprimirResumenFiscalIndividual } 
+
+factura_imprimir_resumen_general:
+  pattern:  /{id}/imprimir-resumen-general/
+  defaults: { _controller: CipenFacturaBundle:Factura:imprimirResumenGeneral } 

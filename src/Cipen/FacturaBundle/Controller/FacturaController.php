@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use Cipen\FacturaBundle\Entity\FacturaInternacion;
+use Cipen\ObraSocialBundle\Entity\ObraSocial;
 
 use Cipen\FacturaBundle\Entity\Factura;
 use Cipen\FacturaBundle\Form\FacturaType;
@@ -16,8 +17,16 @@ class FacturaController extends Controller
 {
     public function listarAction()
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $datos["entities"] = $em->getRepository('CipenFacturaBundle:Factura')->findAll();
+        $em = $this->getDoctrine()->getManager();
+        $dql   = "SELECT e FROM CipenFacturaBundle:Factura e";
+        $query = $em->createQuery($dql);
+
+        $paginator  = $this->get('knp_paginator');
+        $datos["entities"] = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            15
+        );
         
     	return $this->render('CipenFacturaBundle:Factura:listar.html.twig',$datos);
     
@@ -26,67 +35,108 @@ class FacturaController extends Controller
     public function crearAction(Request $request)
     {
         $entity = new Factura();
-        $repositoryInternacion = $this->getDoctrine()->getRepository('CipenInternacionBundle:Internacion');
+        
         $form = $this->createForm(new FacturaType(), $entity);
+        $repositoryInternacion = $this->getDoctrine()->getRepository('CipenInternacionBundle:Internacion');        
         
         if ($request->isMethod("POST")) {
-        
-            $form->bind($request);
-            
-            if ($form->isValid ()) {
-                            
+
+            $form->bind($request);           
+
+            if ($form->isValid ()) {                         
+
+                // persisto la nueva factura que se va a crear
                 $em = $this->getDoctrine()->getEntityManager();
-                
-                $internaciones = $repositoryInternacion->getInternacionesByFactura($entity);
                 $em->persist($entity);
-                
-                if (count($internaciones) > 0) {
-                    $j = 0;
-                    foreach($internaciones as $internacion) {
+
+                //traigo las internaciones de las prestaciones a facturar
+                $internacionesDePrestaciones = $repositoryInternacion->getInternacionesPrestacionesByFactura($entity);
+                //traigo las internaciones de los medicamentos a facturar
+                $internacionesDeMedicamento = $repositoryInternacion->getInternacionesMedicamentoByFactura($entity);
+
+                //array en el que se guardan las internaciones que intervienen en la facturacion
+                $internacionesProcesadas = array();
+                                
+                //proceso las internaciones que tienen prestaciones a facturar
+                if (count($internacionesDePrestaciones) > 0) {
+
+                    foreach($internacionesDePrestaciones as $internacion) {
+                        
+                        $j = $internacion->getId();
                         
                         $facturaInternacion[$j] = new FacturaInternacion();
                         $facturaInternacion[$j]->setFactura($entity);
                         $facturaInternacion[$j]->setInternacion($internacion);
-                        $em->persist($facturaInternacion[$j]);
+                        $em->persist($facturaInternacion[$j]);             
+                        //guardo el id de la internacion para que no se repita cuando procese las internaciones en base 
+                        //a los medicamentos facturados
+                        $internacionesProcesadas[] = $internacion->getId();
+
+                        // seteo toda las prestaciones de la internación que se factura para que no se vuelvan a repetir en
+                        // otra facturación
+                        foreach($internacion->getInternacionPrestacion() as $internacionPrestacion){
+                            $internacionPrestacion->setFactura($facturaInternacion[$j]);
+                            $em->persist($internacionPrestacion);
+                        }                         
                         
-                        foreach ($internacion->getInternacionPrestacion() as $prestacion){
-                            
-                            if (($prestacion->getFecha() >= $entity->getDesde () and $prestacion->getFecha() <= $entity->getHasta() and $prestacion->getFactura() == null) and (($entity->getObraSocial () == null and $prestacion->getConObraSocial() == false) or ($entity->getObraSocial () != null and $prestacion->getConObraSocial()))) {
-                                
-                                $prestacion->setFactura($facturaInternacion[$j]);
-                                $em->persist($prestacion);
-                                
-                            }
-                            
+                    }                                      
+                    
+                }
+
+                //proceso las internaciones que tienen medicamentos a facturar                
+                if (count($internacionesDeMedicamento) > 0) {
+
+                    foreach($internacionesDeMedicamento as $internacion) {
+                        
+                        $j = $internacion->getId();                        
+                        
+                        // agrego solo las internacion que  no fueeron agregadas cuando se facturaron las prestaciones
+                        if (!in_array ($internacion->getId(), $internacionesProcesadas)) {
+                            $facturaInternacion[$j] = new FacturaInternacion();
+                            $facturaInternacion[$j]->setFactura($entity);
+                            $facturaInternacion[$j]->setInternacion($internacion);
+                            $em->persist($facturaInternacion[$j]);  
+                            $internacionesProcesadas[] = $internacion->getId();                            
+                        }
+
+                        // seteo toda las prestaciones de la internación que se factura para que no se vuelvan a repetir en
+                        // otra facturación                        
+                        foreach($internacion->getInternacionMedicamento() as $internacionMedicamento){
+                            $internacionMedicamento->setFactura($facturaInternacion[$j]);
+                            $em->persist($internacionMedicamento);                            
                         }
                         
                     }
 
-                    $em->flush();
-                    
-                    return $this->redirect($this->generateUrl('factura_ver',array('id'=>$entity->getId())));                
-                    
-                } else {
-                    
-                    $msj =
-                    'No hay prestaciones, creadas desde el <strong>'.
-                        $entity->getDesde ()->format ('d/m/Y').
-                        '</strong> hasta el <strong>'.$entity->getDesde ()->format ('d/m/Y') ;
-                    
-                    if ($entity->getObraSocial ()) {
-                        $msj .= "</strong> con obra social <strong>".$entity->getObraSocial();
-                    } else {
-                        $msj .= "</strong> sin obra social <strong>".$entity->getObraSocial();
-                    }
-                    
-                    $msj .= "</strong>, para facturar.";
+                }                               
 
-                    $this->get('session')->setFlash('alert',$msj);
+            } 
+            
+            if(count($internacionesProcesadas) == 0){
+
+                $msj = 'No hay prestaciones o medicamentos a facturar en el periodo <strong>'.
+                        $entity->getPeriodo ()->format ('m/Y') ;
+
+                if ($entity->getObraSocial ()) {
+                    $msj .= "</strong> con obra social <strong>".$entity->getObraSocial();
+                } else {
+                    $msj .= "</strong> sin obra social <strong>".$entity->getObraSocial();
                 }
+
+                $msj .= "</strong>";
+
+                $this->get('session')->setFlash('alert',$msj);
+
+            } else {
+
+                $em->flush();
+                return $this->redirect($this->generateUrl('factura_ver',array('id'=>$entity->getId())));                 
                 
             }
-            
+
         }
+            
+
 
         $datos["entity"] = $entity;
         $datos["form"] = $form->createView ();
@@ -94,6 +144,26 @@ class FacturaController extends Controller
         return $this->render('CipenFacturaBundle:Factura:nuevo.html.twig', $datos);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         
     public function verAction($id)
     {
@@ -118,7 +188,6 @@ class FacturaController extends Controller
     
     private function createArrayPrestaciones($facturaInternacion,$factura)
     {
-                
         $tipoTotal = $this->getTipoTotal($factura);
         $arrayPrestaciones = array();
         $arrayPrestacionesProcesadas = array();
@@ -183,8 +252,14 @@ class FacturaController extends Controller
             $arrayPrestaciones[$key]['total'] = $arrayPrestacion['cantidad'] * $arrayPrestacion['valor_unitario'];
             
             if($tipoTotal == 'porcentaje_10_90') {
-                $arrayPrestaciones[$key]['porcentaje_10'] = round((($arrayPrestaciones[$key]['total'] * 10) / 100), 2 ) ;
-                $arrayPrestaciones[$key]['porcentaje_90'] = round((($arrayPrestaciones[$key]['total'] * 90) / 100), 2 ) ;
+                if ($arrayPrestacion['tipo'] == "modulo" and $arrayPrestacion['object']->getAnularFacturacion10y90()) {
+                    $arrayPrestaciones[$key]['porcentaje_10'] = 0 ;
+                    $arrayPrestaciones[$key]['porcentaje_90'] = round($arrayPrestaciones[$key]['total'] , 2 ) ;
+                    
+                } else {                    
+                    $arrayPrestaciones[$key]['porcentaje_10'] = round((($arrayPrestaciones[$key]['total'] * 10) / 100), 2 ) ;
+                    $arrayPrestaciones[$key]['porcentaje_90'] = round((($arrayPrestaciones[$key]['total'] * 90) / 100), 2 ) ;                    
+                }
             }
             
         }               
@@ -208,15 +283,12 @@ class FacturaController extends Controller
     
     private function getTipoTotal($factura) {
         
-        //indica como deben ser los totales segun la obra social
+        //indica como deben ser los totales segun la forma de facturacion de la obra social
         $tipoTotal = "";    
-        $osFacturacion = $factura->getObraSocial() ? strtolower($factura->getObraSocial()->getNombre()) : null;
+        $osFacturacion = $factura->getObraSocial()->getTipoTotalFactura();
+        
         switch($osFacturacion) {
-            case 'apos':
-                $tipoTotal = "porcentaje_10_90";
-            break;
-
-            case 'apos - adherente particular':
+            case 1:
                 $tipoTotal = "porcentaje_10_90";
             break;
         
@@ -278,7 +350,7 @@ class FacturaController extends Controller
     }
     
 
-    public function imprimirAction($id)
+    public function imprimirResumenIndividualAction($id)
     {
         $datos = $this->getFactura($id);
         $html = $this->renderView('CipenFacturaBundle:Factura:imprimir_resumen_individual.pdf.twig',$datos);
@@ -303,6 +375,56 @@ class FacturaController extends Controller
            
     }
     
+    public function imprimirResumenFiscalIndividualAction($id)
+    {
+        $datos = $this->getFactura($id);
+        $html = $this->renderView('CipenFacturaBundle:Factura:imprimir_resumen_fiscal_individual.pdf.twig',$datos);
+        //$header = $this->renderView('ComunComunBundle:Default:header_cipen.html.twig');
+        $fileName = "factura-".$datos['factura']->getId().".pdf";
+        
+        $mpdf = new \Comun\ComunBundle\Util\mPdf('','',0,'',15,15,16,25,0,9);
+
+        $mpdf->charset_in='UTF-8';
+        $mpdf->ignore_invalid_utf8 = true;
+        $mpdf->SetDisplayMode('fullwidth');
+        $mpdf->SetCompression(false);
+        //$mpdf->SetHTMLHeader($header);
+        //$mpdf->AddPage('','', 0, '', 15, margin-left, margin-right, margin-top, margin-botom, 9, 'L');        
+        $mpdf->AddPage('','', 0, '', 15, 15, 15, 38, 2, 9, 'L');        
+
+        $stylesheet = file_get_contents('http://'.$this->getRequest()->getHost().'/cipen/web/bundles/comuncomun/css/factura-pdf.css');
+
+        $mpdf->WriteHTML($stylesheet,1);
+        $mpdf->WriteHTML($html,2);
+
+        return $mpdf->Output($fileName, "D");
+           
+    }
+    
+    public function imprimirResumenGeneralAction($id)
+    {
+        $datos = $this->getFactura($id);
+        $html = $this->renderView('CipenFacturaBundle:Factura:imprimir_resumen_general.pdf.twig',$datos);
+        $header = $this->renderView('ComunComunBundle:Default:header_cipen.html.twig');
+        $fileName = "factura-".$datos['factura']->getId().".pdf";
+        
+        $mpdf = new \Comun\ComunBundle\Util\mPdf('','',0,'',15,15,16,25,0,9);
+
+        $mpdf->charset_in='UTF-8';
+        $mpdf->ignore_invalid_utf8 = true;
+        $mpdf->SetDisplayMode('fullwidth');
+        $mpdf->SetCompression(false);
+        $mpdf->SetHTMLHeader($header);
+        $mpdf->AddPage();        
+
+        $stylesheet = file_get_contents('http://'.$this->getRequest()->getHost().'/cipen/web/bundles/comuncomun/css/factura-pdf.css');
+
+        $mpdf->WriteHTML($stylesheet,1);
+        $mpdf->WriteHTML($html,2);
+
+        return $mpdf->Output($fileName, "D");
+           
+    }    
     
     private function getFactura($id) {
         

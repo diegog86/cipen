@@ -14,23 +14,26 @@ obra_social_eliminar:
     pattern:  /{id}/eliminar/
     defaults: { _controller: "CipenObraSocialBundle:ObraSocial:eliminar" }
 
+obra_social_factura_editar:
+    pattern:  /editar/{id}/factura/
+    defaults: { _controller: "CipenObraSocialBundle:ObraSocial:editarFactura" }  
 
-unidad:
+obra_social_unidad:
   pattern: /{obraSocialId}/unidad/
   defaults: {_controller: "CipenObraSocialBundle:Unidad:listar"}
 
-unidad_crear:
+obra_social_unidad_crear:
     pattern:  /{obraSocialId}/unidad/crear/
     defaults: { _controller: "CipenObraSocialBundle:Unidad:crear" }
 
-unidad_editar:
+obra_social_unidad_editar:
     pattern:  /{obraSocialId}/unidad/{id}/editar/
     defaults: { _controller: "CipenObraSocialBundle:Unidad:editar" }
 
-unidad_eliminar:
+obra_social_unidad_eliminar:
     pattern:  /{obraSocialId}/unidad/{id}/eliminar/
     defaults: { _controller: "CipenObraSocialBundle:Unidad:eliminar" }
 
-unidad_get_por_obra_socia:
+obra_social_unidad_get_por_obra_social:
   pattern: /unidad/getporobrasocial
   defaults: {_controller: CipenObraSocialBundle:Unidad:getUnidadPorObraSocial}

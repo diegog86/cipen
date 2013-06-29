@@ -196,7 +196,7 @@ $.fn.optionTree = function(tree, options) {
                 options.preselect[cleanName(name)] = null;
             }
             
-            $('select').select2(); 
+            //$('select').select2(); 
 
         } else if (options.set_value_on === 'leaf') { // single option is selected by the user (function called via onchange event())
             if (options.indexed) {

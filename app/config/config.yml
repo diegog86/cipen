@@ -2,10 +2,11 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: doctrine_extensions.yml }    
+    - { resource: "@ComunComunBundle/Resources/config/services.yml" }  #servicio del bundle comun    
 
 framework:
     #esi:             ~
-    #translator:      { fallback: "%locale%" }
+    translator:      ~
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -23,6 +24,9 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+      resources:
+        - 'ComunComunBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -60,7 +64,11 @@ doctrine:
               type: annotation
               alias: Gedmo
               prefix: Gedmo\Tree\Entity
-              dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"        
+              dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+        dql:
+          datetime_functions:
+            month: "Comun\ComunBundle\DoctrineExtensions\Month"
+            year:  "Comun\ComunBundle\DoctrineExtensions\Year"
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -69,10 +77,6 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-genemu_form:
-    date: ~
-    select2: ~
 
 ps_pdf:
     nodes_file: ~
@@ -86,3 +90,31 @@ ps_pdf:
     markdown_stylesheet_filepath: ~
     markdown_document_template_filepath: ~
     document_parser_type: ~
+
+knp_paginator:
+    page_range: 7  # número de páginas que se muestran en el paginador
+
+    default_options:
+        # los siguientes tres parámetros permiten "traducir" el paginador
+        # puedes utilizar por ejemplo: 'pagina', 'ordenar' y 'direccion'
+        page_name:           page
+        sort_field_name:     sort
+        sort_direction_name: direction
+
+        # sólo incluir resultados diferentes (útil cuando haces consultas GROUP BY)
+        distinct: true
+
+    template:
+        # estas opciones configuran la plantilla utilizada para la paginación
+        # y para los controles que premiten reordenar los resultados
+        pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_pagination.html.twig
+        sortable:   KnpPaginatorBundle:Pagination:sortable_link.html.twig
+
+
+fos_user:
+    # tipo de ORM/ODB que utilizas (también puede ser 'mongodb', 'couchdb' y 'propel')
+    db_driver:     orm
+    # el nombre de tu firewall
+    firewall_name: main
+    # el namespace de tu clase 'User' específica
+    user_class:    Cipen\UsuarioBundle\Entity\Usuario

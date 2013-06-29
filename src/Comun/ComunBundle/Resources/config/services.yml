@@ -2,6 +2,13 @@ parameters:
 #    util_comun.example.class: Util\ComunBundle\Example
 
 services:
-#    util_comun.example:
-#        class: %util_comun.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    form.type.autocomplete:
+      class: Comun\ComunBundle\Form\Type\AutocompleteType
+      arguments: [ '@doctrine.orm.entity_manager' ]
+      tags: [{ name: form.type, alias: autocomplete }]
+
+    form.type.entity.hidden:
+      class: Comun\ComunBundle\Form\Type\EntityHiddenType
+      arguments: [ '@doctrine.orm.entity_manager' ]
+      tags: [{ name: form.type, alias: entity_hidden }]
+

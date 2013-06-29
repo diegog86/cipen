@@ -61,7 +61,7 @@ class Modulo
      * @ORM\JoinTable(name="Prestacion__Modulo_Acto_Unidad")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $ActoUnidad;
+    private $actoUnidad;
 
     /**
      * @ORM\Column(name="anularFacturacion10y90", type="boolean")
@@ -73,7 +73,7 @@ class Modulo
      */
     public function __construct()
     {
-        $this->ActoUnidad = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->actoUnidad = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -186,7 +186,7 @@ class Modulo
      */
     public function addActoUnidad(\Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad = null)
     {
-        $this->ActoUnidad[] = $actoUnidad;
+        $this->actoUnidad[] = $actoUnidad;
     
         return $this;
     }
@@ -198,7 +198,7 @@ class Modulo
      */
     public function removeActoUnidad(\Cipen\PrestacionBundle\Entity\ActoUnidad $actoUnidad)
     {
-        $this->ActoUnidad->removeElement($actoUnidad);
+        $this->actoUnidad->removeElement($actoUnidad);
     }
 
     /**
@@ -208,7 +208,7 @@ class Modulo
      */
     public function getActoUnidad()
     {
-        return $this->ActoUnidad;
+        return $this->actoUnidad;
     }
     
     public function __toString () {

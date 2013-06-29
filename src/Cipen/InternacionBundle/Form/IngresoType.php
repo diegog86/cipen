@@ -5,21 +5,32 @@ namespace Cipen\InternacionBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Cipen\InternacionBundle\Entity\Internacion;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class IngresoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('prestador','entity',array(
-                'class'=>'Cipen\\PersonalBundle\\Entity\\Personal',
-                'empty_value'=>''
-                ))
-            ->add('prescriptor','entity',array(
-                'class'=>'Cipen\\PersonalBundle\\Entity\\Personal',
-                'empty_value'=>''
-                ))
-            ->add('diagnosticoIngreso')
+            ->add('numero')        
+            ->add('prestador','autocomplete', array(
+                'class' => 'CipenPersonalBundle:Personal',
+                'url' => $options['urlPersonal'],
+            ))
+            ->add('prescriptor','autocomplete', array(
+                'class' => 'CipenPersonalBundle:Personal',
+                'url' => $options['urlPersonal'],
+            ))
+            ->add('diagnosticoIngreso','collection',array(
+                'type' => 'autocomplete',
+                'options' => array(
+                    'class' => 'CipenDiagnosticoBundle:Diagnostico',
+                    'url' => $options['urlDiagnostico'],                
+                 ),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+            ))
             ->add('fechaHoraIngreso', 'date', array(
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy HH:mm',
@@ -33,10 +44,9 @@ class IngresoType extends AbstractType
         
             if($builder->getData ()->getId() == null) {
                 $builder
-                    ->add('paciente','genemu_jqueryselect2_entity',array(
-                    'class'=>'Cipen\\PacienteBundle\\Entity\\Paciente',
-                    'attr'=>array('data-genemu'=>'select2'),
-                    'empty_value'=>''
+                    ->add('paciente','autocomplete',array(
+                    'class'=>'CipenPacienteBundle:Paciente',
+                    'url' => $options['urlPaciente'],
                     ));
             }
     }
@@ -44,6 +54,17 @@ class IngresoType extends AbstractType
     public function getName()
     {
         return 'internacion_ingreso';
+    }
+    
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Cipen\InternacionBundle\Entity\Internacion',
+        ));
+        
+        $resolver->setRequired(array('urlPersonal','urlDiagnostico','urlPaciente'))
+
+            ;
     }
     
 }

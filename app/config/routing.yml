@@ -1,3 +1,7 @@
+cipen_usuario:
+    resource: "@CipenUsuarioBundle/Resources/config/routing.yml"
+    prefix:   /
+
 cipen_factura:
     resource: "@CipenFacturaBundle/Resources/config/routing.yml"
     prefix:   /factura

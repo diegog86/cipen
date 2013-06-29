@@ -8,30 +8,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Cipen\PrestacionBundle\Entity\Acto;
 use Cipen\PrestacionBundle\Form\ActoType;
 
-/**
- * Paciente controller.
- *
- */
 class ActoController extends Controller
 {
-    /**
-     * Lists all Paciente entities.
-     *
-     */
     public function listarAction()
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $datos["entities"] = $em->getRepository('CipenPrestacionBundle:Acto')->findAll();
+        $em = $this->getDoctrine()->getManager();
+        $dql   = "SELECT e FROM CipenPrestacionBundle:Acto e";
+        $query = $em->createQuery($dql);
+
+        $paginator  = $this->get('knp_paginator');
+        $datos["entities"] = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            15
+        );        
 
     	return $this->render('CipenPrestacionBundle:Acto:listar.html.twig',$datos);
     
     }
 
-    
-    /**
-     * Displays a form to create a new Paciente entity.
-     *
-     */
     public function crearAction(Request $request)
     {
         $entity = new Acto();
@@ -47,10 +42,13 @@ class ActoController extends Controller
                 $em->persist($entity);
                 $em->flush();
                 
+                $request->getSession()->getFlashBag()->add('alert-success','El acto médico fue creado con éxito.');           
+    
                 return $this->redirect($this->generateUrl('acto_editar',array('id'=>$entity->getId())));
                 
             }
             
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo crear acto médico.');                                         
         }
 
         $datos["entity"] = $entity;
@@ -59,10 +57,6 @@ class ActoController extends Controller
         return $this->render('CipenPrestacionBundle:Acto:nuevo.html.twig', $datos);
     }
 
-    /**
-     * Creates a new Paciente entity.
-     *
-     */
     public function editarAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -82,7 +76,14 @@ class ActoController extends Controller
                 
                 $em->persist($entity);
                 $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('alert-success','El acto médico fue actualizado con éxito.');   
+                
+                return $this->redirect($this->generateUrl('acto_editar',array('id'=>$entity->getId())));
+                
             }
+            
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo actualizar acto médico.');                      
             
         }
 
@@ -93,13 +94,7 @@ class ActoController extends Controller
        
     }
 
-  
-
-    /**
-     * Deletes a Paciente entity.
-     *
-     */
-    public function eliminarAction($id)
+    public function eliminarAction($id,Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('CipenPrestacionBundle:Acto')->find($id);
@@ -110,6 +105,8 @@ class ActoController extends Controller
 
         $em->remove($entity);
         $em->flush();
+        
+        $request->getSession()->getFlashBag()->add('alert-success','El acto médico fue eliminado con éxito.');   
 
         return $this->redirect($this->generateUrl('acto'));
     }

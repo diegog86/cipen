@@ -7,7 +7,7 @@
         <li><a href="{{ path('modulo_agregar_acto', { moduloId: entity.id }) }}">Actos médicos</a></li>
     </ul>  
         
-    <form class="form-horizontal" method="POST" action="{{ path('modulo_editar', {'id':entity.id}) }}">
+    <form novalidate="novalidate" class="form-horizontal" method="POST" action="{{ path('modulo_editar', {'id':entity.id}) }}">
 
         {% include 'CipenPrestacionBundle:Modulo:_form.html.twig' %}        
         

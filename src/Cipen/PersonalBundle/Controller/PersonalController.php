@@ -9,30 +9,27 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Cipen\PersonalBundle\Entity\Personal;
 use Cipen\PersonalBundle\Form\PersonalType;
 
-/**
- * Paciente controller.
- *
- */
+
 class PersonalController extends Controller
 {
-    /**
-     * Lists all Paciente entities.
-     *
-     */
     public function listarAction()
-    {
-    	$em = $this->getDoctrine()->getEntityManager();
-        $datos["entities"] = $em->getRepository('CipenPersonalBundle:Personal')->findAll();
+    {        
+        $em = $this->getDoctrine()->getManager();
+        $dql   = "SELECT e FROM CipenPersonalBundle:Personal e order by e.apellido asc,e.nombre asc";
+        $query = $em->createQuery($dql);
+
+        $paginator  = $this->get('knp_paginator');
+        $datos["entities"] = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            15
+        );
         
     	return $this->render('CipenPersonalBundle:Personal:listar.html.twig',$datos);
     
     }
 
     
-    /**
-     * Displays a form to create a new Paciente entity.
-     *
-     */
     public function crearAction(Request $request)
     {
         $entity = new Personal();
@@ -40,21 +37,25 @@ class PersonalController extends Controller
         
         if ($request->isMethod("POST")) {
             
-            $form->bind($request);
+            $form->bind($request);            
             
             if ($form->isValid ()) {
                 
                 $entity = $this->procesar($request, $entity);
                 
+                $request->getSession()->getFlashBag()->add('alert-success','El miembro del personal fue creada con éxito.');                   
                 return $this->redirect($this->generateUrl('personal_editar',array('id'=>$entity->getId())));
                 
             }
             
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo crear miembro del personal');          
         }
 
         $datos["entity"] = $entity;
-        $datos["form"] = $form->createView ();
-        $datos['tipoPreselect'] = array();
+        $datos["form"] = $form->createView ();        
+        $datos['tipoPreselect'] = $this->getDoctrine()
+                                       ->getRepository ('CipenPersonalBundle:Tipo')
+                                       ->getRamaForTipo($entity->getTipo());    
         
         return $this->render('CipenPersonalBundle:Personal:nuevo.html.twig', $datos);
     }
@@ -78,23 +79,20 @@ class PersonalController extends Controller
             if ($form->isValid ()) {
                 
                 $entity = $this->procesar($request, $entity);
-                
+
+                $request->getSession()->getFlashBag()->add('alert-success','El miembro del personal fue actualizado con éxito.');      
                 return $this->redirect($this->generateUrl('personal_editar',array('id'=>$entity->getId())));               
                 
             }
             
+            $request->getSession()->getFlashBag()->add('alert-error','ERROR! No se pudo actualizar miembro del personal');                      
         }
 
         $datos["entity"] = $entity;
         $datos["form"] = $form->createView ();
         
-        $ramaTipos = $em->getRepository ('CipenPersonalBundle:Tipo')->getPath($entity->getTipo());
-        $tiposPreselect = array();
-        foreach ($ramaTipos as $tipo) {
-            $tiposPreselect[] = (string) $tipo->getId();         
-        }
         
-        $datos['tipoPreselect'] = $tiposPreselect;
+        $datos['tipoPreselect'] = $em->getRepository ('CipenPersonalBundle:Tipo')->getRamaForTipo($entity->getTipo());
         
         return $this->render('CipenPersonalBundle:Personal:editar.html.twig', $datos);    
        
@@ -102,34 +100,23 @@ class PersonalController extends Controller
     
     private function procesar($request,$entity) 
     {
-
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        $form = $request->request->get('personal');
-        $tipoId = $form["tipoId"];
-        
-        $tipo = $em->getRepository("CipenPersonalBundle:Tipo")->find($tipoId);
-        $entity->setTipo($tipo);
-               
+        $em = $this->getDoctrine()->getManager();               
         $em->persist($entity);
         $em->flush();    
         
         return $entity;
-        
     }
 
-    /**
-     * Deletes a Paciente entity.
-     *
-     */
-    public function eliminarAction($id)
+    public function eliminarAction($id,Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('CipenPersonalBundle:Personal')->find($id);
 
         if (!$entity) {
-        throw $this->createNotFoundException('No se encontro registro.');
+            throw $this->createNotFoundException('No se encontro registro.');
         }
+        
+        $request->getSession()->getFlashBag()->add('alert-success','El miembro del personal fue eliminado con éxito.');        
 
         $em->remove($entity);
         $em->flush();
@@ -156,5 +143,31 @@ class PersonalController extends Controller
         return new JsonResponse($tiposFormateados);
         
     }
+    
+    public function ajaxAutocompleteAction(Request $request) 
+    {
+              	
+        $term = $request->query->get('term');
+        $em = $this->getDoctrine()->getManager();
+        
+        $empleados = $em
+            ->createQuery('select p from CipenPersonalBundle:Personal p where p.nombre LIKE :term or p.apellido LIKE :term')
+            ->setParameter('term',$term.'%')->getResult();
+
+        $data = array();
+        foreach ($empleados as $empleado){
+            
+            if($empleado->getDni()){
+                $label =  $empleado->getDni()."-".$empleado->getApellido().", ".$empleado->getNombre();
+            } else {
+                $label =  $empleado->getApellido().", ".$empleado->getNombre();
+            }
+            
+            $data[] = array($empleado->getId(), $label);
+        }
+
+        return JsonResponse::create($data);   
+        
+    }    
 
 }
