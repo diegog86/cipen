@@ -33,7 +33,9 @@ class FacturaType extends AbstractType
                 'required'=>false,
                 'empty_value'=>$builder->getData ()->getNombre(),
                 'query_builder'=>function(EntityRepository $er){
-                    return $er->createQueryBuilder('og')->where('og.tipoGenerica = :tipoGenerica')->setParameter ('tipoGenerica', OrganizacionGenerica::DESTINATARIO_OBRA_SOCIAL);
+                    return $er->createQueryBuilder('og')
+                              ->where('og.tipoGenerica = :tipoGenerica')
+                              ->setParameter ('tipoGenerica', OrganizacionGenerica::DESTINATARIO_OBRA_SOCIAL);
                 }
             ))
             ->add('coberturaMedicamentoCatastro')
@@ -41,6 +43,7 @@ class FacturaType extends AbstractType
             ->add('dividePorTipoInternacion',null,array('required'=>false))
             ->add('sufijoMatriculaPersonal')
             ->add('tiempoAcreditacionFactura')
+            ->add('informacionExtraLabel')
             ;
     }
 

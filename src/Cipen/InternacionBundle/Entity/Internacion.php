@@ -21,9 +21,12 @@ class Internacion
         'Enfermedad profesional' => 'Enfermedad profesional'
     );
 
+    const TIPO_INTERNACION_CLINICA = 'clinica';
+    const TIPO_INTERNACION_CIRUGIA = 'cirugia';
+    
     public static $tiposInternaciones = array(
-        'clinica' => 'Clinica',
-        'cirugia' => 'Cirugía',
+        self::TIPO_INTERNACION_CLINICA => 'Clinica',
+        self::TIPO_INTERNACION_CIRUGIA => 'Cirugía',
     );
     
     public static $tiposAltas = array(

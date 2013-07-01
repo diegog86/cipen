@@ -24,7 +24,7 @@ factura_imprimir_resumen_individual:
 
 factura_imprimir_resumen_fiscal_individual:
   pattern:  /{id}/imprimir-resumen-fiscal-individual/
-  defaults: { _controller: CipenFacturaBundle:Factura:imprimirResumenFiscalIndividual } 
+  defaults: { _controller: CipenFacturaBundle:Factura:imprimirFacturaFiscal } 
 
 factura_imprimir_resumen_general:
   pattern:  /{id}/imprimir-resumen-general/

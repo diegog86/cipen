@@ -251,9 +251,4 @@ class PrestacionController extends Controller
         return $this->redirect($this->generateUrl ('internacion_prestacion', array('internacionId'=>$internacionId)));
     }
 
-    
-    
-    
-    
-    
 }

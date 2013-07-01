@@ -4,6 +4,7 @@ namespace Cipen\FacturaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 use Cipen\FacturaBundle\Entity\FacturaInternacion;
 use Cipen\ObraSocialBundle\Entity\ObraSocial;
@@ -75,7 +76,7 @@ class FacturaController extends Controller
                         // seteo toda las prestaciones de la internación que se factura para que no se vuelvan a repetir en
                         // otra facturación
                         foreach($internacion->getInternacionPrestacion() as $internacionPrestacion){
-                            $internacionPrestacion->setFactura($facturaInternacion[$j]);
+                            $internacionPrestacion->setFactura($entity);
                             $em->persist($internacionPrestacion);
                         }                         
                         
@@ -99,7 +100,7 @@ class FacturaController extends Controller
                             $internacionesProcesadas[] = $internacion->getId();                            
                         }
 
-                        // seteo toda las prestaciones de la internación que se factura para que no se vuelvan a repetir en
+                        // seteo toda los medicamentos de la internación que se factura para que no se vuelvan a repetir en
                         // otra facturación                        
                         foreach($internacion->getInternacionMedicamento() as $internacionMedicamento){
                             $internacionMedicamento->setFactura($facturaInternacion[$j]);
@@ -143,26 +144,6 @@ class FacturaController extends Controller
         
         return $this->render('CipenFacturaBundle:Factura:nuevo.html.twig', $datos);
     }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
         
     public function verAction($id)
@@ -186,88 +167,9 @@ class FacturaController extends Controller
         return $this->redirect($this->generateUrl('factura'));
     }
     
-    private function createArrayPrestaciones($facturaInternacion,$factura)
-    {
-        $tipoTotal = $this->getTipoTotal($factura);
-        $arrayPrestaciones = array();
-        $arrayPrestacionesProcesadas = array();
-        
-        foreach ($facturaInternacion->getInternacion()->getInternacionPrestacion() as $prestacion){
 
-             if (($prestacion->getFecha() >= $factura->getDesde () and $prestacion->getFecha() <= $factura->getHasta() and $prestacion->getFactura() != null) and (($factura->getObraSocial () == null and $prestacion->getConObraSocial() == false) or ($factura->getObraSocial () != null and $prestacion->getConObraSocial()))) {
-                 
-
-                if($prestacion->getModulo()){
-
-                    $id = "modulo".$prestacion->getModulo()->getId();
-
-                    if(!in_array($id,$arrayPrestacionesProcesadas)){
-                        $arrayPrestaciones[$id]['cantidad'] = 1;
-                        $arrayPrestaciones[$id]['tipo'] = 'modulo';
-                        $arrayPrestaciones[$id]['object'] = $prestacion->getModulo();
-                        $arrayPrestacionesProcesadas[] = $id;
-                        $arrayPrestaciones[$id]['valor_unitario'] = $prestacion->getModulo()->getValor();
-                    }else{
-                        $arrayPrestaciones[$id]['cantidad'] ++;
-                    }
-
-                }else {
-
-                    $actos = $prestacion->getInternacionPrestacionActo();
-                    $id = "acto".$actos[0]->getActo()->getId();
-
-                    if(!in_array($id,$arrayPrestacionesProcesadas)){
-                        $arrayPrestaciones[$id]['cantidad'] = 1;
-                        $arrayPrestaciones[$id]['tipo'] = 'acto';
-                        $arrayPrestaciones[$id]['object'] = $actos[0];
-
-                        $valorUnitarioEspecialista =
-                            $actos[0]->getHonorarioEspecialista() * count($actos[0]->getEspecialista ());
-
-                        $valorUnitarioAyudante = 
-                            $actos[0]->getHonorarioAyudante() * count($actos[0]->getAyudante ());
-
-                        $valorUnitarioAnestesista =
-                            $actos[0]->getAnestesista() * count($actos[0]->getAnestesista ());
-
-                        $arrayPrestaciones[$id]['valor_unitario'] = 
-                            $valorUnitarioEspecialista + 
-                            $valorUnitarioAyudante +
-                            $valorUnitarioAnestesista + 
-                            $actos[0]->getGasto();
-
-                        $arrayPrestacionesProcesadas[] = $id;
-
-                    }else{
-                        $arrayPrestaciones[$id]['cantidad'] ++;
-                    }
-
-                }
-            }
-        }        
-        
-        //determina los totales según el tipo de total
-        foreach($arrayPrestaciones as $key => $arrayPrestacion) {
-            
-            $arrayPrestaciones[$key]['total'] = $arrayPrestacion['cantidad'] * $arrayPrestacion['valor_unitario'];
-            
-            if($tipoTotal == 'porcentaje_10_90') {
-                if ($arrayPrestacion['tipo'] == "modulo" and $arrayPrestacion['object']->getAnularFacturacion10y90()) {
-                    $arrayPrestaciones[$key]['porcentaje_10'] = 0 ;
-                    $arrayPrestaciones[$key]['porcentaje_90'] = round($arrayPrestaciones[$key]['total'] , 2 ) ;
-                    
-                } else {                    
-                    $arrayPrestaciones[$key]['porcentaje_10'] = round((($arrayPrestaciones[$key]['total'] * 10) / 100), 2 ) ;
-                    $arrayPrestaciones[$key]['porcentaje_90'] = round((($arrayPrestaciones[$key]['total'] * 90) / 100), 2 ) ;                    
-                }
-            }
-            
-        }               
-        
-        return $arrayPrestaciones ;
-        
-    }
     
+/*    
     private function determinarPeriodo($factura) 
     {        
         //DETERMINA PERIODO
@@ -348,11 +250,12 @@ class FacturaController extends Controller
         
         return $hasta;
     }
-    
+*/    
 
     public function imprimirResumenIndividualAction($id)
     {
         $datos = $this->getFactura($id);
+                       
         $html = $this->renderView('CipenFacturaBundle:Factura:imprimir_resumen_individual.pdf.twig',$datos);
         $header = $this->renderView('ComunComunBundle:Default:header_cipen.html.twig');
         $fileName = "factura-".$datos['factura']->getId().".pdf";
@@ -366,7 +269,9 @@ class FacturaController extends Controller
         $mpdf->SetHTMLHeader($header);
         $mpdf->AddPage();        
 
-        $stylesheet = file_get_contents('http://'.$this->getRequest()->getHost().'/cipen/web/bundles/comuncomun/css/factura-pdf.css');
+        $stylesheet = file_get_contents(
+            'http://'.$this->getRequest()->getHost().'/cipen/web/bundles/comuncomun/css/factura-pdf.css'
+        );
 
         $mpdf->WriteHTML($stylesheet,1);
         $mpdf->WriteHTML($html,2);
@@ -375,10 +280,13 @@ class FacturaController extends Controller
            
     }
     
-    public function imprimirResumenFiscalIndividualAction($id)
+    public function imprimirFacturaFiscalAction($id)
     {
         $datos = $this->getFactura($id);
-        $html = $this->renderView('CipenFacturaBundle:Factura:imprimir_resumen_fiscal_individual.pdf.twig',$datos);
+        $html = $this->renderView('CipenFacturaBundle:Factura:imprimir_factura_fiscal.pdf.twig',$datos);
+        
+        //return new Response($html);        
+        
         //$header = $this->renderView('ComunComunBundle:Default:header_cipen.html.twig');
         $fileName = "factura-".$datos['factura']->getId().".pdf";
         
@@ -403,8 +311,26 @@ class FacturaController extends Controller
     
     public function imprimirResumenGeneralAction($id)
     {
-        $datos = $this->getFactura($id);
+        $datos = $this->getFactura($id);                     
+        
+        // para dividir los resumenes generales por el tipo de internación si es requerido según los 
+        //datos de configuración de la obra social cuando se creo la factura
+        $facturaInternacionPorTipoInternacion = array();                
+        if($datos['factura']->getDato('dividePorTipoInternacion')){  
+            
+            foreach($datos['facturaInternaciones'] as $facturaInternacion){            
+                $tipo = $facturaInternacion->getInternacion()->getTipoInternacion();
+                $facturaInternacionPorTipoInternacion[$tipo][] = $facturaInternacion;
+            }            
+                        
+        }
+        
+        $datos['facturaInternacionPorTipoInternacion'] = $facturaInternacionPorTipoInternacion ;
+        
         $html = $this->renderView('CipenFacturaBundle:Factura:imprimir_resumen_general.pdf.twig',$datos);
+        
+        //return new Response($html);
+        
         $header = $this->renderView('ComunComunBundle:Default:header_cipen.html.twig');
         $fileName = "factura-".$datos['factura']->getId().".pdf";
         
@@ -426,8 +352,93 @@ class FacturaController extends Controller
            
     }    
     
-    private function getFactura($id) {
+    private function createArrayPrestaciones($facturaInternacion,$factura)
+    {
         
+        $arrayPrestaciones = array();
+        $arrayPrestacionesProcesadas = array();
+        
+        foreach ($facturaInternacion->getInternacion()->getInternacionPrestacion() as $prestacion){
+
+            //traigo solo las prestaciones de esta factura puesto que una internacion puede tener mas de una factura asociada
+            if($prestacion->getFactura()->getId() == $factura->getId()){
+         
+            /*if (($prestacion->getFecha() >= $factura->getDesde () and $prestacion->getFecha() <= $factura->getHasta() and $prestacion->getFactura() != null) and (($factura->getObraSocial () == null and $prestacion->getConObraSocial() == false) or ($factura->getObraSocial () != null and $prestacion->getConObraSocial()))) {*/
+                            
+
+                if($prestacion->getModulo()){
+
+                    $id = "modulo".$prestacion->getModulo()->getId();
+
+                    if(!in_array($id,$arrayPrestacionesProcesadas)){
+                        $arrayPrestaciones[$id]['cantidad'] = 1;
+                        $arrayPrestaciones[$id]['tipo'] = 'modulo';
+                        $arrayPrestaciones[$id]['object'] = $prestacion->getModulo();
+                        $arrayPrestacionesProcesadas[] = $id;
+                        $arrayPrestaciones[$id]['valor_unitario'] = $prestacion->getModulo()->getValor();
+                    }else{
+                        $arrayPrestaciones[$id]['cantidad'] ++;
+                    }
+
+                }else {
+
+                    $actos = $prestacion->getInternacionPrestacionActo();
+                    $id = "acto".$actos[0]->getActo()->getId();
+
+                    if(!in_array($id,$arrayPrestacionesProcesadas)){
+                        $arrayPrestaciones[$id]['cantidad'] = 1;
+                        $arrayPrestaciones[$id]['tipo'] = 'acto';
+                        $arrayPrestaciones[$id]['object'] = $actos[0];
+
+                        $valorUnitarioEspecialista =
+                            $actos[0]->getHonorarioEspecialista() * count($actos[0]->getEspecialista ());
+
+                        $valorUnitarioAyudante = 
+                            $actos[0]->getHonorarioAyudante() * count($actos[0]->getAyudante ());
+
+                        $valorUnitarioAnestesista =
+                            $actos[0]->getAnestesista() * count($actos[0]->getAnestesista ());
+
+                        $arrayPrestaciones[$id]['valor_unitario'] = 
+                            $valorUnitarioEspecialista + 
+                            $valorUnitarioAyudante +
+                            $valorUnitarioAnestesista + 
+                            $actos[0]->getGasto();
+
+                        $arrayPrestacionesProcesadas[] = $id;
+
+                    }else{
+                        $arrayPrestaciones[$id]['cantidad'] ++;
+                    }
+
+                }
+            }
+        }        
+        
+        //determina los totales según el tipo de total
+        foreach($arrayPrestaciones as $key => $arrayPrestacion) {
+            
+            $arrayPrestaciones[$key]['total'] = $arrayPrestacion['cantidad'] * $arrayPrestacion['valor_unitario'];
+            
+            if($factura->getDato('tipoTotalFactura') == ObraSocial::TIPO_TOTAL_FACTURA_VALOR_10_90) {
+                if ($arrayPrestacion['tipo'] == "modulo" and $arrayPrestacion['object']->getAnularFacturacion10y90()) {
+                    $arrayPrestaciones[$key]['porcentaje_10'] = 0 ;
+                    $arrayPrestaciones[$key]['porcentaje_90'] = round($arrayPrestaciones[$key]['total'] , 2 ) ;
+                    
+                } else {                    
+                    $arrayPrestaciones[$key]['porcentaje_10'] = round((($arrayPrestaciones[$key]['total'] * 10) / 100), 2 ) ;
+                    $arrayPrestaciones[$key]['porcentaje_90'] = round((($arrayPrestaciones[$key]['total'] * 90) / 100), 2 ) ;                    
+                }
+            }
+            
+        }               
+        
+        return $arrayPrestaciones ;
+       
+    }    
+    
+    private function getFactura($id) 
+    {        
         $em = $this->getDoctrine()->getEntityManager();
         $factura = $em->getRepository ('CipenFacturaBundle:Factura') ->find ($id) ;
 
@@ -437,15 +448,11 @@ class FacturaController extends Controller
         
         $facturaInternaciones = $em->getRepository ('CipenFacturaBundle:FacturaInternacion')
             ->findByFactura($factura);                        
-        
-        $desde = array();
-        $hasta = array();
+
         $arrayPrestaciones = array();
         
         foreach($facturaInternaciones as $facturaInternacion) {
             $internacion = $facturaInternacion->getInternacion();
-            $desde[$internacion->getId()] = $this->getInternacionDesde($factura,$internacion);
-            $hasta[$internacion->getId()] = $this->getInternacionHasta($factura,$internacion);
             $arrayPrestaciones[$internacion->getId()] = $this->createArrayPrestaciones($facturaInternacion,$factura);
         }        
         
@@ -454,16 +461,22 @@ class FacturaController extends Controller
         $datos['form'] = $form->createView();
         
         $datos["facturaInternaciones"] = $facturaInternaciones;
-        $datos["periodo"] = $this->determinarPeriodo ($factura);
+        $datos["periodo"] = $factura->getPeriodo();
         $datos['factura'] = $factura;
-        $datos['tipo_total'] = $this->getTipoTotal($factura);
+        $datos['datosFactura'] = $factura->getDatos();        
+        $datos['tiposFactura'] = array(
+            'tipoTotalFactura9010' =>ObraSocial::TIPO_TOTAL_FACTURA_VALOR_10_90,
+            'tipoPeriodoFacturaCorteMensual' =>ObraSocial::TIPO_PERIODO_FACTURA_CORTE_MENSUAL,
+            'tipoFactura' =>ObraSocial::TIPO_FACTURA_A,
+        );
         $datos['prestaciones'] = $arrayPrestaciones;
         
         return $datos;
     }
     
     
-    public function editarAction($id,Request $request){
+    public function editarAction($id,Request $request)
+    {
         
         $em = $this->getDoctrine()->getEntityManager();
         $factura = $em->getRepository ('CipenFacturaBundle:Factura') ->find ($id) ;

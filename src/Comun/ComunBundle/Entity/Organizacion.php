@@ -210,6 +210,11 @@ class Organizacion
         return $this->direccionNumero;
     }
 
+    public function getDireccion()
+    {   
+        return $this->getDireccionCalle ()." ".$this->getDireccionNumero ().' - '.$this->getDireccionBarrio ();
+    }
+    
     /**
      * Set telefono
      *

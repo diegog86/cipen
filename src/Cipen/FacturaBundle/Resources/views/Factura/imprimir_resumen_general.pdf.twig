@@ -6,30 +6,56 @@
 
     <body>
 
-    {% if tipo_total == "" %}
-        {{ _self.facturaInternacion (factura,periodo,facturaInternaciones,prestaciones,tipo_total) }}
-        <pagebreak type="NEXT-ODD" resetpagenum="1" pagenumstyle="i" suppress="off" />
-        {{ _self.facturaInternacion (factura,periodo,facturaInternaciones,prestaciones,tipo_total) }}
-    {% else %}        
-        {{ _self.facturaInternacion (factura,periodo,facturaInternaciones,prestaciones,tipo_total) }}
-    {% endif %}
         
-    {% macro facturaInternacion (factura,periodo,facturaInternaciones,prestaciones,tipo_total,loop,tipo_total_al10_al90_unitario) %}  
+     {% if datosFactura['dividePorTipoInternacion'] %}
         
-            <div class="titulo">RESUMEN GENERAL DE FACTURACIÓN</div>
+        {% for tipoInternacion,facturaInternaciones in facturaInternacionPorTipoInternacion %}
+        
+            {{ _self.mostrarSegunTipoTotal (factura,facturaInternaciones,prestaciones,tiposFactura,datosFactura,tipoInternacion) }}
+            {% if loop.last == false %}
+                <pagebreak type="NEXT-ODD" resetpagenum="1" pagenumstyle="i" suppress="off" />
+            {% endif %}
+                
+        {% endfor %}
+        
+     {% else %}
 
+        {{ _self.mostrarSegunTipoTotal (factura,facturaInternaciones,prestaciones,tiposFactura,datosFactura) }}                       
+    {% endif %}
+       
+    {% macro mostrarSegunTipoTotal(factura,facturaInternaciones,prestaciones,tiposFactura,datosFactura,tipoInternacion) %}
+
+        {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}        
+
+            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,'al10',tiposFactura,datosFactura) }}
+            <pagebreak type="NEXT-ODD" resetpagenum="1" pagenumstyle="i" suppress="off" />
+            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,'al90',tiposFactura,datosFactura) }}
             
+        {% else %}        
+            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,'unitario',tiposFactura,datosFactura,tipoInternacion) }}
+        {% endif %}                
+                
+                
+    {% endmacro %}
+        
+    {% macro facturaInternacion (factura,facturaInternaciones,prestaciones,tipo_total_al10_al90_unitario,tiposFactura,datosFactura,tipoInternacion) %}  
+                    
+            
+            <div class="titulo">
+                RESUMEN GENERAL DE FACTURACIÓN 
+                {{ datosFactura['dividePorTipoInternacion'] ? '('~tipoInternacion| upper~')'  : '' }} 
+            </div>            
 
             <table class="table table-align-left">
                 <thead>
                     <tr>
                         <th>
                             Obra Social: 
-                            {{ factura.obraSocial is not empty ? "Obra social "~factura.obraSocial : "Sin obra social" }}
+                            {{ factura.obraSocial is not empty ? factura.obraSocial : "Sin obra social" }}
                         </th>
                     </tr>
                     <tr>
-                        <th>Periodo: {{ periodo }}</th>
+                        <th>Periodo: {{ factura.periodo | date('m/Y') }}</th>
                     </tr>
                 </thead>
             </table>
@@ -37,103 +63,138 @@
             <table class="table-bordered" >
                  <thead>
                      <tr>
-
-                         {% if tipo_total_al10_al90_unitario == "al90" %}
-
-                                 <th  width="30">&nbsp;</th>
-                                 <th width="100">Factura N°</th>
-                                 <th>&nbsp;</th>
-                                 <th width="100">N° SASOS</th>
-                                 <th width="200">Importe Facturado</th>
-                                 <th width="80">90% - 50%</th>
-                                 <th width="80">Total</th>
-
-                          {% elseif tipo_total_al10_al90_unitario == "al10" %}   
-
-                                 <th  width="30">&nbsp;</th>
-                                 <th width="100">Factura N°</th>
-                                 <th>&nbsp;</th>
-                                 <th width="100">N° SASOS</th>
-                                 <th width="200">Importe Facturado</th>
-                                 <th width="80">90% - 50%</th>
-                                 <th width="80">Total</th>
-
-                          {% else %}
-                                 <th  width="30">&nbsp;</th>
-                                 <th width="100">Factura N°</th>
-                                 <th width="200">Valor unitario</th>
-                                 <th width="80">Total</th>                            
-                          {% endif %}
-
-                         <th  width="30">&nbsp;</th>
-                         <th width="100">Factura N°</th>
-                         <th>&nbsp;</th>
-                         <th width="100">N° SASOS</th>
-                         <th width="200">Importe Facturado</th>
-                         {% if tipo_total == "porcentaje_10_90" %}
-                             <th width="80">90% - 50%</th>
-                             {#<th width="80">10% - 50%</th>#}
+                        <th width="30" align="center">&nbsp;</th>                         
+                        
+                        {% if tiposFactura['tipoFactura'] == datosFactura['tipoFactura'] %}
+                            <th>Apellido, Nombre</th>            
+                            <th width="130">N° Afiliado</th>                                                  
                          {% else %}
-                             <th width="80">Val. unit.</th>
-                         {% endif %}
-                         <th width="80">Total</th>
+                            <th align="center">Factura N°</th>  
+                        {% endif %} 
+
+                        {% if datosFactura['informacionExtraLabel'] %}
+                            <th width="150" align="center"> {{ datosFactura['informacionExtraLabel'] }}</th>                   
+                        {% endif %}
+
+                        {% if tipo_total_al10_al90_unitario == "al90" %}
+
+                            <th width="30" align="center" width="80">&nbsp;</th>
+                            <th align="center" width="80">Importe</th>                                              
+                            <th align="center" width="80">90% - 50%</th>
+
+                         {% elseif tipo_total_al10_al90_unitario == "al10" %}
+
+                            <th width="30" align="center">&nbsp;</th>
+                            <th align="center" width="80">Importe</th>                            
+                            <th align="center" width="80">10% - 50%</th>
+
+                         {% endif %}                       
+
+                         <th align="center" width="80">Total</th>                        
+                        
                      </tr>
                  </thead>
                  <tbody>
+                     
+                     {% set totalSumGeneral = 0 %}
+                     {% set diezPorcentSumGeneral = 0 %}
+                     {% set noventaPorcentSumGeneral = 0 %}
 
+                                          
                      {% for facturaInternacion in facturaInternaciones %}
-                         {{ _self.internacion(facturaInternacion,tipo_total,loop,tipo_total_al10_al90_unitario) }}
+                         <tr>
+                            <td align="center">{{loop.index}}</td>                     
+                             
+                            {% set totalSum = 0 %}
+                            {% set diezPorcentSum = 0 %}
+                            {% set noventaPorcentSum = 0 %}
+
+                            {% set internacion = facturaInternacion.internacion %}
+
+                            {% for prestacion in prestaciones[internacion.id] %}            
+
+                                {% set totalSum = totalSum + prestacion.total %}
+
+                                {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
+                                    {% set diezPorcentSum = diezPorcentSum + prestacion.porcentaje_10 %}
+                                    {% set noventaPorcentSum = noventaPorcentSum + prestacion.porcentaje_90 %}            
+                                {% endif %}
+                            
+                            {% endfor %}
+                            
+                            {% set totalSumGeneral = totalSumGeneral + totalSum %}                                
+                            {% set diezPorcentSumGeneral = diezPorcentSumGeneral + diezPorcentSum %}    
+                            {% set noventaPorcentSumGeneral = noventaPorcentSumGeneral + noventaPorcentSum %}          
+                            
+
+                            {% if tiposFactura['tipoFactura'] == datosFactura['tipoFactura'] %}
+                                <td> {{ internacion.paciente }}</td>            
+                                <td align="center"> {{ internacion.numeroObraSocialPaciente }}</td>                                  
+                             {% else %}
+                                {% if tipo_total_al10_al90_unitario == "al90" %}
+                                    <td align="center">{{ facturaInternacion.facturaFiscal }}</td>                  
+                                {% else %}
+                                    <td align="center">{{ facturaInternacion.facturaFiscalExtra }}</td>                            
+                                {% endif %}
+                            {% endif %} 
+
+                            {% if datosFactura['informacionExtraLabel'] %}
+                                <td align="center"> {{ facturaInternacion.informacionExtraValor }}</td>                   
+                            {% endif %}
+
+                            {% if tipo_total_al10_al90_unitario == "al90" %}
+
+                                <td align="center">90%</td>
+
+                                <td align="center"> $ {{  totalSum }}</td>
+                                <td align="center"> $ {{  noventaPorcentSum }}</td>
+                                <td align="center"> $ {{  noventaPorcentSum }}</td>
+
+                             {% elseif tipo_total_al10_al90_unitario == "al10" %}
+
+                                <td align="center">10%</td>
+                                
+                                <td align="center"> $ {{  totalSum }}</td>
+                                <td align="center"> $ {{  diezPorcentSum }}</td>
+                                <td align="center"> $ {{  diezPorcentSum }}</td>                                
+
+                             {% else %}
+
+                                <td align="center"> $ {{ totalSum }}</td>
+
+                             {% endif %}                                                     
+                             
+                         </tr>
                      {% endfor %}
 
                  </tbody>
             </table>
-    
-    {% endmacro %}  
-    
-    {% macro internacion (facturaInternacion,prestaciones,tipo_total,loop,tipo_total_al10_al90_unitario) %}
-
-            {% set totalSum = 0 %}
-            {% set diezPorcentSum = 0 %}
-            {% set noventaPorcentSum = 0 %}
-            {% set valorUnitarioSum = 0 %}
-            {% set internacion = facturaInternacion.internacion %}
+                      
+            {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
+                <table class="table-bordered" align="right" width="240">            
+            {% else %}            
+                <table class="table-bordered" align="right"  width="80">                        
+            {% endif %}
             
-            {% for prestacion in prestaciones[internacion.id] %}            
-                
-                {% set totalSum = totalSum + prestacion.total %}
-                {% set valorUnitarioSum = valorUnitarioSum + prestacion.valor_unitario %}
-                {% if tipo_total == "porcentaje_10_90" %}
-                    {% set diezPorcentSum = diezPorcentSum + prestacion.porcentaje_10 %}
-                    {% set noventaPorcentSum = noventaPorcentSum + prestacion.porcentaje_90 %}            
-                {% endif %}
-       
-            {% endfor %}
-       
-                <tr>
-                    <td align="center">{{ loop.index }}</td>
-                    {% if tipo_total_al10_al90_unitario == "al90" %}
-                        <td align="center"> {{ facturaInternacion.facturaFiscal }}</td>
-                        <td align="center">90%</td>
-                        <td align="center"> {{ facturaInternacion.informacionExtraValor }}</td>
-                        <td align="center"> {{ prestacion.total }}</td>                           
-                        <td align="center"> $ {{  prestacion.porcentaje_90 }}</td>
-                        <td align="center"> $ {{  prestacion.porcentaje_90 }}</td>
-                     {% elseif tipo_total_al10_al90_unitario == "al10" %}
-                        <td align="center"> {{ facturaInternacion.facturaFiscalExtra }}</td>
-                        <td align="center">10%</td>
-                        <td align="center"> {{ facturaInternacion.informacionExtraValor }}</td>   
-                        <td align="center"> {{ prestacion.total }}</td>   
-                        <td align="center">$ {{  prestacion.porcentaje_10 }}</td>
-                        <td align="center">$ {{  prestacion.porcentaje_10 }}</td>                                           
-                     {% else %}
-                        <td align="center"> {{ facturaInternacion.facturaFiscal }}</td>
-                        <td align="center">$ {{  prestacion.valor_unitario }}</td>
-                        <td align="center">$ {{  prestacion.valor_unitario }}</td>          
-                     {% endif %}
-                        
-                </tr>
-    
-    {% endmacro %}
+                <thead>
+                    <tr>
+                       {% if tipo_total_al10_al90_unitario == "al90" %}
+                           <th align="center" width="80">${{ totalSumGeneral }}</th>                        
+                           <th align="center" width="80">${{ noventaPorcentSumGeneral }}</th>
+                           <th align="center" width="80">${{ noventaPorcentSumGeneral }}</th>                            
+                        {% elseif tipo_total_al10_al90_unitario == "al10" %}
+                           <th align="center" width="80">${{totalSumGeneral}}</th>                        
+                           <th align="center" width="80">${{ diezPorcentSumGeneral }}</th>
+                           <th align="center" width="80">${{ diezPorcentSumGeneral }}</th>                            
+                        {% else %}
+                           <th align="center" width="80">${{totalSumGeneral}}</th>                                           
+                        {% endif %}                                            
+                    </tr>
+                </thead>                
+            </table>    
+            
+    {% endmacro %}  
+   
 
     </body>
 </html>

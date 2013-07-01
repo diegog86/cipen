@@ -95,6 +95,16 @@
     </div>
 </div> 
 
+{% set field = form.informacionExtraLabel %}
+<div class="control-group">
+    {{ form_label(field,'Informacion extra',{ label_attr : { class : 'control-label'} }) }} 
+    <div class="controls">
+        {{ form_widget (field, { attr : { class : 'span9' } }) }}
+        <div class="help-block">Información adicional de la obra social como por ej: SASOS, CUPON, etc.</div>              
+        {{ form_errors (field) }}
+    </div>
+</div>  
+
 {% set field = form.sufijoMatriculaPersonal %}
 <div class="control-group">
     {{ form_label(field,'Sufijo matrícula',{ label_attr : { class : 'control-label'} }) }} 

@@ -31,13 +31,7 @@ class FacturaInternacion
     /**
      * @ORM\ManyToOne(targetEntity="Cipen\InternacionBundle\Entity\Internacion")
      */
-    private $internacion;    
-    
-    
-    /**
-     * @ORM\Column(name="informacionExtraLabel", type="string", nullable=true)
-     */
-    private $informacionExtraLabel;    
+    private $internacion;           
 
     /**
      * @ORM\Column(name="informacionExtraValor", type="string", nullable=true)
@@ -56,21 +50,7 @@ class FacturaInternacion
      */
     private $facturaFiscalExtra;        
     
-    /**
-     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionPrestacion", mappedBy="factura")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     */
-    private $internacionPrestacion;
 
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->internacionPrestacion = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Get id
      *
@@ -127,63 +107,6 @@ class FacturaInternacion
         return $this->internacion;
     }
 
-    /**
-     * Add internacionPrestacion
-     *
-     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion
-     * @return FacturaInternacion
-     */
-    public function addInternacionPrestacion(\Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion)
-    {
-        $this->internacionPrestacion[] = $internacionPrestacion;
-    
-        return $this;
-    }
-
-    /**
-     * Remove internacionPrestacion
-     *
-     * @param \Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion
-     */
-    public function removeInternacionPrestacion(\Cipen\InternacionBundle\Entity\InternacionPrestacion $internacionPrestacion)
-    {
-        $this->internacionPrestacion->removeElement($internacionPrestacion);
-    }
-
-    /**
-     * Get internacionPrestacion
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getInternacionPrestacion()
-    {
-        return $this->internacionPrestacion;
-    }
-
- 
-
-    /**
-     * Set informacionExtraLabel
-     *
-     * @param string $informacionExtraLabel
-     * @return FacturaInternacion
-     */
-    public function setInformacionExtraLabel($informacionExtraLabel)
-    {
-        $this->informacionExtraLabel = $informacionExtraLabel;
-    
-        return $this;
-    }
-
-    /**
-     * Get informacionExtraLabel
-     *
-     * @return string 
-     */
-    public function getInformacionExtraLabel()
-    {
-        return $this->informacionExtraLabel;
-    }
 
     /**
      * Set informacionExtraValor

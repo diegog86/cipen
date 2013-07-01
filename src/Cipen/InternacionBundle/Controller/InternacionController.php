@@ -69,11 +69,11 @@ class InternacionController extends Controller
     
     public function eliminarAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('CipenInternacionBundle:Internacion')->find($id);
 
         if (!$entity) {
-        throw $this->createNotFoundException('No se encontro registro.');
+            throw $this->createNotFoundException('No se encontro registro.');
         }
 
         $em->remove($entity);

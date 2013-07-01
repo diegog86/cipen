@@ -46,11 +46,19 @@
         <div class="row-fluid">
             <table class="table">
                 <tr >
-                    <th style="border:none" width="25%">Periodo: {{ periodo }}</th>
-                    <th style="border:none" width="25%">Historia clínica n°: {{ internacion.numeroFormateado }} </th>
+                    <th style="border:none" width="25%">
+                        {% if tiposFactura['tipoPeriodoFacturaCorteMensual'] == datosFactura['tipoPeriodoFactura'] %}
+                            Periodo: {{ periodo | date('m/Y') }}
+                        {% else %}
+                            Periodo: {{ internacion.fechaHoraEgreso | date('m/Y') }}
+                        {% endif %}
+                    </th>
+                    <th style="border:none" width="25%">
+                        Historia clínica n°: {{ internacion.numeroFormateado }} 
+                    </th>
                     <th style="border:none" width="49%">
                         N° factura:     
-                        {% if tipo_total == "porcentaje_10_90" %}
+                        {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
                             <div class="input-append" style="width: 180px; margin-right: 15px;">
                                 {{ form_widget(form.facturaInternacion[loop.index-1].facturaFiscal, {'attr':{class:'span10','placeholder':'Factura 90%' }}) }}                                
                                 <span class="add-on">90%</span>
@@ -62,7 +70,9 @@
                             </div>
                                                                     
                        {% else %} 
-                           {{ form_widget(form.facturaInternacion[loop.index-1].facturaFiscal, {'attr':{style:'margin-top:-5px;; width: 370px' }}) }}
+                            <div class="input-append" style="width: 180px; margin-right: 15px;">
+                                {{ form_widget(form.facturaInternacion[loop.index-1].facturaFiscal, {'attr':{style:'margin-top:-5px;; width: 370px' }}) }}
+                            </div>
 
                        {% endif %}
                             
@@ -77,37 +87,45 @@
                             Paciente n°: {{ internacion.paciente.numero  }} 
                        {% endif %}
                     </th>
-                    <th style="border:none">DNI: {{ internacion.paciente.dni is not empty ? internacion.paciente.dni : ""  }}</th>
-                    <th style="border:none">Apellido, nombre: {{ internacion.paciente.apellido~", "~internacion.paciente.nombre }}</th>
+                    <th style="border:none">
+                        DNI: {{ internacion.paciente.dni is not empty ? internacion.paciente.dni : "-"  }}
+                    </th>
+                    <th style="border:none">
+                        Apellido, nombre: {{ internacion.paciente.apellido~", "~internacion.paciente.nombre }}
+                    </th>
                 </tr>
                 <tr>
                     <th style="border:none">Fecha de ingreso: {{ internacion.fechaHoraIngreso | date('d/m/Y') }}</th>
-                    <th style="border:none">Fecha de egreso: {{ internacion.fechaHoraIngreso | date('d/m/Y') }} </th>
-                    <th style="border:none">                       
-                        <div class="pull-left">
-                                {{ form_widget(form.facturaInternacion[loop.index-1].informacionExtraLabel, {'attr':{style:'margin-top:-5px; width: 120px' }}) }} :
-                        </div>
-                        <div class="pull-left">
-                                {{ form_widget(form.facturaInternacion[loop.index-1].informacionExtraValor, {'attr':{style:'margin-top:-5px; width: 300px' }}) }}
-                        </div>                      
+                    <th style="border:none">Fecha de egreso: {{ internacion.fechaHoraEgreso | date('d/m/Y') }} </th>
+                    <th style="border:none">  
+                        {% if datosFactura['informacionExtraLabel'] %}
+                            <div class="pull-left">
+                                {{ datosFactura['informacionExtraLabel'] }} :
+                            </div>
+                            <div class="pull-left">
+                                    {{ form_widget(form.facturaInternacion[loop.index-1].informacionExtraValor, {'attr':{style:'margin-top:-5px; width: 300px' }}) }}
+                            </div>                      
+                       {% endif %}
                     </th>                
                 </tr>
             </table>
-            {{ _self.internacion(facturaInternacion.internacion,prestaciones,tipo_total) }}
+            {{ _self.internacion(facturaInternacion.internacion,prestaciones,tiposFactura,datosFactura) }}
         </div>
         {% if loop.last != true %} <hr> {% endif %}
     {% endfor %}
     
-    {% macro internacion (internacion,prestaciones,tipo_total) %}
+    {% macro internacion (internacion,prestaciones,tiposFactura,datosFactura) %}
         
         <table class="table table-bordered table-striped table-align-center">
             <thead>
                 <tr>
                     <th width="30">Cant.</th>
                     <th width="100">Código</th>
-                    <th class="col-left" width="{{ tipo_total == "porcentaje_10_90" ? "330" : "410" }}">Descripción</th>
+                    <th class="col-left" width="{{ tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] ? "330" : "410" }}">
+                        Descripción
+                    </th>
                     <th width="100">Mat. Prof.</th>
-                    {% if tipo_total == "porcentaje_10_90" %}
+                    {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
                         <th width="80">90%</th>
                         <th width="80">10%</th>
                     {% else %}
@@ -128,7 +146,7 @@
                 
                 {% set totalSum = totalSum + prestacion.total %}
                 {% set valorUnitarioSum = valorUnitarioSum + prestacion.valor_unitario %}
-                {% if tipo_total == "porcentaje_10_90" %}
+                {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
                     {% set diezPorcentSum = diezPorcentSum + prestacion.porcentaje_10 %}
                     {% set noventaPorcentSum = noventaPorcentSum + prestacion.porcentaje_90 %}            
                 {% endif %}
@@ -141,7 +159,7 @@
                     </td>
                     <td>{{ internacion.prescriptor.matricula }}{{ internacion.obraSocialPaciente.sufijoMatriculaPersonal}}</td>
                     
-                    {% if tipo_total == "porcentaje_10_90" %}
+                    {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
                         <td>{{ prestacion.porcentaje_90 }}</td>
                         <td>{{  prestacion.porcentaje_10 }}</td>
                      {% else %}
@@ -153,10 +171,10 @@
             </tbody>
         </table>
         
-        <table class="table table-bordered pull-right table-align-center" style="width:{{ tipo_total == "porcentaje_10_90" ? "445" : "340" }}px">
+        <table class="table table-bordered pull-right table-align-center" style="width:{{ tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] ? "445" : "340" }}px">
             <tr>
                 <th width="200">Totales</th>
-                {% if tipo_total == "porcentaje_10_90" %}
+                {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
                     <th width="265">{{noventaPorcentSum}}</th>
                     <th width="265">{{ diezPorcentSum }}</th>
                 {% else %}

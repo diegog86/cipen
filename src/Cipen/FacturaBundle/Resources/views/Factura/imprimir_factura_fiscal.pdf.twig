@@ -1,0 +1,253 @@
+<html>
+    <head>
+        <link type="text/css" rel="media"
+              href="{{ asset('bundles/comuncomun/css/factura-pdf.css') }}" />
+    </head>
+
+    <body>
+        
+    {% if tiposFactura['tipoFactura'] == datosFactura['tipoFactura'] %}
+        
+        {{ _self.facura_A(factura,facturaInternaciones,prestaciones,tiposFactura,datosFactura) }}        
+
+    {% else %}        
+
+        {% for facturaInternacion in facturaInternaciones %}
+           {% if tiposFactura['tipoPeriodoFacturaCorteMensual'] == datosFactura['tipoPeriodoFactura'] %}
+               {{ _self.facura_B(factura,facturaInternacion,prestaciones,'al90',tiposFactura,datosFactura) }}
+                <pagebreak type="NEXT-ODD" resetpagenum="1" pagenumstyle="i" suppress="off" />
+               {{ _self.facura_B(factura,facturaInternacion,prestaciones,'al10',tiposFactura,datosFactura) }}
+           {% else %}
+               {{ _self.facura_B(factura,facturaInternacion,prestaciones,'unitario',tiposFactura,datosFactura) }}
+           {% endif %}
+
+           {%if loop.last == false %}
+               <pagebreak type="NEXT-ODD" resetpagenum="1" pagenumstyle="i" suppress="off" />
+           {% endif %}
+
+        {% endfor %}  
+                       
+    {% endif %}
+        
+    {% macro facura_A(factura,facturaInternaciones,prestaciones,tiposFactura,datosFactura) %}          
+           <div class="factura-fiscal-section-1">
+
+                <div class="factura-fiscal-fecha">
+                    <div>{{ 'NOW' | date('Y') }}</div>
+                    <div>{{ 'NOW' | date('m') }}</div> 
+                    <div>{{ 'NOW' | date('d') }}</div>
+                </div>
+            </div>
+
+            <div class="factura-fiscal-section-2">
+                <div>
+                    {% if datosFactura['destinatario'] %}
+                        {{ datosFactura['destinatario'] }}
+                    {% else %}
+                        {{ factura.obraSocial is not empty ? factura.obraSocial : "" }}                        
+                    {% endif %}
+                </div>
+                 <div>
+                    {% if datosFactura['destinatario'] %}
+                        {{ datosFactura['destinatarioDireccion'] }}
+                    {% else %}
+                        {{ factura.obraSocial is not empty ? factura.obraSocial.direccion : "" }}                        
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="factura-fiscal-section-3">
+
+               
+
+            </div>
+
+            {% set totalSum = 0 %}
+            {% for facturaInternacion in facturaInternaciones %}
+              {% for prestacion in prestaciones[facturaInternacion.internacion.id] %}
+                  {% set totalSum = totalSum + prestacion.total %}
+              {% endfor %}
+            {% endfor %}               
+               
+            <div class="factura-fiscal-section-4">
+                <table width="500" >
+                    <tr>
+                        <th width="350">Descripción</th>
+                        <th width="150">Importe</th>
+                    </tr>
+                    <tr>
+                        <td>Por gastos de internación en el C.I.P.E.N durante el periodo {{ factura.periodo | date('m/Y') }}  con obra social {{ factura.obraSocial.nombre }}</td>
+                        <td> $ {{ totalSum }}</td>
+                    </tr>                    
+                </table>
+                
+                
+            </div>
+               
+
+            <div class="factura-fiscal-total">
+              $ {{ totalSum }}
+            </div>               
+               
+               
+    {% endmacro %}
+               
+    {% macro facura_B(factura,facturaInternacion,prestaciones,tipo_total_al10_al90_unitario,tiposFactura,datosFactura) %}
+
+            <div class="factura-fiscal-section-1">
+
+                <div class="factura-fiscal-fecha">
+                    <div>{{ 'NOW' | date('Y') }}</div>
+                    <div>{{ 'NOW' | date('m') }}</div> 
+                    <div>{{ 'NOW' | date('d') }}</div>
+                </div>
+            </div>
+
+            <div class="factura-fiscal-section-2">
+                <div>
+                    {{ factura.obraSocial is not empty ? factura.obraSocial : "" }}
+                </div>
+                 <div>
+                    {{ factura.obraSocial is not empty ? 
+                        factura.obraSocial.direccionNumero~" - "~
+                        factura.obraSocial.direccionCalle~" - "~
+                        factura.obraSocial.direccionNumero : "" 
+                     }}
+                </div>
+            </div>
+
+            <div class="factura-fiscal-section-3">
+
+                {% set internacion = facturaInternacion.internacion %}
+
+                <table class="table table-align-left">
+                    <thead>
+                        <tr>
+                            <th  width="25%">
+                                {% if tiposFactura['tipoPeriodoFacturaCorteMensual'] == datosFactura['tipoPeriodoFactura'] %}
+                                   Periodo: {{ factura.periodo | date('m/Y') }}
+                               {% else %}
+                                   Periodo: {{ internacion.fechaHoraEgreso | date('m/Y') }}
+                               {% endif %}                                                        
+                            </th>
+                            <th  width="28%">Historia clínica n°: {{ internacion.getNumeroFormateado }} </th>
+                            <th  width="46%"> 
+                                {{ datosFactura['informacionExtraLabel'] ? datosFactura['informacionExtraLabel']~": "~facturaInternacion.informacionExtraValor : "" }} 
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                {% if factura.obraSocial is not empty %}
+                                     Afiliado n°: {{ internacion.numeroObraSocialPaciente  }} 
+                                {% else %}
+                                     Paciente n°: {{ internacion.paciente.numero  }} 
+                                {% endif %}                            </th>
+                            <th >
+                                DNI: {{ internacion.paciente.dni is not empty ? internacion.paciente.dni : "-"  }}</th>
+                            <th>
+                                Apellido, nombre: {{ internacion.paciente.apellido~", "~internacion.paciente.nombre }}
+                            </th>
+                        </tr>
+                    </thead>
+                    </table>
+            </div>
+            <div class="factura-fiscal-section-4">
+                {{ _self.internacion(facturaInternacion.internacion,prestaciones,tiposFactura,datosFactura) }}       
+            </div>
+
+            <div class="factura-fiscal-total">
+
+              {% set totalSum = 0 %}
+              {% set diezPorcentSum = 0 %}
+              {% set noventaPorcentSum = 0 %}
+              {% set valorUnitarioSum = 0 %}
+
+              {% for prestacion in prestaciones[internacion.id] %}
+
+                  {% set totalSum = totalSum + prestacion.total %}
+                  {% set valorUnitarioSum = valorUnitarioSum + prestacion.valor_unitario %}
+                  {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
+                      {% set diezPorcentSum = diezPorcentSum + prestacion.porcentaje_10 %}
+                      {% set noventaPorcentSum = noventaPorcentSum + prestacion.porcentaje_90 %}            
+                  {% endif %}   
+                
+              {% endfor %}
+               
+               {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
+               
+                   {% if tipo_total_al10_al90_unitario == "al90" %}
+                       $ {{ noventaPorcentSum }}
+                   {% else %}
+                       $ {{ diezPorcentSum }}
+                   {% endif %}
+               
+               {% else %}
+                       $ {{ totalSum }}
+               {% endif %}
+               
+
+            </div>
+    
+    {% endmacro %}
+            
+    {% macro internacion (internacion,prestaciones,tiposFactura,datosFactura) %}
+        
+        <table class="table-bordered" >
+            <thead>
+                <tr>
+                    <th  width="30">Cant.</th>
+                    <th width="100">Código</th>
+                    <th class="text-left" width="{{ tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] ? "330" : "410" }}">Descripción</th>
+                    <th width="100">Mat. prof.</th>
+                    {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
+                        <th width="80">90%</th>
+                        <th width="80">10%</th>
+                    {% else %}
+                        <th width="80">Val. unit.</th>
+                   {% endif %}
+                    <th width="80">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% set totalSum = 0 %}
+            {% set diezPorcentSum = 0 %}
+            {% set noventaPorcentSum = 0 %}
+            {% set valorUnitarioSum = 0 %}
+            
+            {% for prestacion in prestaciones[internacion.id] %}
+            
+                
+                {% set totalSum = totalSum + prestacion.total %}
+                {% set valorUnitarioSum = valorUnitarioSum + prestacion.valor_unitario %}
+                {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
+                    {% set diezPorcentSum = diezPorcentSum + prestacion.porcentaje_10 %}
+                    {% set noventaPorcentSum = noventaPorcentSum + prestacion.porcentaje_90 %}            
+                {% endif %}
+    
+                <tr>
+                    <td align="center">{{ prestacion.cantidad }}</td>
+                    <td align="center" >{{ prestacion.tipo == "modulo" ?  prestacion.object.codigo : prestacion.object.acto.codigo }}</td>
+                    <td>
+                        {{ prestacion.tipo == "modulo" ?  prestacion.object.descripcion : prestacion.object.acto.descripcion }}
+                    </td>
+                    <td align="center">{{ internacion.prescriptor.matricula }}</td>
+                    
+                    {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
+                        <td align="center">$ {{ prestacion.porcentaje_90 }}</td>
+                        <td align="center">$ {{  prestacion.porcentaje_10 }}</td>
+                     {% else %}
+                        <td align="center">$ {{  prestacion.valor_unitario }}</td>
+                     {% endif %}
+                    <td align="center">$ {{ prestacion.total }}</td>                    
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+                 
+    {% endmacro %}
+
+               
+             
+    </body>
+</html>

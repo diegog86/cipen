@@ -46,12 +46,19 @@ class Factura
      *@ORM\Column(name="datos", type="text")
      */
     private $datos;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionPrestacion", mappedBy="factura")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $internacionPrestacion;    
 
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->internacionPrestacion = new \Doctrine\Common\Collections\ArrayCollection();
         $this->internacion = new \Doctrine\Common\Collections\ArrayCollection();
         $this->periodo = new \DateTime('NOW');
     }
@@ -74,12 +81,14 @@ class Factura
         $datos['tipoFactura'] = $obraSocial->getTipoFactura ();
         $datos['tipoTotalFactura'] = $obraSocial->getTipoTotalFactura ();
         $datos['tipoPeriodoFactura'] = $obraSocial->getTipoPeriodoFactura ();
-        $datos['destinatario'] = $obraSocial->getDestinatario ();
+        $datos['destinatario'] = $obraSocial->getDestinatario () ? $obraSocial->getDestinatario ()->getNombre () : '';
+        $datos['destinatarioDireccion'] = $obraSocial->getDestinatario () ? $obraSocial->getDestinatario ()->getDireccion () : '';
         $datos['coberturaMedicamentoCatastro'] = $obraSocial->getCoberturaMedicamentoCatastro ();
         $datos['ivaInscripto'] = $obraSocial->getIvaInscripto ();
         $datos['dividePorTipoInternacion'] = $obraSocial->getDividePorTipoInternacion ();
         $datos['sufijoMatriculaPersonal'] = $obraSocial->getSufijoMatriculaPersonal ();
         $datos['tiempoAcreditacionFactura'] = $obraSocial->getTiempoAcreditacionFactura ();       
+        $datos['informacionExtraLabel'] = $obraSocial->getInformacionExtraLabel ();  
         
         $this->datos = json_encode($datos);
 

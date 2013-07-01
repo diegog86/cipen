@@ -59,8 +59,8 @@ class InternacionPrestacion
     private $fecha;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="Cipen\FacturaBundle\Entity\FacturaInternacion")
-     * @ORM\JoinTable(name="Factura__Factura_Internacion_Prestacion")
+     * @ORM\ManyToOne(targetEntity="Cipen\FacturaBundle\Entity\Factura")
+     * @ORM\JoinTable(name="Factura__Factura_Internacion")
      * @ORM\JoinColumn(nullable=true,onDelete="set null")
      */
     private $factura;
@@ -214,10 +214,10 @@ class InternacionPrestacion
     /**
      * Set factura
      *
-     * @param \Cipen\FacturaBundle\Entity\FacturaInternacion $factura
+     * @param \Cipen\FacturaBundle\Entity\Factura $factura
      * @return InternacionPrestacion
      */
-    public function setFactura(\Cipen\FacturaBundle\Entity\FacturaInternacion $factura = null)
+    public function setFactura(\Cipen\FacturaBundle\Entity\Factura $factura = null)
     {
         $this->factura = $factura;
     

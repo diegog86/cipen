@@ -6,6 +6,7 @@ body{
 .titulo{
     padding-top:10px;
     font-size: 18px;
+    text-align: center;
 }
 
 table {
@@ -106,4 +107,5 @@ table th{
     margin-right: 10px;
     width: 100px;
     text-align: center;
+    border:solid 1px #000;
 }

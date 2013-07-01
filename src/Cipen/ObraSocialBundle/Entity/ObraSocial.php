@@ -91,6 +91,11 @@ class ObraSocial extends Organizacion
      */
     private $tiempoAcreditacionFactura;
     
+    /**
+     * @ORM\Column(name="informacionExtraLabel", type="string", nullable=true)
+     */
+    private $informacionExtraLabel;        
+    
     
     /**
      * @ORM\OneToMany(targetEntity="Cipen\ObraSocialBundle\Entity\Unidad", mappedBy="obraSocial")
@@ -115,6 +120,7 @@ class ObraSocial extends Organizacion
         $this->tipoTotalFactura = 0;
         $this->tipoPeriodoFactura = 0;
         $this->destinatario = null; //no es mejor poner el nombre del cliente por default ?
+        $this->informacionExtraLabel = null;      
         $this->coberturaMedicamentoCatastro = 100;        
         $this->ivaInscripto = 0;
         $this->dividePorTipoInternacion = false;
@@ -362,4 +368,27 @@ class ObraSocial extends Organizacion
     {
         return $this->tiempoAcreditacionFactura;
     }
+    
+    /**
+     * Set informacionExtraLabel
+     *
+     * @param string $informacionExtraLabel
+     */
+    public function setInformacionExtraLabel($informacionExtraLabel)
+    {
+        $this->informacionExtraLabel = $informacionExtraLabel;
+    
+        return $this;
+    }
+
+    /**
+     * Get informacionExtraLabel
+     *
+     * @return string 
+     */
+    public function getInformacionExtraLabel()
+    {
+        return $this->informacionExtraLabel;
+    }
+    
 }
