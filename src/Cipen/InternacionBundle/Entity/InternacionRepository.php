@@ -7,72 +7,46 @@ use \Cipen\ObraSocialBundle\Entity\ObraSocial;
 
 class InternacionRepository extends EntityRepository
 {
-    public function getInternacionesPrestacionesByFactura($factura) 
-    {                   
-        //imop: internacion medicamento o prestacion
-        $qb = $this->createQueryBuilder('i');        
-
-        $qb = $this->addCriterioPeriodo('i.internacionPrestacion',$qb, $factura);
-        $qb = $this->addCriterioExtra($qb);
-
+    
+    public function findInternacionesParaFacturar($factura)
+    {
+        $qbi = $this->createQueryBuilder('i');        
+        
         if ($factura->getObraSocial()) {
-            $qb->andWhere ('i.obraSocialPaciente = :obraSocial and imop.conObraSocial = 1')
+            $qbi->where ('i.obraSocialPaciente = :obraSocial')
                 ->setParameter ('obraSocial', $factura->getObraSocial()->getId());
-        } else {
-            $qb->andWhere ('imop.conObraSocial = 0');
-        }
-
-
-        
-        return $qb->getQuery()->getResult();            
-
-    }
-    
-    public function getInternacionesMedicamentoByFactura($factura) 
-    {                   
-        //imop: internacion medicamento o prestacion
-        $qb = $this->createQueryBuilder('i');        
-        
-        $qb = $this->addCriterioPeriodo('i.internacionMedicamento',$qb, $factura);
-        $qb = $this->addCriterioExtra($qb);        
-        
-        $qb->andWhere ('i.obraSocialPaciente = :obraSocial')
-           ->setParameter ('obraSocial', $factura->getObraSocial());               
-                   
-        return $qb->getQuery()->getResult();            
-
-    }    
-    
-    private function addCriterioPeriodo($entidad,$qb, $factura)
-    {
-
+        } 
+                
         if($factura->getDato('tipoPeriodoFactura') == ObraSocial::TIPO_PERIODO_FACTURA_CORTE_MENSUAL){        
-            $condicion = 'MONTH(imop.fecha) = :mes and YEAR(imop.fecha) = :ano and imop.factura IS NULL';
-            $qb->innerJoin ($entidad, 'imop', 'WITH' ,$condicion);                                
-        } else {
-            $condicion = '(i.fechaHoraEgreso IS NOT NULL and
-                           MONTH(i.fechaHoraEgreso) <= :mes and 
-                           YEAR(i.fechaHoraEgreso) = :ano )
-                          and imop.factura IS NULL';            
             
-            $qb->innerJoin ($entidad, 'imop');        
-        }
-
-        $qb->where($condicion);                 
-        $qb->setParameter('mes' , $factura ->getPeriodo()->format('m'));
-        $qb->setParameter('ano' , $factura ->getPeriodo()->format('Y'));        
-                
-        return $qb;
+            $condicion = 'MONTH(ip.fecha) = :mes and YEAR(ip.fecha) = :ano and ip.factura IS NULL';                        
+            $qbi->leftJoin ('i.internacionPrestacion','ip','WITH',$condicion);
+            
+            $condicion = 'MONTH(im.fecha) = :mes and YEAR(im.fecha) = :ano and im.factura IS NULL';                        
+            $qbi->leftJoin ('i.internacionMedicamento','im','WITH',$condicion);
+            
+        } else {
+          
+            $qbi->andWhere ('((i.fechaHoraEgreso IS NOT NULL and
+                           MONTH(i.fechaHoraEgreso) <= :mes and 
+                           YEAR(i.fechaHoraEgreso) <= :ano )
+                          and (ip.factura IS NULL or im.factura IS NULL))');            
+            
+            $qbi->leftJoin ('i.internacionPrestacion', 'ip','with','ip.factura IS NULL')
+                ->leftJoin ('i.internacionMedicamento', 'im','with','im.factura IS NULL');
+        }        
+        
+        $qbi->groupBy ('i.id')
+            ->having ($qbi->expr()->gt($qbi->expr()->count('ip.id'),0))
+            ->orHaving ($qbi->expr()->gt($qbi->expr()->count('im.id'),0))
+            ->setParameter('mes' , $factura ->getPeriodo()->format('m'))
+            ->setParameter('ano' , $factura ->getPeriodo()->format('Y'));        
+        ;        
+        
+        return $qbi->getQuery()->getResult();   
+        
     }
-    
-    private function addCriterioExtra($qb)
-    {
-        $qb->groupBy ('i.id')
-           ->having ($qb->expr()->gt($qb->expr()->count('imop.id'),0));
-                
-        return $qb;
-    }    
-    
+        
     public function getNumeroMax()
     {
         $rs = $this->createQueryBuilder('i')

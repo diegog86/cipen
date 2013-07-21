@@ -11,7 +11,7 @@
         
         {% for tipoInternacion,facturaInternaciones in facturaInternacionPorTipoInternacion %}
         
-            {{ _self.mostrarSegunTipoTotal (factura,facturaInternaciones,prestaciones,tiposFactura,datosFactura,tipoInternacion) }}
+            {{ _self.mostrarSegunTipoTotal (factura,facturaInternaciones,prestaciones,medicamentos,tiposFactura,datosFactura,tipoInternacion) }}
             {% if loop.last == false %}
                 <pagebreak type="NEXT-ODD" resetpagenum="1" pagenumstyle="i" suppress="off" />
             {% endif %}
@@ -20,25 +20,25 @@
         
      {% else %}
 
-        {{ _self.mostrarSegunTipoTotal (factura,facturaInternaciones,prestaciones,tiposFactura,datosFactura) }}                       
+        {{ _self.mostrarSegunTipoTotal (factura,facturaInternaciones,prestaciones,medicamentos,tiposFactura,datosFactura) }}                       
     {% endif %}
        
-    {% macro mostrarSegunTipoTotal(factura,facturaInternaciones,prestaciones,tiposFactura,datosFactura,tipoInternacion) %}
+    {% macro mostrarSegunTipoTotal(factura,facturaInternaciones,prestaciones,medicamentos,tiposFactura,datosFactura,tipoInternacion) %}
 
         {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}        
 
-            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,'al10',tiposFactura,datosFactura) }}
+            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,medicamentos,'al10',tiposFactura,datosFactura) }}
             <pagebreak type="NEXT-ODD" resetpagenum="1" pagenumstyle="i" suppress="off" />
-            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,'al90',tiposFactura,datosFactura) }}
+            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,medicamentos,'al90',tiposFactura,datosFactura) }}
             
         {% else %}        
-            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,'unitario',tiposFactura,datosFactura,tipoInternacion) }}
+            {{ _self.facturaInternacion (factura,facturaInternaciones,prestaciones,medicamentos,'unitario',tiposFactura,datosFactura,tipoInternacion) }}
         {% endif %}                
                 
                 
     {% endmacro %}
         
-    {% macro facturaInternacion (factura,facturaInternaciones,prestaciones,tipo_total_al10_al90_unitario,tiposFactura,datosFactura,tipoInternacion) %}  
+    {% macro facturaInternacion (factura,facturaInternaciones,prestaciones,medicamentos,tipo_total_al10_al90_unitario,tiposFactura,datosFactura,tipoInternacion) %}  
                     
             
             <div class="titulo">
@@ -80,13 +80,13 @@
 
                             <th width="30" align="center" width="80">&nbsp;</th>
                             <th align="center" width="80">Importe</th>                                              
-                            <th align="center" width="80">90% - 50%</th>
+                            <th align="center" width="80">90% - {{ datosFactura['coberturaMedicamentoCatastro'] }}%</th>
 
                          {% elseif tipo_total_al10_al90_unitario == "al10" %}
 
                             <th width="30" align="center">&nbsp;</th>
                             <th align="center" width="80">Importe</th>                            
-                            <th align="center" width="80">10% - 50%</th>
+                            <th align="center" width="80">10% - {{ 100 - datosFactura['coberturaMedicamentoCatastro'] }}%</th>
 
                          {% endif %}                       
 
@@ -99,6 +99,8 @@
                      {% set totalSumGeneral = 0 %}
                      {% set diezPorcentSumGeneral = 0 %}
                      {% set noventaPorcentSumGeneral = 0 %}
+                     {% set totalSumMedicamentosCoberturaGeneral = 0 %}        
+                     {% set totalSumMedicamentosNoCoberturaGeneral = 0 %}                        
 
                                           
                      {% for facturaInternacion in facturaInternaciones %}
@@ -108,23 +110,53 @@
                             {% set totalSum = 0 %}
                             {% set diezPorcentSum = 0 %}
                             {% set noventaPorcentSum = 0 %}
+                            
+                            {% set totalSumMedicamentosCobertura = 0 %}        
+                            {% set totalSumMedicamentosNoCobertura = 0 %}                                                    
 
                             {% set internacion = facturaInternacion.internacion %}
 
-                            {% for prestacion in prestaciones[internacion.id] %}            
-
-                                {% set totalSum = totalSum + prestacion.total %}
-
-                                {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
-                                    {% set diezPorcentSum = diezPorcentSum + prestacion.porcentaje_10 %}
-                                    {% set noventaPorcentSum = noventaPorcentSum + prestacion.porcentaje_90 %}            
-                                {% endif %}
+                            {% if prestaciones[internacion.id] | length > 0 %}
                             
-                            {% endfor %}
+                                {% for prestacion in prestaciones[internacion.id] %}            
+
+                                    {% set totalSum = totalSum + prestacion.total %}
+
+                                    {% if tiposFactura['tipoTotalFactura9010'] == datosFactura['tipoTotalFactura'] %}
+                                        {% set diezPorcentSum = diezPorcentSum + prestacion.porcentaje_10 %}
+                                        {% set noventaPorcentSum = noventaPorcentSum + prestacion.porcentaje_90 %}            
+                                    {% endif %}
+
+                                {% endfor %}
+
+                                {% set totalSumGeneral = totalSumGeneral + totalSum %}                                
+                                {% set diezPorcentSumGeneral = diezPorcentSumGeneral + diezPorcentSum %}    
+                                {% set noventaPorcentSumGeneral = noventaPorcentSumGeneral + noventaPorcentSum %}          
                             
-                            {% set totalSumGeneral = totalSumGeneral + totalSum %}                                
-                            {% set diezPorcentSumGeneral = diezPorcentSumGeneral + diezPorcentSum %}    
-                            {% set noventaPorcentSumGeneral = noventaPorcentSumGeneral + noventaPorcentSum %}          
+                            {% endif %}
+                            
+                            
+                            
+                            {% if medicamentos[internacion.id] | length > 0 %}
+                            
+                                {% for medicamento in medicamentos[internacion.id] %}            
+
+                                    {% set totalSumMedicamentosCobertura = totalSumMedicamentosCobertura + 
+                                                                           medicamento.total_cobertura %}
+                            
+                                    {% set totalSumMedicamentosNoCobertura = totalSumMedicamentosNoCobertura + 
+                                                                             medicamento.total_no_cobertura %}
+
+                                {% endfor %}
+
+                                {% set totalSumMedicamentosCoberturaGeneral = totalSumMedicamentosCoberturaGeneral +
+                                                                              totalSumMedicamentosCobertura  %}        
+                            
+                                {% set totalSumMedicamentosNoCoberturaGeneral = totalSumMedicamentosNoCoberturaGeneral +
+                                                                                totalSumMedicamentosNoCobertura %}         
+                            
+                            {% endif %}
+                            
                             
 
                             {% if tiposFactura['tipoFactura'] == datosFactura['tipoFactura'] %}
@@ -146,21 +178,21 @@
 
                                 <td align="center">90%</td>
 
-                                <td align="center"> $ {{  totalSum }}</td>
-                                <td align="center"> $ {{  noventaPorcentSum }}</td>
-                                <td align="center"> $ {{  noventaPorcentSum }}</td>
+                                <td align="center"> $ {{  totalSum + totalSumMedicamentosCobertura }}</td>
+                                <td align="center"> $ {{  noventaPorcentSum + totalSumMedicamentosCobertura }}</td>
+                                <td align="center"> $ {{  noventaPorcentSum + totalSumMedicamentosNoCobertura }}</td>
 
                              {% elseif tipo_total_al10_al90_unitario == "al10" %}
 
                                 <td align="center">10%</td>
                                 
-                                <td align="center"> $ {{  totalSum }}</td>
-                                <td align="center"> $ {{  diezPorcentSum }}</td>
-                                <td align="center"> $ {{  diezPorcentSum }}</td>                                
+                                <td align="center"> $ {{  totalSum + totalSumMedicamentosNoCobertura }}</td>
+                                <td align="center"> $ {{  diezPorcentSum + totalSumMedicamentosNoCobertura }}</td>
+                                <td align="center"> $ {{  diezPorcentSum + totalSumMedicamentosNoCobertura }}</td>                                
 
                              {% else %}
 
-                                <td align="center"> $ {{ totalSum }}</td>
+                                <td align="center"> $ {{ totalSum + totalSumMedicamentosCobertura }}</td>
 
                              {% endif %}                                                     
                              
@@ -179,15 +211,20 @@
                 <thead>
                     <tr>
                        {% if tipo_total_al10_al90_unitario == "al90" %}
-                           <th align="center" width="80">${{ totalSumGeneral }}</th>                        
-                           <th align="center" width="80">${{ noventaPorcentSumGeneral }}</th>
-                           <th align="center" width="80">${{ noventaPorcentSumGeneral }}</th>                            
+                           <th align="center" width="80">${{totalSumGeneral +
+                                                            totalSumMedicamentosCoberturaGeneral +
+                                                            totalSumMedicamentosNoCoberturaGeneral}}</th>                        
+                           <th align="center" width="80">${{ noventaPorcentSumGeneral + totalSumMedicamentosCoberturaGeneral }}</th>
+                           <th align="center" width="80">${{ noventaPorcentSumGeneral + totalSumMedicamentosCoberturaGeneral }}</th>                            
                         {% elseif tipo_total_al10_al90_unitario == "al10" %}
-                           <th align="center" width="80">${{totalSumGeneral}}</th>                        
-                           <th align="center" width="80">${{ diezPorcentSumGeneral }}</th>
-                           <th align="center" width="80">${{ diezPorcentSumGeneral }}</th>                            
+                           <th align="center" width="80">${{totalSumGeneral +
+                                                            totalSumMedicamentosCoberturaGeneral +
+                                                            totalSumMedicamentosNoCoberturaGeneral}}
+                           </th>                        
+                           <th align="center" width="80">${{ diezPorcentSumGeneral + totalSumMedicamentosNoCoberturaGeneral }}</th>
+                           <th align="center" width="80">${{ diezPorcentSumGeneral + totalSumMedicamentosNoCoberturaGeneral }}</th>                            
                         {% else %}
-                           <th align="center" width="80">${{totalSumGeneral}}</th>                                           
+                           <th align="center" width="80">${{totalSumGeneral + totalSumMedicamentosCoberturaGeneral}}</th>                                           
                         {% endif %}                                            
                     </tr>
                 </thead>                

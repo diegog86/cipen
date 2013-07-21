@@ -10,7 +10,7 @@ class FacturaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('obraSocial',null,array('empty_value'=>'SIN OBRA SOCIAL'))                                
+            ->add('obraSocial',null,array('empty_value'=>false))                                
             ->add('periodo', 'date', array(
                 'input'  => 'datetime',
                 'widget' => 'choice',

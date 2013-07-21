@@ -128,25 +128,25 @@
                     
                     {% for mensaje in app.session.getFlashBag.get('alert-success') %}
                         <div class="alert alert-success" style="margin-top: 15px;">
-                            {{ mensaje }}
+                            {{ mensaje | raw }}
                         </div>
                     {% endfor %}
 
                     {% for mensaje in app.session.getFlashBag.get('alert-error') %}
                         <div class="alert alert-error" style="margin-top: 15px;">
-                            {{ mensaje }}
+                            {{ mensaje | raw }}
                         </div>
                     {% endfor %}
 
                     {% for mensaje in app.session.getFlashBag.get('alert-info') %}
                         <div class="alert alert-info" style="margin-top: 15px;">
-                            {{ mensaje }}
+                            {{ mensaje | raw }}
                         </div>
                     {% endfor %}
 
                     {% for mensaje in app.session.getFlashBag.get('alert') %}
                         <div class="alert" style="margin-top: 15px;">
-                            {{ mensaje }}
+                            {{ mensaje | raw }}
                         </div>
                     {% endfor %}                    
                     

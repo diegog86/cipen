@@ -19,7 +19,7 @@ class FacturaController extends Controller
     public function listarAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $dql   = "SELECT e FROM CipenFacturaBundle:Factura e";
+        $dql   = "SELECT e FROM CipenFacturaBundle:Factura e order by e.id desc";
         $query = $em->createQuery($dql);
 
         $paginator  = $this->get('knp_paginator');
@@ -50,13 +50,42 @@ class FacturaController extends Controller
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($entity);
 
-                //traigo las internaciones de las prestaciones a facturar
+                //traigo las internaciones a facturar
+                $internaciones = $repositoryInternacion->findInternacionesParaFacturar($entity);                
+                
+                foreach($internaciones as $internacion) {
+
+                    $j = $internacion->getId();
+
+                    $facturaInternacion[$j] = new FacturaInternacion();
+                    $facturaInternacion[$j]->setFactura($entity);
+                    $facturaInternacion[$j]->setInternacion($internacion);
+                    $em->persist($facturaInternacion[$j]);             
+
+                    // seteo toda las prestaciones de la internación que se factura para que no se vuelvan a repetir en
+                    // otra facturación
+                    foreach($internacion->getInternacionPrestacion() as $internacionPrestacion){
+                        $internacionPrestacion->setFactura($entity);
+                        $em->persist($internacionPrestacion);
+                    } 
+
+                    // seteo todo los medicamentos de la internación que se factura para que no se vuelvan a repetir en
+                    // otra facturación                        
+                    foreach($internacion->getInternacionMedicamento() as $internacionMedicamento){
+                        $internacionMedicamento->setFactura($entity);
+                        $em->persist($internacionMedicamento);                            
+                    }                        
+
+                }                
+                
+                
+                /* /traigo las internaciones de las prestaciones a facturar
                 $internacionesDePrestaciones = $repositoryInternacion->getInternacionesPrestacionesByFactura($entity);
                 //traigo las internaciones de los medicamentos a facturar
                 $internacionesDeMedicamento = $repositoryInternacion->getInternacionesMedicamentoByFactura($entity);
 
                 //array en el que se guardan las internaciones que intervienen en la facturacion
-                $internacionesProcesadas = array();
+                //$internacionesProcesadas = array();
                                 
                 //proceso las internaciones que tienen prestaciones a facturar
                 if (count($internacionesDePrestaciones) > 0) {
@@ -78,14 +107,21 @@ class FacturaController extends Controller
                         foreach($internacion->getInternacionPrestacion() as $internacionPrestacion){
                             $internacionPrestacion->setFactura($entity);
                             $em->persist($internacionPrestacion);
-                        }                         
+                        } 
+                        
+                        // seteo todo los medicamentos de la internación que se factura para que no se vuelvan a repetir en
+                        // otra facturación                        
+                        foreach($internacion->getInternacionMedicamento() as $internacionMedicamento){
+                            $internacionMedicamento->setFactura($entity);
+                            $em->persist($internacionMedicamento);                            
+                        }                        
                         
                     }                                      
                     
-                }
+                } */
 
                 //proceso las internaciones que tienen medicamentos a facturar                
-                if (count($internacionesDeMedicamento) > 0) {
+               /* if (count($internacionesDeMedicamento) > 0) {
 
                     foreach($internacionesDeMedicamento as $internacion) {
                         
@@ -100,20 +136,20 @@ class FacturaController extends Controller
                             $internacionesProcesadas[] = $internacion->getId();                            
                         }
 
-                        // seteo toda los medicamentos de la internación que se factura para que no se vuelvan a repetir en
+                        // seteo todo los medicamentos de la internación que se factura para que no se vuelvan a repetir en
                         // otra facturación                        
                         foreach($internacion->getInternacionMedicamento() as $internacionMedicamento){
-                            $internacionMedicamento->setFactura($facturaInternacion[$j]);
+                            $internacionMedicamento->setFactura($entity);
                             $em->persist($internacionMedicamento);                            
                         }
                         
                     }
 
-                }                               
+                }      */                         
 
             } 
             
-            if(count($internacionesProcesadas) == 0){
+            if(count($internaciones) == 0){
 
                 $msj = 'No hay prestaciones o medicamentos a facturar en el periodo <strong>'.
                         $entity->getPeriodo ()->format ('m/Y') ;
@@ -135,8 +171,7 @@ class FacturaController extends Controller
                 
             }
 
-        }
-            
+        }            
 
 
         $datos["entity"] = $entity;
@@ -352,13 +387,13 @@ class FacturaController extends Controller
            
     }    
     
-    private function createArrayPrestaciones($facturaInternacion,$factura)
+    private function createArrayPrestaciones($internacion,$factura)
     {
         
         $arrayPrestaciones = array();
         $arrayPrestacionesProcesadas = array();
         
-        foreach ($facturaInternacion->getInternacion()->getInternacionPrestacion() as $prestacion){
+        foreach ($internacion->getInternacionPrestacion() as $prestacion){
 
             //traigo solo las prestaciones de esta factura puesto que una internacion puede tener mas de una factura asociada
             if($prestacion->getFactura()->getId() == $factura->getId()){
@@ -436,6 +471,52 @@ class FacturaController extends Controller
         return $arrayPrestaciones ;
        
     }    
+
+    private function createArrayMedicamentos($internacion,$factura)
+    {        
+        $arrayMedicamentos = array();
+        $arrayMedicamentosProcesados = array();        
+        
+        foreach ($internacion->getInternacionMedicamento() as $internacionMedicamento){
+        
+            $medicamento = $internacionMedicamento->getMedicamento();
+            
+            //traigo solo los medicamentos de esta factura puesto que una internacion puede tener mas de una factura asociada
+            if($internacionMedicamento->getFactura()->getId() == $factura->getId() and 
+                $medicamento->getCatastro()){
+         
+            /*if (($prestacion->getFecha() >= $factura->getDesde () and $prestacion->getFecha() <= $factura->getHasta() and $prestacion->getFactura() != null) and (($factura->getObraSocial () == null and $prestacion->getConObraSocial() == false) or ($factura->getObraSocial () != null and $prestacion->getConObraSocial()))) {*/
+                            
+                $id = $medicamento->getId();
+
+                if(!in_array($id,$arrayMedicamentosProcesados)){
+                    $arrayMedicamentos[$id]['cantidad'] = $internacionMedicamento->getCantidad();
+                    $arrayMedicamentos[$id]['object'] = $internacionMedicamento;
+                    $arrayMedicamentosProcesados[] = $id;
+                    $arrayMedicamentos[$id]['valor_unitario'] = $medicamento->getKairo();
+                }else{
+                    $arrayMedicamentos[$id]['cantidad'] = $arrayMedicamentos[$id]['cantidad'] + $internacionMedicamento->getCantidad();
+                }
+
+            }
+        }                
+        
+        //determina los totales según cobertura que cubre la obra social
+        foreach($arrayMedicamentos as $key => $arrayMedicamento) {
+            
+            $arrayMedicamentos[$key]['total'] = $arrayMedicamento['cantidad'] * $arrayMedicamento['valor_unitario'];            
+            $total_cobertura = ($arrayMedicamentos[$key]['total'] * $factura->getDato('coberturaMedicamentoCatastro'))/100;
+            $arrayMedicamentos[$key]['total_cobertura'] = $total_cobertura;                    
+            
+            $total_no_cobertura = $arrayMedicamentos[$key]['total'] - $arrayMedicamentos[$key]['total_cobertura'] ;
+            $arrayMedicamentos[$key]['total_no_cobertura'] = $total_no_cobertura;             
+            
+        }               
+        
+        return $arrayMedicamentos ;
+       
+    }    
+    
     
     private function getFactura($id) 
     {        
@@ -447,16 +528,25 @@ class FacturaController extends Controller
         }
         
         $facturaInternaciones = $em->getRepository ('CipenFacturaBundle:FacturaInternacion')
-            ->findByFactura($factura);                        
-
-        $arrayPrestaciones = array();
+            ->findByFacturaConPrestaciones($factura);                        
+            
         
         foreach($facturaInternaciones as $facturaInternacion) {
+            
             $internacion = $facturaInternacion->getInternacion();
-            $arrayPrestaciones[$internacion->getId()] = $this->createArrayPrestaciones($facturaInternacion,$factura);
-        }        
-        
+            $arrayPrestaciones[$internacion->getId()] = array();
+            if($internacionPrestacion = $this->createArrayPrestaciones($internacion,$factura)){
+               $arrayPrestaciones[$internacion->getId()] = $internacionPrestacion;      
+            }            
+            
+            $arrayMedicamentos[$internacion->getId()] = array();            
+            if($internacionMedicamento = $this->createArrayMedicamentos($internacion,$factura)){
+                $arrayMedicamentos[$internacion->getId()] = $internacionMedicamento;            
+            }
+            
+        }   
        
+
         $form =  $this->createForm(new FacturaConInternacionesType(), $factura);
         $datos['form'] = $form->createView();
         
@@ -468,8 +558,10 @@ class FacturaController extends Controller
             'tipoTotalFactura9010' =>ObraSocial::TIPO_TOTAL_FACTURA_VALOR_10_90,
             'tipoPeriodoFacturaCorteMensual' =>ObraSocial::TIPO_PERIODO_FACTURA_CORTE_MENSUAL,
             'tipoFactura' =>ObraSocial::TIPO_FACTURA_A,
-        );
+        );        
+               
         $datos['prestaciones'] = $arrayPrestaciones;
+        $datos['medicamentos'] = $arrayMedicamentos;
         
         return $datos;
     }

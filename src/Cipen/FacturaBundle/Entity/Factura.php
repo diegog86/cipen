@@ -24,7 +24,6 @@ class Factura
 
     /**
      * @ORM\ManyToOne(targetEntity="Cipen\ObraSocialBundle\Entity\ObraSocial")
-     * @ORM\JoinColumn(nullable=true)
      */
     private $obraSocial;
 
@@ -52,6 +51,12 @@ class Factura
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $internacionPrestacion;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Cipen\InternacionBundle\Entity\InternacionMedicamento", mappedBy="factura")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $internacionMedicamento;    
 
     /**
      * Constructor
@@ -59,6 +64,7 @@ class Factura
     public function __construct()
     {
         $this->internacionPrestacion = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->internacionMedicamento = new \Doctrine\Common\Collections\ArrayCollection();        
         $this->internacion = new \Doctrine\Common\Collections\ArrayCollection();
         $this->periodo = new \DateTime('NOW');
     }

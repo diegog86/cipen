@@ -1,24 +1,99 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Iniciar Sesión</title>
+        
+        <style type="text/css">
 
-{% trans_default_domain 'FOSUserBundle' %}
+            body {
+                padding-top: 40px;
+                padding-bottom: 40px;
+                background-color: #f5f5f5;
+                font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            }
 
-{% block fos_user_content %}
-{% if error %}
-    <div>{{ error|trans }}</div>
-{% endif %}
+            .btn-primary {
+                background-color: #006DCC;
+                border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+                color: #FFFFFF;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+                padding: 10px;
+                border-radius: 6px;
+                font-size: 18px;
+                cursor: default;
+            }
+            .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] {
+                background-color: #0044CC;
+                color: #FFFFFF;
+            }          
 
-<form action="{{ path("fos_user_security_check") }}" method="post">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+              .form-signin {
+                max-width: 300px;
+                padding: 19px 29px 29px;
+                margin: 0 auto 20px;
+                background-color: #fff;
+                border: 1px solid #e5e5e5;
+                -webkit-border-radius: 5px;
+                   -moz-border-radius: 5px;
+                        border-radius: 5px;
+                -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                        box-shadow: 0 1px 2px rgba(0,0,0,.05);
+              }
+              .form-signin .form-signin-heading,
+              .form-signin .checkbox {
+                margin-bottom: 10px;
+              }
+              .form-signin input[type="text"],
+              .form-signin input[type="password"] {
+                font-size: 16px;
+                height: auto;
+                margin-bottom: 15px;
+                padding: 7px 9px;
+                width: 90%;
+              }
+              
+            .alert-error {
+                background-color: #F2DEDE;
+                border: 1px solid #EED3D7;
+                color: #B94A48;
+                border-radius: 4px 4px 4px 4px;
+                margin-bottom: 20px;
+                padding: 8px 35px 8px 14px;
+                text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+            }
 
-    <label for="username">{{ 'security.login.username'|trans }}</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+     </style>        
+        
+    </head>
+    <body>
+        
+        <div class="container">
 
-    <label for="password">{{ 'security.login.password'|trans }}</label>
-    <input type="password" id="password" name="_password" required="required" />
+            <form class="form-signin" action="{{ path("fos_user_security_check") }}" method="post">
 
-    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-    <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                <h2 class="form-signin-heading">Iniciar sesión</h2>
+                
+                {% if error %}
+                    <div class="alert-error">{{ error }}</div>
+                {% endif %}                
 
-    <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
-</form>
-{% endblock fos_user_content %}
+                <input class="input-block-level" placeholder="Usuario" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+
+
+                <input class="input-block-level" placeholder="Contraseña" type="password" id="password" name="_password" required="required" />
+
+                {#<input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>#}
+
+                <button class="btn btn-large btn-primary" type="submit" id="_submit" name="_submit"> Enviar</button>
+            </form>
+
+
+        </div>        
+
+    </body>
+</html>
+        

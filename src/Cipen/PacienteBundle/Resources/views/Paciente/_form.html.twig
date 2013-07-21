@@ -109,7 +109,7 @@
         </div> 
 
         <div class="control-group">
-            {{ form_label(responsable.nombre,'Nombre',{ label_attr : { class : 'control-label'} }) }}
+            {{ form_label(responsable.nombre,'Nombre *',{ label_attr : { class : 'control-label'} }) }}
             <div class="controls">
                 {{ form_widget (responsable.nombre, { attr : { class : 'span7' } }) }}
                 {{ form_errors (responsable.nombre) }}
@@ -117,7 +117,7 @@
         </div> 
 
         <div class="control-group">
-            {{ form_label(responsable.apellido,'Apellido',{ label_attr : { class : 'control-label'} }) }}
+            {{ form_label(responsable.apellido,'Apellido *',{ label_attr : { class : 'control-label'} }) }}
             <div class="controls">
                 {{ form_widget (responsable.apellido, { attr : { class : 'span7' } }) }}
                 {{ form_errors (responsable.apellido) }}
