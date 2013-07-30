@@ -51,4 +51,12 @@ class FacturaType extends AbstractType
     {
         return 'obra_social_factura';
     }
+    
+    public function setDefaultOptions (\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults (array(
+            'data_class' => 'Cipen\ObraSocialBundle\Entity\ObraSocial',
+            'validation_groups' => array('factura'),
+        ));
+    }
 }

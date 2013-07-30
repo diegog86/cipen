@@ -57,15 +57,15 @@ class ObraSocial extends Organizacion
 
     /**
      * @ORM\Column(name="ivaInscripto", type="float")
-     * @assert\NotBlank(message="Por favor, ingrese iva inscripto.")
-     * @assert\Type(type="float", message="Iva inscripto debe ser un número.")
+     * @assert\NotBlank(message="Por favor, ingrese iva inscripto.", groups={"factura"})
+     * @assert\Type(type="float", message="Iva inscripto debe ser un número.", groups={"factura"})
      */
     private $ivaInscripto;    
 
     /**
      * @ORM\Column(name="coberturaMedicamentoCatastro", type="float")
-     * @assert\NotBlank(message="Por favor, ingrese cobertura medicamento.")
-     * @assert\Type(type="float", message="Cobertura medicamento debe ser un número.")
+     * @assert\NotBlank(message="Por favor, ingrese cobertura medicamento.", groups={"factura"})
+     * @assert\Type(type="float", message="Cobertura medicamento debe ser un número.", groups={"factura"})
      */
     private $coberturaMedicamentoCatastro;    
 
@@ -86,8 +86,8 @@ class ObraSocial extends Organizacion
     
     /**
      * @ORM\Column(name="tiempoAcreditacionFactura", type="integer")
-     * @assert\NotBlank(message="Por favor, ingrese días de acreditación.")
-     * @assert\Type(type="integer", message="Tiempo de acreditación debe ser un número.")
+     * @assert\NotBlank(message="Por favor, ingrese días de acreditación.", groups={"factura"})
+     * @assert\Type(type="integer", message="Tiempo de acreditación debe ser un número.", groups={"factura"})
      */
     private $tiempoAcreditacionFactura;
     
